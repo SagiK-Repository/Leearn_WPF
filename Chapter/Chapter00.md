@@ -1,4 +1,4 @@
-# 1. WPF Style이란?
+# 0. WPF Style이란?
 
 ### WPF
 
