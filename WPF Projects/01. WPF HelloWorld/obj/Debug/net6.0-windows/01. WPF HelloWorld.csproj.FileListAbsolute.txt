@@ -1,0 +1,21 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\bin\Debug\net6.0-windows\01. WPF HelloWorld.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\bin\Debug\net6.0-windows\01. WPF HelloWorld.deps.json
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\bin\Debug\net6.0-windows\01. WPF HelloWorld.runtimeconfig.json
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\bin\Debug\net6.0-windows\01. WPF HelloWorld.dll
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\bin\Debug\net6.0-windows\01. WPF HelloWorld.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.AssemblyInfoInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.AssemblyInfo.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.dll
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\refint\01. WPF HelloWorld.dll
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\01. WPF HelloWorld.genruntimeconfig.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\01. WPF HelloWorld\obj\Debug\net6.0-windows\ref\01. WPF HelloWorld.dll

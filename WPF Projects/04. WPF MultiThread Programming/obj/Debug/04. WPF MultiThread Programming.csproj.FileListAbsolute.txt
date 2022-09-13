@@ -1,0 +1,16 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\bin\Debug\_04.WPF_MultiThread_Programming.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\bin\Debug\_04.WPF_MultiThread_Programming.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\bin\Debug\_04.WPF_MultiThread_Programming.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\04. WPF MultiThread Programming.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\04. WPF MultiThread Programming.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\_04.WPF_MultiThread_Programming_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\_04.WPF_MultiThread_Programming_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\_04.WPF_MultiThread_Programming.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\_04.WPF_MultiThread_Programming.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\04. WPF MultiThread Programming.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\04. WPF MultiThread Programming.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\_04.WPF_MultiThread_Programming.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\04. WPF MultiThread Programming\obj\Debug\_04.WPF_MultiThread_Programming.pdb

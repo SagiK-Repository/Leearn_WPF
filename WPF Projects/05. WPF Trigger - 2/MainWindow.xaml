@@ -1,0 +1,27 @@
+﻿<Window x:Class="_05.WPF_Trigger___2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_05.WPF_Trigger___2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="MyStyle">
+            <Setter Property="Control.Foreground" Value="Red" />
+            <Setter Property="TextBlock.Text" Value="Hello WPF!"/>
+            <Style.Triggers>
+                <Trigger Property="Control.IsMouseOver" Value="true">
+                    <Setter Property="Control.Foreground" Value="Blue"/>
+                    <Setter Property="TextBlock.Text" Value="버튼으로 진입했습니다."/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <StackPanel>
+        <Button Width="100" Height="70"
+                Style="{StaticResource MyStyle}" Content="Trigger"/>
+        <TextBlock Style="{StaticResource MyStyle}" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </StackPanel>
+
+</Window>

@@ -1,0 +1,10 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\bin\Debug\_02.CCharp_WPF_HelloWorld.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\bin\Debug\_02.CCharp_WPF_HelloWorld.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\bin\Debug\_02.CCharp_WPF_HelloWorld.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\obj\Debug\02. CCharp WPF HelloWorld.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\obj\Debug\02. CCharp WPF HelloWorld.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\obj\Debug\_02.CCharp_WPF_HelloWorld.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\obj\Debug\02. CCharp WPF HelloWorld.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\obj\Debug\02. CCharp WPF HelloWorld.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\obj\Debug\_02.CCharp_WPF_HelloWorld.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\02. CCharp WPF HelloWorld\obj\Debug\_02.CCharp_WPF_HelloWorld.pdb

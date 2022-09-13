@@ -1,0 +1,16 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\bin\Debug\_06.WPF_Trigger__2____2.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\bin\Debug\_06.WPF_Trigger__2____2.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\bin\Debug\_06.WPF_Trigger__2____2.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\06. WPF Trigger (2) - 2.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\06. WPF Trigger (2) - 2.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\_06.WPF_Trigger__2____2_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\_06.WPF_Trigger__2____2_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\_06.WPF_Trigger__2____2.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\_06.WPF_Trigger__2____2.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\06. WPF Trigger (2) - 2.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\06. WPF Trigger (2) - 2.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\_06.WPF_Trigger__2____2.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\06. WPF Trigger (2) - 2\obj\Debug\_06.WPF_Trigger__2____2.pdb
