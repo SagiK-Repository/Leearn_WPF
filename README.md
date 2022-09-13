@@ -1,5 +1,6 @@
-# Leearn_WPF
+문서정보 : 2022.09.13. 작성, 작성자 [@SAgiKPJH](https://github.com/SAgiKPJH)
 
+# Leearn_WPF
 
 ## 목적
 
