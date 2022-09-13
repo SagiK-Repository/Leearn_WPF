@@ -1,4 +1,4 @@
-# 2. WPF XAML HellowWorld
+# 1. WPF XAML HellowWorld
 
 - Visual Studio > 새 프로젝트 > WPF 애플리케이션(응용프로그램) > 프로젝트 이름 변경 > 완료
 - App.xaml파일 : 기본 설정 파일
@@ -119,3 +119,8 @@
   }
   ```
   </details>
+  
+### 결과
+
+![01](https://user-images.githubusercontent.com/66783849/189934580-426d5ecf-c66f-441c-b62d-6ff2b40572d3.png)
+
