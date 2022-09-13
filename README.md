@@ -10,13 +10,13 @@
 
 ## 목표
 
-- [ ] 00. WPF Style이란?
-- [ ] 01. WPF XAML HellowWorld
-- [ ] 02. C# WPF HelloWorld
-- [ ] 03. WPF 데이터 바인딩, 데이터 바인딩이용하여 오라클테이블 데이터를 ListView에 출력
-- [ ] 04. WPF MultiThread Programming
-- [ ] 05. WPF Trigger
-- [ ] 06. WPF Trigger (2)
+- [x] [00. WPF Style이란?](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter00.md)
+- [x] [01. WPF XAML HellowWorld](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter01.md)
+- [x] [02. C# WPF HelloWorld](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter02.md)
+- [ ] [03. WPF 데이터 바인딩, 데이터 바인딩이용하여 오라클테이블 데이터를 ListView에 출력](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter03.md)
+- [x] [04. WPF MultiThread Programming](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter04.md)
+- [x] [05. WPF Trigger](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter05.md)
+- [x] [06. WPF Trigger (2)](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter06.md)
 - [ ] 07. ListBox와 LINQ쿼리데이터바인딩, 새창띄우기, 이벤트 및 델리게이트를 통한 메인 윈도우리스트박스리프레쉬
 - [ ] 08. 의존프로퍼티, 의존속성
 - [ ] 09. WPF 이벤트라우팅 (버블링, 터널링, 다이렉트)
