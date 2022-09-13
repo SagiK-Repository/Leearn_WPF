@@ -85,7 +85,7 @@ namespace _00._HellowWorld {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/01. WPF XAML HellowWorld;V1.0.0.0;component/mainwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/00. HellowWorld;component/mainwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\MainWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

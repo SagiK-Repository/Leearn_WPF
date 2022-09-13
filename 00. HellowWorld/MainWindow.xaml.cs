@@ -24,5 +24,20 @@ namespace _00._HellowWorld
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(textBox.Text + "님 환영합니다.", "Hello World!");
+        }
+
+        private void TextBlockMouseLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Hi There!", "Hello World", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void button_Click_1(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(textBox.Text + "님 환영합니다.", "Hello World!");
+        }
     }
 }

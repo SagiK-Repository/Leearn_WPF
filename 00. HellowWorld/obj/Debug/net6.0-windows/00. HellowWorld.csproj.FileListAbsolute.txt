@@ -1,0 +1,21 @@
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\bin\Debug\net6.0-windows\00. HellowWorld.exe
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\bin\Debug\net6.0-windows\00. HellowWorld.deps.json
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\bin\Debug\net6.0-windows\00. HellowWorld.runtimeconfig.json
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\bin\Debug\net6.0-windows\00. HellowWorld.dll
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\bin\Debug\net6.0-windows\00. HellowWorld.pdb
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.g.resources
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.GeneratedMSBuildEditorConfig.editorconfig
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.AssemblyInfoInputs.cache
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.AssemblyInfo.cs
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.dll
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\refint\00. HellowWorld.dll
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.pdb
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\00. HellowWorld.genruntimeconfig.cache
+D:\Git_Hub_Repository\WPF_Project\00. HellowWorld\obj\Debug\net6.0-windows\ref\00. HellowWorld.dll

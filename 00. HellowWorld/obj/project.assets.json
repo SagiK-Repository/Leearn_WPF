@@ -15,9 +15,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Git_Hub_Repository\\WPF_Project\\00. HellowWorld\\00. HellowWorld.csproj",
-      "projectName": "00. HellowWorld",
-      "projectPath": "D:\\Git_Hub_Repository\\WPF_Project\\00. HellowWorld\\00. HellowWorld.csproj",
+      "projectUniqueName": "D:\\Git_Hub_Repository\\WPF_Project\\00. HellowWorld\\01. WPF XAML HellowWorld.csproj",
+      "projectName": "01. WPF XAML HellowWorld",
+      "projectPath": "D:\\Git_Hub_Repository\\WPF_Project\\00. HellowWorld\\01. WPF XAML HellowWorld.csproj",
       "packagesPath": "C:\\Users\\jh.park\\.nuget\\packages\\",
       "outputPath": "D:\\Git_Hub_Repository\\WPF_Project\\00. HellowWorld\\obj\\",
       "projectStyle": "PackageReference",

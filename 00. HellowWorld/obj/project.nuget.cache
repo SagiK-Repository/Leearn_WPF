@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UHXRlf+cd6xjIOqfufr1zwL3LQPGjQBR0utPssPtifK1WWxO/dqL6hkIFV0mynwNBTMzUPDA4FLYdqY69cZ/6A==",
+  "dgSpecHash": "7M4LPIBMmngRb2R7QuJ+BB8fSHS4pjvFUqgvJu7w0ZzCXf2SW9agcrCRoMAPhMCOqRwW5jbS5F7dDWpjoP1faQ==",
   "success": true,
-  "projectFilePath": "D:\\Git_Hub_Repository\\WPF_Project\\00. HellowWorld\\00. HellowWorld.csproj",
+  "projectFilePath": "D:\\Git_Hub_Repository\\WPF_Project\\00. HellowWorld\\01. WPF XAML HellowWorld.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
