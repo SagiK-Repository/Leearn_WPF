@@ -2,12 +2,6 @@
 
 # Leearn_WPF
 
-## 목적
-
-- WPF 프로그래밍 강의 학습하고 내용 정리합니다.
-
-<br>
-
 ## 목표
 
 - [x] [00. WPF Style이란?](https://github.com/SagiK-Repository/Leearn_WPF/blob/main/Chapter/Chapter00.md)
@@ -29,7 +23,6 @@
 - [ ] 16. IValueConverter를 이용한 데이터바인딩, Data Type이 다른 경우의 Data Binding
 - [ ] 17. WPF, MVVM, ListBox의 컬렉션 정렬, 필터링, 탐색 실습(ListCollectionView)
 - [ ] 18. 계산기, MVVM, Command, 데이터바인딩이용
-- [ ] 19. 교육 관련 총평(비평)
 
 <br>
 
