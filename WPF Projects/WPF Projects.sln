@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01. WPF HelloWorld", "01. WPF HelloWorld\01. WPF HelloWorld.csproj", "{5277DC30-9278-485E-BE63-9C3AD6E39134}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "01. WPF HelloWorld", "01. WPF HelloWorld\01. WPF HelloWorld.csproj", "{5277DC30-9278-485E-BE63-9C3AD6E39134}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02. CCharp WPF HelloWorld", "02. CCharp WPF HelloWorld\02. CCharp WPF HelloWorld.csproj", "{2716CD28-0434-4E4E-8A39-43567E36A463}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "06. WPF Trigger (2) - 2", "06. WPF Trigger (2) - 2\06. WPF Trigger (2) - 2.csproj", "{8522E6F4-FA25-42B3-B1BA-02F156958944}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "07. WPF Example", "07. WPF Example\07. WPF Example.csproj", "{C195EF3C-6D38-4E30-86BE-6439CFD81C77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "08. wpfDependencyProperty", "08. wpfDependencyProperty\08. wpfDependencyProperty.csproj", "{3B792973-0784-4A76-9606-514365171993}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{C195EF3C-6D38-4E30-86BE-6439CFD81C77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C195EF3C-6D38-4E30-86BE-6439CFD81C77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C195EF3C-6D38-4E30-86BE-6439CFD81C77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B792973-0784-4A76-9606-514365171993}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B792973-0784-4A76-9606-514365171993}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B792973-0784-4A76-9606-514365171993}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B792973-0784-4A76-9606-514365171993}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

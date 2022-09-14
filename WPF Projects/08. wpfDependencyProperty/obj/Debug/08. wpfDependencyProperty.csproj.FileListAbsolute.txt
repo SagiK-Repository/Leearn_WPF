@@ -1,0 +1,16 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\08. wpfDependencyProperty.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\08. wpfDependencyProperty.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\_08.wpfDependencyProperty_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\_08.wpfDependencyProperty_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\bin\Debug\_08.wpfDependencyProperty.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\bin\Debug\_08.wpfDependencyProperty.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\bin\Debug\_08.wpfDependencyProperty.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\_08.wpfDependencyProperty.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\_08.wpfDependencyProperty.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\08. wpfDependencyProperty.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\08. wpfDependencyProperty.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\_08.wpfDependencyProperty.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\08. wpfDependencyProperty\obj\Debug\_08.wpfDependencyProperty.pdb
