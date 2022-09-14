@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "14. CommandPattern_DataBind
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "15. Command_Pattern_HelloWorld", "15. Command_Pattern_HelloWorld\15. Command_Pattern_HelloWorld.csproj", "{8AE62687-9FAF-402B-AED0-14D5E6115715}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "16. wpfIValueConverter", "16. wpfIValueConverter\16. wpfIValueConverter.csproj", "{0B1B99AC-5146-4607-8B8C-C33C00D28C08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{8AE62687-9FAF-402B-AED0-14D5E6115715}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AE62687-9FAF-402B-AED0-14D5E6115715}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AE62687-9FAF-402B-AED0-14D5E6115715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B1B99AC-5146-4607-8B8C-C33C00D28C08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B1B99AC-5146-4607-8B8C-C33C00D28C08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B1B99AC-5146-4607-8B8C-C33C00D28C08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B1B99AC-5146-4607-8B8C-C33C00D28C08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
