@@ -1,0 +1,16 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\bin\Debug\_10.WpfDataBinding.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\bin\Debug\_10.WpfDataBinding.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\bin\Debug\_10.WpfDataBinding.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\10. WpfDataBinding.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\10. WpfDataBinding.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\_10.WpfDataBinding_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\_10.WpfDataBinding_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\_10.WpfDataBinding.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\_10.WpfDataBinding.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\10. WpfDataBinding.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\10. WpfDataBinding.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\_10.WpfDataBinding.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\10. WpfDataBinding\obj\Debug\_10.WpfDataBinding.pdb
