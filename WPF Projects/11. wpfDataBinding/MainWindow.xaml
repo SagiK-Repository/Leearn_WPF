@@ -10,7 +10,7 @@
         <!--Binding Target-->
         <!--UpdateSourceTrigger는 타겟이 소스를 갱신하는 타이밍을 지정-->
         <!--TextBox인 경우 LostFocus가 기본이므로 값이 바뀔때마다 갱신하기 위해 PropertyChanged로 설정-->
-        <TextBox Margin="24" Text="{Binding ElementName=label, Path=Content, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <TextBox Margin="24" Text="{Binding ElementName=label, Path=Content, UpdateSourceTrigger=PropertyChanged, Mode=OneWayToSource}"/>
         <Label Name="label" Content="대한민국" HorizontalAlignment="Center" BorderBrush="Black" BorderThickness="2"/>
     </StackPanel>
 </Window>
