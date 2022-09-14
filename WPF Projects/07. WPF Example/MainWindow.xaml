@@ -5,8 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_07.WPF_Example"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="521" Width="451">
+    <Window.Resources>
+        <local:Duties x:Key="duties"/>
+        <!--Duties 클래스를 로컬로 등록-->
+        <DataTemplate x:Key="MyTemplate">
+            <!--데이터 탬플릿-->
+            <Border Name ="border">
+                <!--선-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Duty Name:"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=DutyName}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="DutyType:"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=DutyType}"/>
+                    <Separator Grid.Row="2" Grid.ColumnSpan="2"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <LinearGradientBrush x:Key="GrayBlueGradientBrush" StartPoint="0,0" EndPoint="1,1">
+            <!--브러쉬-->
+            <GradientStop Color="DarkGray" Offset="0" />
+            <GradientStop Color="#CCCCFF" Offset="0.5" />
+            <GradientStop Color="DarkGray" Offset="1" />
+        </LinearGradientBrush>
+        <Style TargetType="{x:Type Button}">
+            <!--버튼 전용 스타일-->
+            <Setter Property="Background" Value="{StaticResource GrayBlueGradientBrush}"/>
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+    </Window.Resources>
+    <StackPanel>
+        <Button x:Name="Add" Click="Add_Click">직무 추가</Button>
+        <TextBlock Margin="10,0,0,0">직무타입을 선택 하세요.</TextBlock>
+        <ListBox Name="myListBox1" SelectionChanged="OnSelected" SelectedIndex="0" Margin="10,0,10,0">
+            <ListBoxItem>Inner</ListBoxItem>
+            <ListBoxItem>OutSide</ListBoxItem>
+        </ListBox>
+        <TextBlock Margin="10,10,0,-10">직무</TextBlock>
+        <ListBox Width="400" Margin="10" Name="myListBox2"
+                 HorizontalAlignment="Stretch"
+                 ItemsSource="{Binding}"
+                 ItemTemplate="{StaticResource MyTemplate}"
+                 SelectionChanged="OnSelected2"/>
+    </StackPanel>
 </Window>

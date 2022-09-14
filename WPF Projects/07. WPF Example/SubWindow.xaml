@@ -1,0 +1,30 @@
+﻿<Window x:Class="_07.WPF_Example.SubWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_07.WPF_Example"
+        mc:Ignorable="d"
+        Title="SubWindow" Height="268" Width="388">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBlock FontSize="20" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center">직무 등록</TextBlock>
+        <TextBlock Grid.Row="1" Margin="10" VerticalAlignment="Center">직무명</TextBlock>
+        <TextBox x:Name="txtDutyName" Grid.Row="1" Margin="10" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center"></TextBox>
+        <TextBlock Margin="10" Grid.Row="2" VerticalAlignment="Center">직무타입</TextBlock>
+        <RadioButton x:Name="rdoInner" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">내근</RadioButton>
+        <RadioButton x:Name="rdoOutside" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">외근</RadioButton>
+        <Button Grid.Column="1" Grid.Row="2" Width="88" HorizontalAlignment="Center" Click="Button_Click" Height="22" Margin="16,93,16,-74">저장</Button>
+
+    </Grid>
+
+</Window>

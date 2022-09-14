@@ -9,7 +9,7 @@ namespace _07.WPF_Example
 {
     public enum DutyType
     {
-        Inner, Outside
+        Inner, OutSide
     }
 
     public class Duty
@@ -39,15 +39,15 @@ namespace _07.WPF_Example
     }
 
 
-    public class Duties : ObservableCollection<Duty>
+    public class Duties : ObservableCollection<Duty> // ObservableCollection : 커렉션에 값이 변결될 때 자동 감지
     {
         public Duties() {
-            Add(new Duty("SALES", DutyType.Outside));
-            Add(new Duty("LOGISTICS", DutyType.Outside));
+            Add(new Duty("SALES", DutyType.OutSide));
+            Add(new Duty("LOGISTICS", DutyType.OutSide));
             Add(new Duty("IT", DutyType.Inner));
             Add(new Duty("MARKETING", DutyType.Inner));
             Add(new Duty("HR", DutyType.Inner));
-            Add(new Duty("PROPOTION", DutyType.Outside));
+            Add(new Duty("PROPOTION", DutyType.OutSide));
         }
     }
 
