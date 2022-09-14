@@ -1,0 +1,16 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\bin\Debug\_12.wpfDataContext_DataBinding.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\bin\Debug\_12.wpfDataContext_DataBinding.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\bin\Debug\_12.wpfDataContext_DataBinding.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\12. wpfDataContext_DataBinding.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\12. wpfDataContext_DataBinding.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\_12.wpfDataContext_DataBinding_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\_12.wpfDataContext_DataBinding_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\_12.wpfDataContext_DataBinding.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\_12.wpfDataContext_DataBinding.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\12. wpfDataContext_DataBinding.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\12. wpfDataContext_DataBinding.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\_12.wpfDataContext_DataBinding.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\12. wpfDataContext_DataBinding\obj\Debug\_12.wpfDataContext_DataBinding.pdb
