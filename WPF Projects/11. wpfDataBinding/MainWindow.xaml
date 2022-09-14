@@ -1,0 +1,16 @@
+﻿<Window x:Class="_11.wpfDataBinding.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_11.wpfDataBinding"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <!--Binding Target-->
+        <!--UpdateSourceTrigger는 타겟이 소스를 갱신하는 타이밍을 지정-->
+        <!--TextBox인 경우 LostFocus가 기본이므로 값이 바뀔때마다 갱신하기 위해 PropertyChanged로 설정-->
+        <TextBox Margin="24" Text="{Binding ElementName=label, Path=Content, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        <Label Name="label" Content="대한민국" HorizontalAlignment="Center" BorderBrush="Black" BorderThickness="2"/>
+    </StackPanel>
+</Window>

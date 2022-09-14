@@ -10,10 +10,10 @@
         <Label Content="Which city do you love"/>
         <CheckBox Content="SEOUL" IsChecked="{Binding Seoul}"/>
         <CheckBox Content="JEJOO" IsChecked="{Binding Jejoo}"/>
-        <TextBox x:Name="txt2" Text="{Binding Text, Source={x:Reference txt1}, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Content="INCHEON" IsChecked="{Binding Incheon}"/>
         <Button Content="제출" Click="Sumit_Click"/>
         <TextBox Name="txt1" Text="{Binding Mode=OneWay}"/>
+        <TextBox x:Name="txt2" Text="{Binding Text, Source={x:Reference txt1}, UpdateSourceTrigger=PropertyChanged}"/>
     </StackPanel>
 
 </Window>
