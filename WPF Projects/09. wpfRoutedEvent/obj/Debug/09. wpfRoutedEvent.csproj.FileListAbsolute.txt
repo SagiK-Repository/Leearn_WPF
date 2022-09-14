@@ -1,0 +1,16 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\bin\Debug\_09.wpfRoutedEvent.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\bin\Debug\_09.wpfRoutedEvent.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\bin\Debug\_09.wpfRoutedEvent.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\09. wpfRoutedEvent.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\09. wpfRoutedEvent.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\_09.wpfRoutedEvent_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\_09.wpfRoutedEvent_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\_09.wpfRoutedEvent.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\_09.wpfRoutedEvent.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\09. wpfRoutedEvent.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\09. wpfRoutedEvent.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\_09.wpfRoutedEvent.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\09. wpfRoutedEvent\obj\Debug\_09.wpfRoutedEvent.pdb
