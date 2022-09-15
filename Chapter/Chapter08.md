@@ -161,3 +161,9 @@ namespace _09.wpfRoutedEvent
 }
 ```
 </details>
+
+
+
+### 결과
+
+- <img src="https://user-images.githubusercontent.com/66783849/190459730-262426e9-effc-46a2-b676-c32692b72dc1.png" width="70%">
