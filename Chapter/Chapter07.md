@@ -263,3 +263,7 @@ namespace _07.WPF_Example
 }
 ```
 </details>
+
+        
+### 결과
+<img src="https://user-images.githubusercontent.com/66783849/190459571-3e748911-6b8a-4af1-be8e-fda00852c942.png" width="70%">
