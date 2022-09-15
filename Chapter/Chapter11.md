@@ -85,3 +85,7 @@ namespace _12.wpfDataContext_DataBinding
 
 ```
 </details>
+
+### 결과
+
+- <img src="https://user-images.githubusercontent.com/66783849/190460027-56501423-b654-44f0-9d91-7bdeb5f5ee30.png" width="70%">
