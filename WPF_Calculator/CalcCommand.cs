@@ -131,17 +131,43 @@ namespace WPF_Calculator
         public void Execute(object parameter)
         {
             string op = parameter.ToString(); // 입력한 사칙연산 들어온다.
-            double op1;
-            if (double.TryParse(_viewModel.InputString, out op1))
+
+            if (_viewModel.Op != null)
             {
-                _viewModel.Op1 = op1;
+                double op2 = double.Parse(_viewModel.InputString);
+                _viewModel.DisplayText = calculate(_viewModel.Op, (double)_viewModel.Op1, op2).ToString();
+                _viewModel.Op1 = calculate(_viewModel.Op, (double)_viewModel.Op1, op2);
                 _viewModel.Op = op;
-                _viewModel.InputString = ""; // 3 + 를 누르면, DisplayText는 3, InputText는 Clear
-            }else if (_viewModel.InputString == "" && op == "-")
+                _viewModel.InputString = "";
+            }
+            else
             {
-                _viewModel.InputString = "-";
+                double op1;
+                if (double.TryParse(_viewModel.InputString, out op1))
+                {
+                    _viewModel.Op1 = op1;
+                    _viewModel.Op = op;
+                    _viewModel.InputString = ""; // 3 + 를 누르면, DisplayText는 3, InputText는 Clear
+                }
+                else if (_viewModel.InputString == "" && op == "-")
+                {
+                    _viewModel.InputString = "-";
+                }
             }
         }
+
+        private static double calculate(string op, double op1, double op2)
+        {
+            switch (op)
+            {
+                case "+": return op1 + op2;
+                case "-": return op1 - op2;
+                case "*": return op1 * op2;
+                case "/": return op1 / op2;
+                default: return 0;
+            }
+        }
+
     }
 
 
@@ -170,6 +196,7 @@ namespace WPF_Calculator
         {
             double op2 = double.Parse(_viewModel.InputString);
             _viewModel.InputString = calculate(_viewModel.Op, (double)_viewModel.Op1, op2).ToString();
+            _viewModel.Op = null;
         }
 
         private static double calculate(string op, double op1, double op2)

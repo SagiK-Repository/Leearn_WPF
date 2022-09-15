@@ -14,3 +14,19 @@ D:\Git_Hub_Repository\WPF_Project\WPF_Calculator\obj\Debug\WPF_Calculator.csproj
 D:\Git_Hub_Repository\WPF_Project\WPF_Calculator\obj\Debug\WPF_Calculator.csproj.CoreCompileInputs.cache
 D:\Git_Hub_Repository\WPF_Project\WPF_Calculator\obj\Debug\WPF_Calculator.exe
 D:\Git_Hub_Repository\WPF_Project\WPF_Calculator\obj\Debug\WPF_Calculator.pdb
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\bin\Debug\WPF_Calculator.exe.config
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\bin\Debug\WPF_Calculator.exe
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\bin\Debug\WPF_Calculator.pdb
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.csproj.AssemblyReference.cache
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.csproj.SuggestedBindingRedirects.cache
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\MainWindow.g.cs
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\App.g.cs
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator_MarkupCompile.cache
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator_MarkupCompile.lref
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\MainWindow.baml
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.g.resources
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.Properties.Resources.resources
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.csproj.GenerateResource.cache
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.csproj.CoreCompileInputs.cache
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.exe
+D:\Sagi_JJU D\Git_Fork\Leearn_WPF\WPF_Calculator\obj\Debug\WPF_Calculator.pdb
