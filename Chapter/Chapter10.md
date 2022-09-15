@@ -80,4 +80,4 @@ namespace _11.wpfDataBinding___2
 
 ### 결과
 
-- <img src="https://user-images.githubusercontent.com/66783849/190459887-42fe4bdf-e886-4c25-9500-e881c491f2ff.png" width="70%">
+- <img src="https://user-images.githubusercontent.com/66783849/190459887-42fe4bdf-e886-4c25-9500-e881c491f2ff.png" width="30%">
