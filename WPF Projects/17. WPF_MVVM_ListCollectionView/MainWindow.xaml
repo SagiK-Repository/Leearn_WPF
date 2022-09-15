@@ -1,0 +1,67 @@
+﻿<Window x:Class="_17.WPF_MVVM_ListCollectionView.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_17.WPF_MVVM_ListCollectionView"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="285" Width="421">
+    <!--Window.Resources로 미리 자원 등록-->
+    <Window.Resources> 
+        <!--EmpViewModel 자원을 "emps"로 등록-->
+        <local:EmpViewModel x:Key="emps"/>
+        <!--"template 라는 이름으로 DataTemplate를 등록-->
+        <!--Column 표를 만드는 틀을 정의한다.-->
+        <DataTemplate x:Key="template">
+            <Grid Width="400">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Path=EmpNo}"/>
+                <TextBlock Grid.Column="1" Text="{Binding Path=EName}"/>
+                <TextBlock Grid.Column="2" Text="{Binding Path=Job}"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <!--StackPanel 객체에 emps 소스 할당-->
+    <StackPanel Name="rootElement"
+                DataContext="{Binding Source={StaticResource emps}}" 
+                DataContextChanged="MainWindow_DataContextChanged">
+        <Grid Width="400">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="150"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="20"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock HorizontalAlignment="Center" Grid.ColumnSpan="3">사원 리스트</TextBlock>
+            <Button Grid.Row="1" Grid.Column="0" Name="btnEmpNo" Content="EmpNo" Click="OnClick"></Button>
+            <Button Grid.Row="1" Grid.Column="1" Name="btnEName" Content="EName" Click="OnClick"></Button>
+            <Button Grid.Row="1" Grid.Column="2" Name="btnJob" Content="Job" Click="OnClick"></Button>
+            <ListBox Grid.Row="2" Grid.ColumnSpan="3" Name="empListBox" 
+                    ItemsSource="{Binding Source={StaticResource emps}}" 
+                    ItemTemplate="{StaticResource template}"
+                    IsSynchronizedWithCurrentItem="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+            <TextBlock Foreground="Blue" Grid.Row="3" Grid.ColumnSpan="3">이전/이후/데이터필터링</TextBlock>
+            <Button Grid.Row="4" Grid.Column="0" Name="Previous" Click="OnMove">Previous</Button>
+            <Button Grid.Row="4" Grid.Column="1" Name="Next" Click="OnMove">Next</Button>
+            <Button Grid.Row="4" Grid.Column="2" Name="Filter" Click="OnFilter">Show only Manager</Button>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Name="tblEmpNo" Text="{Binding Path=EmpNo}"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" Name="tblEName" Text="{Binding Path=EName}"/>
+            <TextBlock Grid.Row="5" Grid.Column="2" Name="tblJob" Text="{Binding Path=Job}"/>
+
+        </Grid>
+    </StackPanel>
+   
+</Window>

@@ -1,0 +1,17 @@
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\bin\Debug\_17.WPF_MVVM_ListCollectionView.exe.config
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\bin\Debug\_17.WPF_MVVM_ListCollectionView.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\bin\Debug\_17.WPF_MVVM_ListCollectionView.pdb
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\17. WPF_MVVM_ListCollectionView.csproj.AssemblyReference.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\17. WPF_MVVM_ListCollectionView.csproj.SuggestedBindingRedirects.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\MainWindow.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\App.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\GeneratedInternalTypeHelper.g.cs
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\_17.WPF_MVVM_ListCollectionView_MarkupCompile.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\_17.WPF_MVVM_ListCollectionView_MarkupCompile.lref
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\MainWindow.baml
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\_17.WPF_MVVM_ListCollectionView.g.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\_17.WPF_MVVM_ListCollectionView.Properties.Resources.resources
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\17. WPF_MVVM_ListCollectionView.csproj.GenerateResource.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\17. WPF_MVVM_ListCollectionView.csproj.CoreCompileInputs.cache
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\_17.WPF_MVVM_ListCollectionView.exe
+D:\Git_Hub_Repository\WPF_Project\WPF Projects\17. WPF_MVVM_ListCollectionView\obj\Debug\_17.WPF_MVVM_ListCollectionView.pdb
