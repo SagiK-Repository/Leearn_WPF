@@ -483,5 +483,5 @@ namespace WPF_Calculator
 
 ### 결과
 
-- <img src="https://user-images.githubusercontent.com/66783849/190461815-59219574-c957-40bb-adca-dfb30aa84973.png" width="50%">
+- <img src="https://user-images.githubusercontent.com/66783849/190461815-59219574-c957-40bb-adca-dfb30aa84973.png">
 
