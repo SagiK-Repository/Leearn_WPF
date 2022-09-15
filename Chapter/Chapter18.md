@@ -2,7 +2,7 @@
 
 - MVVM, Command, 데이터바인딩을 이용하여 계산기를 만든다.
 - 특히 윈도우 10에서 기본 제공되는 계산기를 모방하여 제작해본다.  
-  <img src="" width="">
+  <img src="https://user-images.githubusercontent.com/66783849/190462047-541bf078-f443-4b09-bb2d-0cda5dcb7321.png">
 
 ### 실습
 - 실습 목표
@@ -483,5 +483,5 @@ namespace WPF_Calculator
 
 ### 결과
 
-- <img src="" width="">
+- <img src="https://user-images.githubusercontent.com/66783849/190461815-59219574-c957-40bb-adca-dfb30aa84973.png">
 
