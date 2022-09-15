@@ -153,3 +153,6 @@ namespace _13.wpfDataBinding___2
 ```
 </details>
 
+### 결과
+
+- <img src="https://user-images.githubusercontent.com/66783849/190460121-659bac32-3b9c-4fdb-bb41-c782a0f92ae0.png" width="70%">
