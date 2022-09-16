@@ -1201,6 +1201,386 @@
 
 # Ch 06. Content 및 Control
 
+### 0. Summary(요약)
+
+- <img src="http://build.mirero.co.kr:8099/images/WPF/chapter6/summary.jpg" width="70%">
+
+<br>
+
+### 1. 다양한 콘텐츠 적용 가능
+
+- Control은 사용자가 상호작용할 수 있는 UI이다.
+- <img src="http://build.mirero.co.kr:8099/images/WPF/chapter6/6_1.jpg" width="50%">
+
+<br>
+
+### 실습 0-0 Image Element
+
+- Image를 솔루션 탐색기에 존재하는 프로젝트 경로에 넣는다. (폴더경로 포함)
+- xaml 코드를 통해 이미지를 출력할 수 있다.
+  ```xml
+  <Grid>
+    <Image Source="3-5.jpg"/>
+    <Image Source="Pictures/3-5.jpg"/>
+  </Grid>
+  ```
+- MainWindow.xaml.cs로도 이미지를 출력할 수 있다. (위 코드와 동일)
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+          Uri uri = new Uri("Pictures/3-5.jpg", UriKind.Relative);
+          BitmapImage bitmap = new BitmapImage(uri);
+          Image image = new Image();
+          image.Source = bitmap;
+
+          Grid grid = new Grid();
+          grid.Children.Add(image);
+          Grid.SetRow(image, 0);
+          Grid.SetColumn(image, 0);
+
+          Content = grid;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/57879142d4ea02d040fbfc0cf77994d4/image.png">
+
+<br>
+
+### 실습 0-1 ContentControls - Label Control
+
+- Image를 솔루션 탐색기에 존재하는 프로젝트 경로에 넣는다. (폴더경로 포함)
+  ```xml
+    <StackPanel>
+        <Label Content="WPF Example Image" FontWeight="Bold"/>
+        <Label>
+            <Image Source="3-5.jpg"></Image>
+        </Label>
+    </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/7caf95a33096c8f42b24bcbf4818cf93/image.png">
+
+<br>
+
+### 실습 0-2 ContentControls - Label Control - Accelerator key
+
+- Content 앞에 '_'를 넣으면 F가 Accelerator key로 할당되어 사용자가 firstName 요소를 가져올 수 있다. <kbd>Alt</kbd>+<kbd>F</kbd>를 누르면 커서가 firtstName 요소로 간다.
+  ```xml
+    <StackPanel>
+        <Label Target="{Binding ElementName=firstName}">_First Name:</Label>
+        <TextBox Name="firstName"></TextBox>
+
+        <Label Target="{Binding ElementName=lastName}">_Last Name:</Label>
+        <TextBox Name="lastName"></TextBox>
+    </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/d0049889bf2384258df51523067da92a/image.png">
+
+<br>
+
+### 실습 0-3 ContentControls - Button Control
+
+- 버튼 이벤트 핸들러는 code-behind에 추가해야 한다.
+- xaml 코드를 통해 버튼을 구성할 수 있다.
+  ```xml
+    <StackPanel>
+        <Button Click="Button_Click">Click Me</Button>
+    </StackPanel>
+  ```
+- MainWindow.xaml.cs로 이벤트를 구성한다.
+  ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("The Button has been clicked", "Button Message");
+        }
+    }  
+  ```
+- 결과  
+  <img src="/uploads/86c13813f0bb9cda514ad9af79478d8b/image.png">
+
+<br>
+
+
+### 실습 0-4 ContentControls - CheckBox, RadioButton Controls
+
+- CheckBox나 RadioButton은 상태를 유지하는 Control이다.
+- RadioButton은 선택되면 다른 RadioButton의 IsChecked상태가 unchecked가 된다.
+- IsChecked 속성 : code-behind에서 라디오 버튼이나 체크박스가 체크가 되어있는지 확인할 수 있다.
+- xaml 코드를 통해 CheckBox, RadioButton를 구성할 수 있다.
+  ```xml
+    <StackPanel>
+        <CheckBox Name="cb1" Margin="5,10,0,0">Option 1</CheckBox>
+        <CheckBox Name="cb2" Margin="5,0,0,0">Option 2</CheckBox>
+        <RadioButton Name="rb1" Margin="5,10,0,0">One of Three</RadioButton>
+        <RadioButton Name="rb2" Margin="5,0,0,0">Two of Three</RadioButton>
+        <RadioButton Name="rb3" Margin="5,0,0,0">Three of Three</RadioButton>
+    </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/390ca50852012d110988f388ed6e61d6/image.png">
+
+<br>
+
+
+### 실습 1-0 ContentControls - Grouping RadioButtons
+
+- Default로는 모든 RadioButton들은 부모 요소와 같은 그룹에 속해있다.
+- GroupName 속성을 사용하여 그룹을 지정한다. (String)
+- xaml 코드를 통해 Grouping RadioButtons를 구성할 수 있다.
+  ```xml
+     <StackPanel>
+         <RadioButton Margin="5,0,5,0">Default1</RadioButton>
+         <RadioButton Margin="5,0">Default2</RadioButton>
+
+         <RadioButton GroupName="Group1" Margin="5,7,5,0">Group1-1</RadioButton>
+         <RadioButton GroupName="Group1" Margin="5,0">Group1-2</RadioButton>
+
+         <RadioButton GroupName="Group2" Margin="5,7,5,0">Group2-1</RadioButton>
+         <RadioButton GroupName="Group2" Margin="5,0">Group2-1</RadioButton>
+     </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/cd1208ed68278e14b0959bea922a37f3/image.png">
+
+<br>
+
+### Window 클래스
+
+- Window 클래스는 ContentControl 클래스의 상속을 받는다.
+  | Name                  | Method or Property | Purposes                                            |
+  |-----------------------|--------------------|-----------------------------------------------------|
+  | Show                  | Method             | 창을 연 후 새로 열린 창이 닫힐 때까지 기다리지 않고 반환된다.                |
+  | ShowDialog            | Method             | 창을 연 후 새로 열린 창이 닫힌 경우에만 반환된다.                       |
+  | Hide                  | Method             | 창이 표시되지 않게 한다.                                      |
+  | Topmost               | Property           | 창을 맨 위에 표시할지 여부를 설정한다. 맨위에 있으면 true, 그렇지 않으면 false. |
+  | ShowInTaskBar         | Property           | 창이 작업표시줄에 있으면 true, 그렇지 않으면 false.                  |
+  | WindowStartupLocation | Property           | 창이 처음 표시될때의 위치를 설정한다.                               |
+
+<br>
+
+
+### 실습 1-1 Window Ownership
+
+- 프로그램은 여러 개의 Window 창을 생성할 수 있다.
+- 윈도우들은 독립적이거나, 다른 윈도우창을 소유할 수 있다. (Child Window 설정)
+- Child Window를 만들기 위해서는, Owner 속성을 owner window로 참조해 주면 된다.
+- xaml 코드를 통해 버튼을 하나 구성한다.
+  ```xml
+    <Grid>
+        <Button Click="Button_Click" VerticalAlignment="Top">
+            Create Other Windows
+        </Button>
+    </Grid>
+  ```
+- MainWindow.xaml.cs로 Button_Click 이벤트를 구성한다.
+  ```cs
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        Window w1 = new Window();
+        w1.Background = Brushes.AliceBlue;
+        w1.Title = "Win 1";
+        w1.Height = 120;
+        w1.Width = 250;
+        w1.Content = "Independent Window";
+        w1.Show();
+        
+        Window w2 = new Window();
+        w2.Background = Brushes.PaleVioletRed;
+        w2.Title = "Win 2";
+        w2.Height = 120;
+        w2.Width = 250;
+        w2.Content = "ChildWindow";
+        w2.Owner = this;
+        w2.Show();
+    }
+  ```
+- 결과
+  - MainWindow를 닫으면 Win2도 닫히고, 최소화시키면 Win2도 최소화 되는 것을 확인다.  
+  <img src="/uploads/faefb1e0cac96f9210e94bc55f16e290/image.png">
+
+<br>
+
+
+### 실습 1-2 Window - Modal Dialog Boxes
+
+- Modal dialog(Modal dialog box)는 특정 정보를 표시하거나 사용자로부터 정보를 수집하는 데 초점을 맞춘 창이다.
+- Show()를 호출하여 표시하는 방법 대신, ShowDialog() 메소드를 사용한다.
+- Modal dialog이 실행되면 다른 작업을 못한다. dialog 창을 닫으면 다른 작업을 시작할 수 있다.
+- 프로젝트 > 추가 > 새항목 > 창(WPF) > XAML이름은 "MyDialog"로 한다.
+- MainWindow.xaml 코드를 통해 버튼을 구성한다.
+  ```xml
+    <Grid>
+        <Button Click="Button_Click" VerticalAlignment="Top">
+            Create Dialog
+        </Button>
+    </Grid>
+  ```
+- MainWindow.xaml.cs로 Button_Click 이벤트를 구성한다.
+  ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MyDialog dlg = new MyDialog();
+            string result = (true == dlg.ShowDialog())
+                ? "Ok Clicked."
+                : "Cancel";
+            MessageBox.Show(result, "Result"); 
+        }
+    }
+  ```
+- MyDialog.xaml
+  ```xml
+    <Grid>
+        <Button Click="Button_Click" VerticalAlignment="Top">
+            Create Dialog
+        </Button>
+    </Grid>
+  ```
+- MainWindow.xaml.cs로 Button_Click 이벤트를 구성한다.
+  ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MyDialog dlg = new MyDialog();
+            string result = (true == dlg.ShowDialog())
+                ? "Ok Clicked."
+                : "Cancel";
+            MessageBox.Show(result, "Result"); 
+        }
+    }
+  ```
+- 결과  
+  <img src="/uploads/4cdc0b8cae73786e2d4e8121dcd14835/image.png">  
+  <img src="/uploads/38358edf1a4a0e8719f564aa5d1dbd9e/image.png">
+
+<br>
+
+
+### 실습 1-3 Window - MessageBox Dialog Box
+
+- MessageBox 클래스는 사용자에게 메시지, 오류 또는 경고를 표시한다.
+- modal box이기 때문에 프로그램을 계속하기 전에 대화상자에 주소를 지정해야 한다.
+- xaml 코드를 통해 버튼을 구성한다.
+  ```xml
+    <StackPanel>
+        <Button Click="Button_Click">Click Me</Button>
+    </StackPanel>
+  ```
+- MainWindow.xaml.cs로 이벤트를 구성한다.
+  ```cs
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("The Button has been clicked", "Button Message", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+        }
+    }  
+  ```
+- 결과  
+  <img src="/uploads/2ec15d2534e00c39e5dc4aa985025330/image.png">
+
+<br>
+
+
+### 실습 1-4 Window - ScrollViewer
+
+- ScrollViewer는 Content가 너무 커서 할당된 영역에 표시할 수 없는 경우 스크롤 막대를 Content element에 추가한다.
+- xaml 코드를 통해 스크롤을 구성할 수 있다.
+  ```xml
+    <Grid>
+        <ScrollViewer>
+            <StackPanel>
+                <Button>Button1</Button>
+                <Button>Button2</Button>
+                <Button>Button3</Button>
+                <Button>Button4</Button>
+                <Button>Button5</Button>
+                <Button>Button6</Button>
+                <Button>Button7</Button>
+                <Button>Button8</Button>
+                <Button>Button9</Button>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+  ```
+- 결과  
+  <img src="/uploads/9c032bcd0e846babf03bc0feb9ccca42/image.png">
+
+<br>
+
+
+### 실습 2-0 Window - ScrollViewer Image
+
+- ScrollViewer에 Image포함.
+- xaml 코드를 통해 스크롤 이미지를 구성할 수 있다.
+  ```xml
+     <Grid>
+         <ScrollViewer>
+             <Image Source="ChurchSmall.jpg"/>
+         </ScrollViewer>
+     </Grid>
+  ```
+- 결과  
+  <img src="/uploads/18f964fef6537c03cd102c36af2c6da8/image.png">
+
+<br>
+
+### HeaderedContentControl
+
+- HeaderedContentControl 클래스는 ContentControl 클래스에서 파생된다.
+- Header 속성의 content는 main content의 제목으로 사용된다.
+
+<br>
+
+### 실습 2-1 HeaderedContentControl - GroupBox Element
+
+- GroupBox는 content 주변에 테두리를 배치하고 header를 왼쪽 상단에 배치한다.
+- GroupBox에서 BorderThickness 및 Background를 설정할 수 있다.
+- 헤더 자체에 content가 포함될 수 있다.
+- xaml 코드를 통해 버튼을 구성할 수 있다.
+  ```xml
+    <GroupBox Header="Grouped Things" Margin="5">
+        <StackPanel>
+            <Image Margin="3" HorizontalAlignment="Left" Height="50" Source="3-5.jpg">
+            </Image>
+            <Button Margin="3">Btn 1</Button>
+            <Button Margin="3">Btn 2</Button>
+        </StackPanel>
+    </GroupBox>
+  ```
+- 결과  
+  <img src="/uploads/d486cf6cab38503a7a1162291fe44ad5/image.png">
+
+<br>
+
+
 <br><br><br>
 
 # Ch 07. Dependency Property
