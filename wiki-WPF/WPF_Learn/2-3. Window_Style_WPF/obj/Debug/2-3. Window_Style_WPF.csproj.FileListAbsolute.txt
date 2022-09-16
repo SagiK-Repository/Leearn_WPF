@@ -1,8 +1,0 @@
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\bin\Debug\_2_3.Window_Style_WPF.exe.config
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\bin\Debug\_2_3.Window_Style_WPF.exe
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\bin\Debug\_2_3.Window_Style_WPF.pdb
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\obj\Debug\2-3. Window_Style_WPF.csproj.AssemblyReference.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\obj\Debug\2-3. Window_Style_WPF.csproj.SuggestedBindingRedirects.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\obj\Debug\2-3. Window_Style_WPF.csproj.CoreCompileInputs.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\obj\Debug\_2_3.Window_Style_WPF.exe
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-3. Window_Style_WPF\obj\Debug\_2_3.Window_Style_WPF.pdb

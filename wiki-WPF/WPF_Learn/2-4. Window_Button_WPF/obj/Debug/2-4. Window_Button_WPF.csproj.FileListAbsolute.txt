@@ -1,8 +1,0 @@
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\bin\Debug\_2_4.Window_Button_WPF.exe.config
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\bin\Debug\_2_4.Window_Button_WPF.exe
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\bin\Debug\_2_4.Window_Button_WPF.pdb
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\obj\Debug\2-4. Window_Button_WPF.csproj.AssemblyReference.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\obj\Debug\2-4. Window_Button_WPF.csproj.SuggestedBindingRedirects.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\obj\Debug\2-4. Window_Button_WPF.csproj.CoreCompileInputs.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\obj\Debug\_2_4.Window_Button_WPF.exe
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\2-4. Window_Button_WPF\obj\Debug\_2_4.Window_Button_WPF.pdb

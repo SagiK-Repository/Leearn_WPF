@@ -1,8 +1,0 @@
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\bin\Debug\_3_5.WPF_Window_Class_.exe.config
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\bin\Debug\_3_5.WPF_Window_Class_.exe
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\bin\Debug\_3_5.WPF_Window_Class_.pdb
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\obj\Debug\3-5. WPF_Window_Class_.csproj.AssemblyReference.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\obj\Debug\3-5. WPF_Window_Class_.csproj.SuggestedBindingRedirects.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\obj\Debug\3-5. WPF_Window_Class_.csproj.CoreCompileInputs.cache
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\obj\Debug\_3_5.WPF_Window_Class_.exe
-D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\3-5. WPF_Window_Class_\obj\Debug\_3_5.WPF_Window_Class_.pdb
