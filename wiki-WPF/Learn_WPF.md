@@ -342,6 +342,202 @@
 
 # Ch 03. WPF Architecture 및 어플리케이션
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+<br>
+
+### 1. WPF Project
+
+- Visual Studio > 새 프로젝트 > WPF 앱(.NET Framework) > 프로젝트 이름 변경 > 완료
+- App.xaml 파일과 App.xaml.cs 파일이 App을 수행
+- MainWindow.xaml 파일과 MainWindow.xaml.cs 파일이 MainWindow를 수행한다.
+- Visual Studio에서 Default로 두 개의 XAML 파일을 생성한다.
+  - MainWindow.xaml
+  - App.xaml
+- Logical Tree와 Visual Tree는 다음과 같이 구성된다.
+  - Logical Tree(논리적 트리)  
+    <img src="" width="70%">
+  - Visual Tree(시각적 트리) (디버깅 모드에서 확인 가능)  
+    <img src="" width="70%">
+
+
+<br>
+
+### 2. XAML 및 C# 프로그램의 컴파일 과정
+
+- <img src="" width="70%">
+- XAML 파일은 컴파일하면 BAML(XAML을 Binary로 표현한 파일)과 .g.cs파일이 만들어진다.
+- C# 파일과 BAML파일로 exe를 만든다. (XAML파일에 직접 접근하는 것이 아니라, BAML 파일을 사용한다)
+- UI 트리는 어셈블리의 MainWindow BAML이 로드한 MainWindow 클래스에서 InitializeComponent 메서드를 호출할 때 생성된다.
+
+
+<br>
+
+### 3. WPF Architecture (WPF 구조)
+
+- <img src="" width="70%">
+- 상위의 서비스를 사용하는 계층, Direct와 플랫폼의 하위 계층, 두 계층 사이를 번역하는 계층
+  - Managed WPF Layer : 직접 서비스를 노출하는 부분이다.
+    - Window Base : Application과 Window 클래스이다.
+  - Media Integration Layer : Unmanaged code, Direct3D로 렌더링을 하는 부분이다.
+- WPF는 최상위 윈도우만 제외하고 나머지 컨트롤이나 Shape 등은 Direct3D를 이용해서 그린다.
+
+<br>
+
+### 4. UI 속성
+
+- ContentControl 클래스에는 Button 클래스와 Window클래스가 포함되어있다.
+- Children속성은 Panel 클래스를 상속받았다.
+
+<br>
+
+### 5. Window 클래스
+
+- Window 클래스중에 SolidColorBrush, LinearGradientBrush, RadialGradientBrush를 다루어 본다.
+- 2.1로 프로젝트를 구성한다.
+  ```cs
+  using System;
+  using System.Windows.Media;
+  using System.Windows;
+  namespace _3_5.WPF_Window_Class_
+  {
+      // Color Window
+      class ColorWindow : Window
+      {
+          public ColorWindow(Brush b)
+          {
+              Title = "My Simple Window";
+              Content = "Hi~ There~!";
+              Width = 300; Height = 200;
+  
+              Background = b;
+              Foreground = Brushes.Blue;
+          }
+      }
+  
+      internal class Program
+      {
+          [STAThread]
+          static void Main(string[] args)
+          {
+              // SolidColorBrush : 단색
+              // 기본 단색
+              ColorWindow myWin0 = new ColorWindow(Brushes.Beige);
+  
+              Color myColor = new Color();
+              myColor.A = 255; // 0~255의 불투명한 정도
+              myColor.R = 100; // 0~255의 red
+              myColor.G = 150; // 0~255의 green
+              myColor.B = 200; // 0~255의 blue
+              ColorWindow myWin1 = new ColorWindow(new SolidColorBrush(myColor));
+              // SolidColorBrush scb = new SolidColorBrush(myColor);
+              // SolidColorBrushs myWin0 = new SolidColorBrushs(sb);
+  
+  
+              //LinearGradientBrush : 선형 그라데이션
+              Point startPoint = new Point(0, 0); // 왼쪽 위 시작점 (높이와 너비는 0~1)
+              Point endPoint = new Point(1, 1); // 오른쪽 아래 종료점
+  
+              ColorWindow myWin2 = new ColorWindow(
+                  new LinearGradientBrush(Colors.White, Colors.MistyRose, startPoint, endPoint)
+                  );
+  
+              LinearGradientBrush lgb = new LinearGradientBrush();
+              lgb.StartPoint = new Point(0, 0);
+              lgb.EndPoint = new Point(1, 1);
+              lgb.GradientStops.Add(new GradientStop(Colors.Yellow, 0.0)); // Step 위치별 색 지정
+              lgb.GradientStops.Add(new GradientStop(Colors.Red, 0.25));
+              lgb.GradientStops.Add(new GradientStop(Colors.Blue, 0.75));
+              lgb.GradientStops.Add(new GradientStop(Colors.LimeGreen, 1.0));
+  
+              ColorWindow myWin3 = new ColorWindow(lgb);
+  
+  
+              // RadialGradientBrush : 방사형 그라데이션
+              ColorWindow myWin4 = new ColorWindow(
+                  new RadialGradientBrush(Colors.White, Colors.Aquamarine)
+                  );
+  
+              RadialGradientBrush rgb = new RadialGradientBrush();
+              rgb.GradientOrigin = new Point(0.5, 0.5); // Gradiation 시작점 위치 비율
+              rgb.Center = new Point(0.5, 0.5); // Gradiation 범위 중심 위치 비율
+              rgb.RadiusX = 0.5; // Gradiation 가로 길이
+              rgb.RadiusY = 0.5; // Gradiation 세로 길이
+              rgb.GradientStops.Add(new GradientStop(Colors.Yellow, 0.0)); // Step 위치별 색 지정
+              rgb.GradientStops.Add(new GradientStop(Colors.Red, 0.25));
+              rgb.GradientStops.Add(new GradientStop(Colors.Blue, 0.75));
+              rgb.GradientStops.Add(new GradientStop(Colors.LimeGreen, 1.0));
+  
+              ColorWindow myWin5 = new ColorWindow(rgb);
+              myWin0.Show(); myWin1.Show(); myWin2.Show(); myWin3.Show(); myWin4.Show(); myWin5.Show();
+  
+              Application myApp = new Application();
+              myApp.Run(myWin0); myApp.Run(myWin1); myApp.Run(myWin2); myApp.Run(myWin3); myApp.Run(myWin4); myApp.Run(myWin5);
+  
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="" width="70%">
+
+<br>
+
+### 6. Application 클래스
+
+<img src="" width="70%">  
+
+- Run() : WPF 응용프로그램 시작
+- Run(Window) : 지정된 Window창을 열고 시작
+
+<br>
+
+### 7. 이미지 핸들러
+
+- Ch 09를 참고할 것.
+- 2.1를 통해 프로젝트를 만든다.
+  ```cs
+  using System;
+  using System.Windows;
+  using Application = System.Windows.Application;
+  
+  namespace _3_7.WPF_Application_Class
+  {
+      class MyWindow : Window
+      {
+          public MyWindow()
+          {
+              Title = "My Program Window";
+              Width = 300;
+              Height = 200;
+              Content = "this is application handles the startup event.";
+          }
+      }
+  
+      class Program
+      {
+          [STAThread]
+          static void Main(string[] args)
+          {
+              MyWindow win = new MyWindow();
+              Application app = new Application();
+              app.Startup += App_Startup;
+              app.Run(win);
+          }
+  
+          private static void App_Startup(object sender, StartupEventArgs e)
+          {
+              MessageBox.Show("The application is starting", "Starting Message");
+          }
+      }
+  
+  }
+  ```
+- 결과
+  <img src="" width="70%">
+
 <br><br><br>
 
 # Ch 04. XAML
