@@ -847,7 +847,355 @@
 
 # Ch 05. Layout
 
+### 0. Summary(요약)
 
+- <img src="/uploads/a5a1330819eb09f39399c08de6e139d3/image.png" width="70%">
+
+### 1. Layout 프로세스
+
+- Layout Process 는 크게 두 단계로 나눌 수 있다.
+  - Measure : 트리의 Window, Panel, child elements들의 사이즈를 측정한다.
+    - 재귀적순서로 트리의 요소들이 동작하고 child 요소가 부모에게 이상적인 사이즈 값을 반환해준다.
+  - Arrange : 부모가 자식들로부터 사이즈를 받으면, 실제로 각자에게 얼마를 줄지 계산해서 적당한 위치에 자식들을 위치시킨다.
+
+- MainWindow.xaml
+  ```xml
+  <Window x:Class="_5.WPF_Layout.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_5.WPF_Layout"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="900" Width="1800">
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <!--Element 크기 설정-->
+        <StackPanel Grid.Row="0" Grid.Column="0" >
+            <!--Width가 125보다 작아지지 않고, 200보다 커지지 않는다.-->
+            <Button MinWidth="125" MaxWidth="200">MinWidth="125" MaxWidth="200"</Button>
+            <!--이미지의 Width는 반드시 150이다-->
+            <Image Width="150" Source="3-5.jpg"></Image>
+            <Button>Long Button String</Button>
+        </StackPanel>
+
+        <!--HorizontalAlignment 속성-->
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <Button>HorizontalAlignment</Button>
+            <Button HorizontalAlignment="Left">Left</Button>
+            <Button HorizontalAlignment="Center">Center</Button>
+            <Button HorizontalAlignment="Right">Right</Button>
+            <Button HorizontalAlignment="Stretch">HorizontalAlignment="Stretch"</Button>
+        </StackPanel>
+
+        <!--VeticalAlignment 속성-->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+            <Button VerticalAlignment="Top">Top</Button>
+            <Button VerticalAlignment="Center">Center</Button>
+            <Button VerticalAlignment="Bottom">Bottom</Button>
+            <Button VerticalAlignment="Stretch">Stretch</Button>
+        </StackPanel>
+
+        <!--HorizontalContentAlignment 속성-->
+        <StackPanel Grid.Row="0" Grid.Column="3">
+            <Button>HorizontalContentAlignment</Button>
+            <Button HorizontalContentAlignment="Left">HorizontalContentAlignment="Left"</Button>
+            <Button HorizontalContentAlignment="Center">HorizontalContentAlignment="Center"</Button>
+            <Button HorizontalContentAlignment="Right">HorizontalContentAlignment="Right"</Button>
+            <Button HorizontalContentAlignment="Stretch">HorizontalContentAlignment="Stretch?"</Button>
+        </StackPanel>
+
+        <!--VerticalContentAlignment 속성-->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="4">
+            <Button VerticalContentAlignment="Top">Top</Button>
+            <Button VerticalContentAlignment="Center">Center</Button>
+            <Button VerticalContentAlignment="Bottom">Bottom</Button>
+            <Button VerticalContentAlignment="Stretch">Stretch?</Button>
+        </StackPanel>
+
+        <!--ContentAlignment를 Stretch로 설정했을 때-->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="5">
+            <Button VerticalContentAlignment="Top">Top</Button>
+            <Button VerticalContentAlignment="Center">Center</Button>
+            <Button VerticalContentAlignment="Bottom">Bottom</Button>
+            <Button VerticalContentAlignment="Stretch" Background="Aqua">
+                <Button Margin="15">
+                    Stretch?
+                </Button>
+            </Button>
+        </StackPanel>
+
+        <!--Visibility 속성 : Visible-->
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <Button Visibility="Visible">Visible</Button>
+            <Button>Visibility="Visible"</Button>
+        </StackPanel>
+
+        <!--Visible 속성 : Hidden-->
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Button Visibility="Hidden">Hidden</Button>
+            <Button>Visibility="Hidden"</Button>
+        </StackPanel>
+
+        <!--Visible 속성 : Collapsed-->
+        <StackPanel Grid.Row="1" Grid.Column="2">
+            <Button Visibility="Collapsed">Collapsed</Button>
+            <Button>Visibility="Collapsed"</Button>
+        </StackPanel>
+        
+        <!--Padding-->
+        <StackPanel Grid.Row="1" Grid.Column="3">
+            <Button Padding="10">Padding="10"</Button>
+            <Button Padding="10">Padding="10"</Button>
+        </StackPanel>
+
+        <!--Margin-->
+        <StackPanel Grid.Row="1" Grid.Column="4">
+            <Button Margin="10">Margin="10"</Button>
+            <Button Margin="10">Margin="10"</Button>
+        </StackPanel>
+        
+        <!--Padding & Margin-->
+        <StackPanel Grid.Row="1" Grid.Column="5">
+            <Button Padding="10" Margin="10">Padding="10" Margin="10"</Button>
+            <Button Padding="10" Margin="10">Padding="10" Margin="10"</Button>
+        </StackPanel>
+
+        <!--Padding & Margin = "좌우, 상하"-->
+        <StackPanel Grid.Row="2" Grid.Column="0">
+            <Button Padding="5,10" Margin="5,20">Padding="5,10" Margin="5,20"</Button>
+            <Button Padding="5,10" Margin="5,20">Padding="5,10" Margin="5,20"</Button>
+        </StackPanel>
+
+        <!--Padding & Margin = "좌, 상, 우, 하"-->
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <Button Padding="5,0,10,15">Padding="5,0,10,15"</Button>
+            <Button Padding="5,0,20,30">Padding="5,0,20,30"</Button>
+            <Button Padding="50,50,0,0">Padding="50,50,0,0"</Button>
+        </StackPanel>
+
+
+        <!--StackPanel-->
+        <StackPanel Grid.Row="2" Grid.Column="2">
+            <Button>StackPanel Btn1</Button>
+            <Button>StackPanel Btn2</Button>
+            <Button>StackPanel Btn3</Button>
+            <Button>StackPanel Btn4</Button>
+            <Button>StackPanel Btn5</Button>
+            <Button>StackPanel Btn6</Button>
+        </StackPanel>
+        
+        <!--WrapPanel-->
+        <WrapPanel ItemHeight="90" Grid.Row="2" Grid.Column="3">
+            <Button>Button 1</Button>
+            <Button VerticalAlignment="Top">WrapPanel</Button>
+            <Button VerticalAlignment="Center">Button 3</Button>
+            <Button VerticalAlignment="Bottom">Button 4</Button>
+            <Button VerticalAlignment="Stretch">Button 5</Button>
+        </WrapPanel>
+
+        <!--DockPanel-->
+        <DockPanel LastChildFill="False" Grid.Row="2" Grid.Column="4">
+            <Button>DockPanel</Button>
+            <Button>Button 2</Button>
+            <Button DockPanel.Dock="Top">DockPanel.Dock="Top"</Button>
+            <Button DockPanel.Dock="Right">"Right'</Button>
+        </DockPanel>
+
+        <DockPanel LastChildFill="False" Grid.Row="2" Grid.Column="5">
+            <Button DockPanel.Dock="Top">Btn 1</Button>
+            <Button DockPanel.Dock="Right">Btn 2</Button>
+            <Button DockPanel.Dock="Bottom">Btn 3</Button>
+            <Button DockPanel.Dock="Left">Btn 4</Button>
+            <Button DockPanel.Dock="Top">DockPanel 5</Button>
+            <Button DockPanel.Dock="Right">Btn 6</Button>
+            <Button DockPanel.Dock="Bottom">Btn 7</Button>
+            <Button DockPanel.Dock="Left">Btn 8</Button>
+            <Button DockPanel.Dock="Top">Btn 9</Button>
+            <Button DockPanel.Dock="Right">Btn 10</Button>
+            <Button DockPanel.Dock="Bottom">Btn 11</Button>
+            <Button DockPanel.Dock="Left">Btn 12</Button>
+        </DockPanel>
+
+        <!--Grid-->
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Button1</Button>
+            <Button Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2">Button2</Button>
+            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Button3</Button>
+        </Grid>
+
+        <!--Grid Absolute Sizing : Height와 Width 속성으로 설정-->
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0">Grid</Button>
+            <Button Grid.Row="1" Grid.Column="1">Button2</Button>
+        </Grid>
+
+        <!--Grid Automatic Sizing : 셀 Content에 맞게 설정-->
+        <Grid ShowGridLines="True" Grid.Row="3" Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0">Grid Auto</Button>
+            <Button Grid.Row="1" Grid.Column="1">Long Button Name</Button>
+        </Grid>
+
+        <!--Grid Proportional Sizing : 사용가능한 공간을 비례적으로 행과 열을 나눔-->
+        <Grid ShowGridLines="True" Grid.Row="3" Grid.Column="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0">Grid</Button>
+            <Button Grid.Row="1" Grid.Column="1">Height="*"</Button>
+        </Grid>
+
+        <!--Grid Proportional Sizing-->
+        <Grid Grid.Row="3" Grid.Column="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Height="*"</Button>
+            <Button Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2">Width="2*,3*,5*"</Button>
+        </Grid>
+
+        <!--Splitter Bars-->
+        <Grid Grid.Row="3" Grid.Column="5">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0">Button1</Button>
+            <Button Grid.Row="1" Grid.Column="0">Button2</Button>
+            <GridSplitter Grid.Row="0" Grid.Column="1"
+  					Width="3"
+  					Grid.RowSpan="2"
+  					Background="Pink"
+  					HorizontalAlignment="Center"
+  					VerticalAlignment="Stretch">
+            </GridSplitter>
+            <Button Grid.Row="0" Grid.Column="2">GridSplitter</Button>
+            <Button Grid.Row="1" Grid.Column="2">GridSplitter</Button>
+        </Grid>
+
+        <!--Shared Size Groups-->
+        <Grid Grid.IsSharedSizeScope="True" Grid.Row="4" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Column0"></ColumnDefinition>
+                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="Auto" SharedSizeGroup="Column0"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0">Button1</Button>
+            <Button Grid.Row="1" Grid.Column="3">Button2</Button>
+            <GridSplitter Grid.Row="0" Grid.Column="1"
+                      Width="3"
+                      Grid.RowSpan="2"
+                      Background="Pink"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch">
+            </GridSplitter>
+        </Grid>
+
+
+        <!--Canvas-->
+        <Canvas Grid.Row="4" Grid.Column="1">
+            <Button Canvas.Top="20" Canvas.Left="30" Canvas.ZIndex="5">Canvas.ZIndex="5"</Button>
+            <Button Canvas.Top="20" Canvas.Right="30" Canvas.ZIndex="3">Canvas.ZIndex="3"</Button>
+            <Button Canvas.Bottom="20" Canvas.Left="30">Canvas.ZIndex="0"</Button>
+            <Button Canvas.Bottom="20" Canvas.Right="30">Canvas.ZIndex="0"</Button>
+        </Canvas>
+
+
+        <!--Canvas : 좌표계를 사용하여 원하는 위치에 요소를 배치한다.-->
+        <Canvas Grid.Row="4" Grid.Column="2">
+            <Button Canvas.Top="20" Canvas.Left="30" >Canvas.ZIndex="0"</Button>
+            <Button Canvas.Top="20" Canvas.Right="30" >Canvas.ZIndex="0"</Button>
+            <Button Canvas.Bottom="20" Canvas.Left="30">Canvas.ZIndex="0"</Button>
+            <Button Canvas.Bottom="20" Canvas.Right="30">Canvas.ZIndex="0"</Button>
+        </Canvas>
+
+
+        <!--UniformGrid : UniformGrid의 모양이나 크기를 변경할지라도 항상 다른 셀들과 크기가 같다.-->
+        <UniformGrid Rows="2" Columns="2" Grid.Row="4" Grid.Column="3">
+            <Button>Button 1</Button>
+            <Button>Button 2</Button>
+            <Button>Button 3</Button>
+            <Button>Button 4</Button>
+        </UniformGrid>
+
+        <!--Q1. 버튼 두 개를 생성하여 Button2를 클릭하면 Button1이 나타나고,
+        Button2를 한번 더 클릭하면 Button1이 안보이게 하는 프로그램을 만든다.-->
+        <StackPanel Grid.Row="4" Grid.Column="4">
+            <Button Visibility="Hidden" Name="ErasableButton">Button1</Button>
+            <Button Click="Button_Click">Hidden or Visible</Button>
+        </StackPanel>
+      </Grid>
+  </Window>
+  ```
+- 결과  
+  <img src="/uploads/4059d1e4cfadfc90b16ad8717bdfadf9/image.png">
 
 <br><br><br>
 
