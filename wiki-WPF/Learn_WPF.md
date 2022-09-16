@@ -114,6 +114,230 @@
 
 # Ch 02. WPF 프로그래밍 개요
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+<br>
+
+### 1. WPF 프로젝트 생성 방법 - 콘솔 앱으로 생성하기
+
+- Visual Studio > 새 프로젝트 > 콘솔 앱(.NET Framework) > 프로젝트 이름 변경 > 완료
+- 솔루션 탐색기 > 참조 > 오른쪽 마우스 > 참조 추가 > 어셈블리 > WindowBase, PresentationCore, PresentationFrameWork 체크
+- 프로젝트 > 오른쪽 마우스 클릭 > 속성 > 애플리케이션(응용프로그램) > 출력형식 > Windows 애플리케이션(응용프로그램)으로 변경
+- Porgram.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Windows; // Windows 참조
+  
+  namespace _2_1.WPF_Console
+  {
+      internal class Program
+      {
+          [STAThread] // 싱글 쓰레드
+          static void Main(string[] args)
+          {
+              Window myWin = new Window();
+              myWin.Title = "my simple window"; //원도우 창 이름
+              myWin.Content = "hi there!"; // 윈도우 폼 내용
+  
+              Application myApp = new Application();
+              myApp.Run(myWin);
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="">
+- 윈도우 화면은 다음과 같이 구성한다.  
+  <img src="" width="50%">
+
+
+<br>
+
+### 2. Window 클래스를 상속받은 MyWindow 클래스로 윈도우 앱 만들기
+
+- 2-1과 마찬가지로 프로젝트를 구성한다.
+- Program.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Windows;
+  
+  namespace _2_2.Window_Class_WPF
+  {
+      class MyWindow : Window
+      {
+          public MyWindow()
+          {
+              Width = 300;
+              Height = 200;
+              Title = "my simple window";
+              Content = "hi there!";
+          }
+      }
+  
+      internal class Program
+      {
+          [STAThread]
+          static void Main(string[] args)
+          {
+              MyWindow myWin = new MyWindow();
+              myWin.Show();
+  
+              Application myApp = new Application();
+              myApp.Run(myWin);
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="">
+- Window는 다음과 같은 속성들로 구성되어 있다.  
+  <img src="" width="30%">
+
+
+<br>
+
+### 3. WindowStyle
+
+- 2-1과 마찬가지로 프로젝트를 구성한다.
+- Window Styles에 따라 다양한 창을 만들 수 있다.
+- Program.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Windows;
+  
+  namespace _2_3.Window_Style_WPF
+  {
+      class MyWindow : Window
+      {
+          public MyWindow(WindowStyle a)
+          {
+              Width = 300;
+              Height = 200;
+              Title = "WindowStyles";
+  
+              Content = WindowStyle.ToString();
+              // WindowStyle = WindowStyle.None;
+              WindowStyle = a;
+          }
+      }
+  
+      internal class Program
+      {
+          [STAThread]
+          static void Main(string[] args)
+          {
+              // SingleBorderWindow : 단일 테두리가 있는 창
+              MyWindow myWin0 = new MyWindow(WindowStyle.SingleBorderWindow);
+              // ThreeDBorderWindow : 창이 3차원 테두리
+              MyWindow myWin1 = new MyWindow(WindowStyle.ThreeDBorderWindow);
+              // ToolWindow : 고정된 도구창(최대화, 최소화 할 수 없다.)
+              MyWindow myWin2 = new MyWindow(WindowStyle.ToolWindow);
+              // None : 클라이언트 영역만 표시, 제목 표시줄과 테두리는 표시되지 않는다.
+              MyWindow myWin3 = new MyWindow(WindowStyle.None);
+              // myWin.WindowStyle = WindowStyle.None;
+  
+              myWin0.Show();
+              myWin1.Show();
+              myWin2.Show();
+              myWin3.Show();
+  
+              Application myApp = new Application();
+              myApp.Run(myWin0);
+              myApp.Run(myWin1);
+              myApp.Run(myWin2);
+              myApp.Run(myWin3);
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="" width="70%">
+
+<br>
+
+### 4. 버튼 만들기
+
+- 2-1과 마찬가지로 프로젝트를 구성한다.
+- using System.Window.Control 추가하여 구성한다.
+- Program.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Windows;
+  using System.Windows.Controls;
+  
+  namespace _2_4.Window_Button_WPF
+  {
+      // 기초 버튼
+      class MyWindow : Window
+      {
+          public MyWindow()
+          {
+              Title = "My Program Window";
+              Width = 300;
+              Height = 200;
+              Button btn = new Button();    // Create a button.
+              btn.Content = "Click Me";     // Set the button's text.
+              Content = btn;
+          }
+      }
+  
+      // 가로맞춤, 세로맞춤 속성 추가
+      class ButtonWindow : Window
+      {
+          public ButtonWindow(HorizontalAlignment h)
+          {
+              Title = "My Program Window";
+              Width = 300;
+              Height = 200;
+  
+              Button btn = new Button();    // Create a button.
+              btn.HorizontalAlignment = h;
+              btn.VerticalAlignment = VerticalAlignment.Center;
+              btn.Content = "Click Me";     // Set the button's text.
+  
+              Content = btn;
+          }
+      }
+  
+      internal class Program
+      {
+          [STAThread]
+          static void Main(string[] args)
+          {
+              // 기본 버튼
+              MyWindow myWin0 = new MyWindow();
+  
+              // 가로맞춤, 세로맞춤 속성 추가
+              ButtonWindow myWin1 = new ButtonWindow(HorizontalAlignment.Center);
+  
+              ButtonWindow myWin2 = new ButtonWindow(HorizontalAlignment.Left);
+  
+              ButtonWindow myWin3 = new ButtonWindow(HorizontalAlignment.Right);
+  
+              ButtonWindow myWin4 = new ButtonWindow(HorizontalAlignment.Stretch);
+  
+              myWin0.Show();
+              myWin1.Show();
+              myWin2.Show();
+              myWin3.Show();
+              myWin4.Show();
+  
+              Application myApp = new Application();
+              myApp.Run(myWin0);
+              myApp.Run(myWin1);
+              myApp.Run(myWin2);
+              myApp.Run(myWin3);
+              myApp.Run(myWin4);
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="" width="70%">
+
+
 <br><br><br>
 
 # Ch 03. WPF Architecture 및 어플리케이션
