@@ -542,9 +542,312 @@
 
 # Ch 04. XAML
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+<br>
+
+### 1. Application, Window의 UI 구조
+
+- Application 및 Window 각각의 방법을 비교한다.
+- Program.cs
+  ```cs
+  using System;
+  using System.Windows;
+  using System.Windows.Controls;
+  
+  namespace _4_1.WPF__Win
+  {
+      class MyWindow : Window
+      {
+          public MyWindow()
+          {
+              Width = 300;
+              Height = 200;
+              StackPanel sp = new StackPanel();
+              Button btn = new Button();
+              TextBlock txt = new TextBlock();
+  
+              btn.Content = "Click Me";
+              txt.Text = "illustrated WPF";
+              sp.Children.Add(txt);
+              sp.Children.Add(btn);
+              Content = sp;
+          }
+      }
+  
+      internal class Program
+      {
+          [STAThread]
+          static void Main(string[] args)
+          {
+              Application app = new Application();
+              MyWindow win = new MyWindow();
+              app.Run(win);
+          }
+      }
+  }
+  ```
+- MainWindow.xaml
+  ```xml
+  <Window x:Class="_4_1_WPF_App_Win.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_4_1_WPF_App_Win"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="200" Width="300">
+      <StackPanel>
+          <TextBlock>Illustrated WPF</TextBlock>
+          <Button>Click Me</Button>
+      </StackPanel>
+  </Window>
+  ```
+- XAML 파일로 UI구조를 설계한다면 더 간단해진다.
+
+
+<br>
+
+### 2. Attribute(속성) 추가 방법 4가지
+
+- Object Element Syntax
+  - `<Button Width="100" Height="50"> Click ME </Button>`
+- Attribute Syntax
+  - `<Button Width="100" Height="50"> </Button>`
+  - `<Button Width="100" Height="50" />`
+- Property Element Syntax : 속성들이 많아지면 복잡해지기 때문에 계층구조로 볼 수 있게 한다.
+  ```xml
+  <Button>
+    <Button.Background>
+        <LinearGradientBru Comsh StartPostiom="0,0" EndPoint="1,1">
+            <GrandientStop Color="Red" Offsrt="0.0">
+            <GrandientStop Color="Blue" Offsrt="1.0">
+        </LinearGradientBrush/>
+    </Button.Background>
+    Click Me
+  </Button>
+  ```
+- 부모의 속성을 사용할 때 Attached Property를 쓴다. `<Button Grid.Row="2"> Click </Button>`
+- 2.1와 같이 프로젝트를 구성한다.
+- 기본 Control들을 사용하기 위한 namespace
+  - `xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"`는 namespace를 나타낸다. (System.Windows, System.Windows.Controls/Automation...)
+  - `xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"`는 System.Windows.Markup를 나타낸다.
+  - x: => 프로젝트 템플릿, 샘플 코드 및 언어 기능의 설명서
+  - d: => 디자이너 네임스페이스
+  - mc: => 태그 호환성을 위해 사용된다.
+- MainWindow.xaml
+  ```xml
+  <Window x:Class="_4_2.WPF_XAML_Attribute.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_4_2.WPF_XAML_Attribute"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid>
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Button Grid.Row="1" Grid.RowSpan="2">
+              <Button.Background>
+                  <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                      <GradientStop Color="Red" Offset="0.0"/>
+                      <GradientStop Color="Blue" Offset="1.0"/>
+                  </LinearGradientBrush>
+              </Button.Background>
+              Click Me
+          </Button>
+      </Grid>
+  </Window>
+  ```
+- 결과  
+  <img src="">
+
+<br>
+
+### 3. Code-Behind 및 Object Names
+
+- Button에 속성값으로 이름을 설정하는 방법 : `<Button Name = "myButton"> Hi </Button>`
+- Name이 없는 클래스는 `<Button x:Name = "myButton"> Hi </Button>`
+  - x:Name => code-behind에서 해당 item을 참조할 수 있는 field를 만들어 준다.
+- MainWindow.xaml
+  ```xml
+  ...
+        Title="MainWindow" Height="450" Width="800">
+      <Grid>
+          <Button Name="myButton"/>
+      </Grid>
+  </Window>
+  ```
+- MainWindow.xaml.cs
+  ```cs
+  using System.Windows;
+  
+  namespace _4_3.WPF_XAML_ObjectName
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+              this.myButton.Content = "Hi There";
+          }
+      }
+  }
+  ```
+- Code-behind(MainWindow.xaml.cs)에서 해당 item을 참조할 수 있다.
+- 결과  
+  <img src="">
+
+<br>
+
+### 4. 다른 namespace 에서 class 사용하는 방법
+
+- MainWindow.xaml에서 namespace를 참조하여 클래스를 구성한다.
+- MainWindow.xaml.cs
+  ```cs
+  using System.Windows;
+  
+  namespace _4_3.WPF_XAML_ObjectName
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+              this.myButton.Content = "Hi There";
+          }
+      }
+  }
+  ```
+- MainWindow.xaml
+  ```xml
+  <Window x:Class="_4_4.WPS_namespace_Class.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:ctl="clr-namespace:_4_4.WPS_namespace_Class"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid>
+          <ctl:Mybutton>Hi There</ctl:Mybutton>
+      </Grid>
+  </Window>
+  ```
+- `xmlns:ctl="clr-namespace:_4_4.WPS_namespace_Class"`를 통해서 namespace "_4_4.WPS_namespace_Class"를 "ctl"이라는 이름으로 사용하여, `<ctl:Mybutton>Hi There</ctl:Mybutton>`를 통해 클래스를 사용하였다.
+- 실행 결과  
+  <img src="">
+
+<br>
+
+### 5. Markup Extensions
+
+- Markup Extensions을 통해 사용자 지정 태그 확장한다.
+  - `<Button Style="{StaticResource SomeStyle}">Click Me</Button>`
+- MarkupExtension클래스를 상속받고 ProvideValues라는 추상 메소드를 Override 해주는 것으로 구현한다.
+- 2가지 형태가 존재한다.
+  - 생성자 parameter를 넣는 방법
+    - `{ExtensionsClass Param1, Param2, ...}`
+  - 속성/값 쌍을 넣는 방법
+    - `{ExtensionsClass Property1=value1, Property2=value2, ...}`
+- 3-1와 같은 프로젝트를 구성한다.
+- MainWindow.xaml
+  ```xml
+  ...
+          xmlns:stl="clr-namespace:MarkupExtensions"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid>
+          <StackPanel>
+              <Button Content="{stl:ShowTime First}"></Button>
+              <Button Content="{stl:ShowTime Header=Second}"></Button>
+          </StackPanel>
+      </Grid>
+  </Window>
+  ```
+- MainWindow.xaml.cs
+  ```cs
+  using System;
+  using System.Windows;
+  using System.Windows.Markup;
+  
+  namespace MarkupExtensions
+  {
+      class ShowTime : MarkupExtension
+      {
+          private string header = string.Empty;
+          public string Header
+          {
+              get { return header; }
+              set { header = value; }
+          }
+          public ShowTime() { }
+          public ShowTime(string input)
+          {
+              header = input;
+          }
+          public override object ProvideValue(IServiceProvider serviceProvider)
+          {
+              return string.Format("{0}: {1}", header, DateTime.Now.ToLongTimeString());
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="">
+
+
+<br>
+
+### 6. White Space
+
+- "<"나 "'"와 같은 특수문자를 출력한다.
+- 생략된 공백을 나타낸다.
+- `xml:space = "preserve"`를 속성으로 추가하면 공백이 생략되지 않는다.
+  - `<Button xml:space = "preserve"> Click    Me </Button>`
+- 특수문자는 다음으로 대체한다.
+  | Character          | Character Entity |
+  |--------------------|------------------|
+  | Ampersand(&)       | \&amp;            |
+  | Less than(<)       | \&lt;             |
+  | Greater than(>)    | \&gt;             |
+  | Nonebreaking space | \&nbsp;           |
+  | Apostrophe(')      | \&apos;           |
+  | Quotation mark(")  | \&quot;           |
+- MainWindow.xaml
+  ```xml
+  ...
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <Button>Click &amp;Me</Button>
+        <Button>Click               &lt;Me&gt;</Button>
+        <Button>Click   &apos;Me&apos;</Button>
+        <Button xml:space ="preserve">Click       &quot;Me&quot;</Button>
+        <Button xml:space ="preserve">Click
+        Me</Button>
+    </StackPanel>
+</Window>
+  ```
+- 결과  
+  <img src="">
+
+
 <br><br><br>
 
+
+
 # Ch 05. Layout
+
+
 
 <br><br><br>
 
