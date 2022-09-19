@@ -28,16 +28,6 @@
 
 <br>
 
-## 출처
-- http://wish.mirero.co.kr/mirero/education/newface-group/newface/juhyung.park/-/issues/1
-- http://build.mirero.co.kr:8099/articles/WPF/Chapter1/Chapter1.html
-
-<br>
-
-## 참여자
-@ByungEun.Kim @JungOk.Kim @SeungHa.Lee @ChangBum.Kwon
-
-
 
 ---
 
@@ -1203,14 +1193,14 @@
 
 ### 0. Summary(요약)
 
-- <img src="http://build.mirero.co.kr:8099/images/WPF/chapter6/summary.jpg" width="70%">
+- <img src="" width="70%">
 
 <br>
 
 ### 1. 다양한 콘텐츠 적용 가능
 
 - Control은 사용자가 상호작용할 수 있는 UI이다.
-- <img src="http://build.mirero.co.kr:8099/images/WPF/chapter6/6_1.jpg" width="50%">
+- <img src="" width="50%">
 
 <br>
 
