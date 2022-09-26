@@ -2137,7 +2137,510 @@
 
 # Ch 07. Dependency Property
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+<br>
+
+### 1. Property와 새로운 패러다임
+
+- 표준속성 (Property)
+  - 속성(Property)은 일반적으로 클래스의 private field와 연결되며 다른 클래스에 해당 field를 접근할 수 있게 한다. 이 field를 backing field라고 한다.
+  - 속성은 클래스의 functional member이다. 즉, 코드를 실행한다.
+    - 값을 속성에 할당할 때, 이 값은 set accessor(접근자) 에게 전달되며 일반적으로 backing field에 할당된다.
+    - 속성에서 읽어올 때 get accessor(접근자) 는 backing field에 반환된다.
+  - get, set 접근자는 backing field를 설정 및 반환뿐만 아니라 어떤 코드를 넣던지 실행할 수 있다. 유일한 제약조건은 get접근자가 값을 반환(return) 해야 하고 올바른 type이어야 한다는 것이다.
+  - 예시  
+    ```cs
+    class MyClass {
+      private int _myProp; // Backing field
+      public int MyProp { get; set; } // Property
+    }
+    ```
+- 의존 속성(Dependency Property)
+  - WPF는 simple field를 사용하지 않는 새로운 패턴을 도입하고 기능을 추가한다.
+  - 새로운 유형의 Property를 Dependency Property(의존 속성)라고 한다.
+    - Dependency property의 값은 simple field에 저장되지 않지만, 필요에 의해 결정된다.
+    - Dependency property의 값은 코드에서 새 값을 할당하지 않더라도 특정 시간에 default값, 데이터 바인딩, 다른 속성들의 값, 사용자 기본 설정 및 기타 다른 요인에 따라 달라질 수 있다.
+    - WPF property system은 모든 Element를 추적하고 이러한 속성들을 호출할 때 값을 결정하는 역할을 한다.
+    - 코드나 마크업(XAML)에서 dependency property를 사용하는 구문은 dependency property가 아닌 속성을 사용하는 구문과 동일하다. 이 책의 시작부터 본 WPF 대부분의 속성이 dependency 속성이었다.
+
+<br>
+
+### 예제 1 Dependency Property
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <GroupBox FontWeight="Bold" Grid.Row="0" Grid.Column="0">
+      <GroupBox.Header>
+          Buttons
+      </GroupBox.Header>
+      <StackPanel>
+          <Button FontWeight="Medium">Button1</Button>
+          <Button>Button2</Button>
+      </StackPanel>
+  </GroupBox>
+  ```
+- 다음과 같이 WPF Property System에서 Bold의 값 을 상속받는다.  
+  <img src="/uploads/e55442793e77c11d83ac3114ff3069ae/image.png" width="50%">
+
+<br>
+
+### 2. Property 값 결정
+
+- Dependency property(의존 속성)의 값을 결정하려면 WPF property system이 가능한 여러 평가를 수행해야 한다.
+  <img src="/uploads/9d53a3608966d8ad01f2d86cb2d74244/image.png" width="50%">
+
+<br>
+
+### 3. Dependency Property의 Infrastructure
+
+- Dependency property 아키텍처는 DependencyProperty 및 DependencyObject 두 클래스의 협업을 기반으로 한다.
+  - DependencyProperty 클래스의 인스턴스를 dependency property identifier라고 하며, 특정 의존 속성의 특성을 나타낸다. 이 값은 속성값이 아니라 속성에 대한 특성 또는 metadata를 나타낸다.
+  - DependencyObject 클래스의 object에는 WPF property 시스템과 상호작용하여 특정 의존 속성의 값을 가져오고 설정하는 infrastructure가 포함되어있다.
+
+<br>
+
+### 4. 사용자 정의 Dependency Property
+
+- MainWindow.xaml.cs를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      //Dependency Property Field
+      // 클래스는 의존 속성 식별자에 대한 참조를 포함할 의존 속성 유형의 필드를 선언해야 한다.
+      public static readonly DependencyProperty SidesProperty;
+      //Dependency Property CLR Wrapper
+      public int Sides
+      {
+          get { return (int)GetValue(SidesProperty); }
+          set { SetValue(SidesProperty, value); }
+      }
+      static MainWindow()  //Static Constructor
+      {
+          // 인스턴스 할당하는 방법
+          // FrameworkPropertyMetadat 객체를 생성하고 의존 속성을 관리하는 방법을 설명하는 객체의 속성을 설정한다.
+          FrameworkPropertyMetadata md = new FrameworkPropertyMetadata();
+          // md.AffectsArrange = true; // 의존 속성이 layout 프로세스의 정렬 단계에 영향을 주는지 여부를 지정한다.
+          // md.AffectsMeasure = true; // layout 프로세스의 측정 단계에 영향을 주는지 여부를 지정한다.
+          // md.AffectsParentArrange = true; // 부모 요소 layout의 측정단계에 잠재적으로 영향을 주는지 여부를 지정한다.
+          // md.AffectsRender = true; // 표준 정렬이나 측정 문제 이외의 이유로 요소의 다시 그리기가 필요한지 여부를 지정한다.
+          // md.BindsTwoWayByDefault = true; // 속성이 기본적으로 양방향으로 바인드 하는지의 여부를 지정한다.
+          // md.DefaultValue = (object)??; // 속성 값을 설정하는 다른 요소가 없는 경우 의존 속성의 기본값을 지정한다.
+          // md.Inherits = true; // 의존속성의 값이 상속되는지 여부를 지정한다.
+          // md.PropertyChangedCallback = (PropertyChangedCallback)??; // 의존 속성의 유효한 속성 값이 변경될 때 호출되는 콜백을 나타낸다.
+          md.PropertyChangedCallback = OnSidesChanged;  //Set Callback
+          // 의존 속성 identifier object를 가져오려면 WPF 속성 시스템에 의존 속성을 등록해야 한다.
+          SidesProperty = DependencyProperty.Register(
+              "Sides", // Dependency Property Field Name, 속성 필드의 이름
+              typeof(int), // Type of the Property, bool int 등과 같이 의존속성의 type
+              typeof(MainWindow), // Type of Property Owner, 의존 속성을 선언하는 클래스의 type
+              md); // Reference to Metadata, 메타데이터에 대한 참조
+      }
+      public MainWindow() //Instance Constructor
+      {
+          InitializeComponent();
+      }
+      private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+      {
+          int SideCount;
+          bool success = int.TryParse(input.Text, out SideCount);
+          if (success && SideCount > 2 && 1000 > SideCount)
+              Sides = SideCount;
+      }
+      static void OnSidesChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+      {
+          MainWindow win = obj as MainWindow;
+          if (win == null || win.poly == null)
+              return;
+          const int n = 1; // 크기 배수
+          const int xCenter = 65;
+          const int yCenter = 50;
+          const int radius = 40;
+          double rads = Math.PI / win.Sides * 2;
+          win.poly.Points.Clear();
+          win.poly.Points.Add(new Point((xCenter + radius) * n, yCenter * n));
+          for (double i = 1; i <= win.Sides - 1; i++)
+          {
+              double x = (Math.Cos(rads * i) * radius) + xCenter;
+              double y = (Math.Sin(rads * i) * radius) + yCenter;
+              win.poly.Points.Add(new Point(n * x, n * y));
+          }
+      }
+  }
+  ```
+- xml을 다음과 같이 선언한다.
+  ```xml
+  <StackPanel>
+      <TextBox TextChanged="TextBox_TextChanged" Name="input">
+          0
+      </TextBox>
+      <Grid>
+          <Polygon Name="poly" Stroke="Black" Fill="LightGray"/>
+      </Grid>
+  </StackPanel>
+  ```
+
+<br>
+
+### 예제 3 : Attached Property 생성하기
+
+- 일반 dependency property에는 GetValue와 SetValue 호출에 대한 CLR property wrapper가 있다.
+- Attached property에는 GetXXX와 SetXXX 형식의 static 메서드가 있다.
+- GetXXX, SetXXX 메서드가 GetValue 와 SetValue 메서드를 호출하려면 대상 객체가 DependencyObject에서 파생되어야 한다.
+- xaml 코드는 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+     <TextBlock Name="txt1">Holder 1</TextBlock>
+     <TextBlock Name="txt2">Holder 2</TextBlock>
+  </StackPanel>
+  ```
+- IntStorage.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public class IntStorage : DependencyObject
+  {
+  }
+  ```
+- MinWindow.xaml.cs 코드는 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public static readonly DependencyProperty CountProperty;
+
+      static MainWindow()     // Static Constructor
+      {
+          CountProperty = DependencyProperty.RegisterAttached("Count", typeof(int), typeof(MainWindow));
+      }
+
+      public static int GetCount(IntStorage ints)
+      {
+          return (int)ints.GetValue(CountProperty);
+      }
+
+      public static void SetCount(IntStorage ints, int value)
+      {
+          ints.SetValue(CountProperty, value);
+      }
+
+      public MainWindow()      // Instance Constructor
+      {
+          InitializeComponent();
+
+          IntStorage is1 = new IntStorage();  // Create Targets.
+          IntStorage is2 = new IntStorage();
+
+          SetCount(is1, 28);                // Store Values.
+          SetCount(is2, 500);
+          int i1 = GetCount(is1);           // Retrieve the values.
+          int i2 = GetCount(is2);
+
+          txt1.Text = i1.ToString();          // Display the values.
+          txt2.Text = i2.ToString();
+      }
+  }
+  ```
+
+<br>
+
+### 예제 4. Dependency property를 사용하여 타이머를 만든다.
+
+- 일반 dependency property에는 GetValue와 SetValue 호출에 대한 CLR property wrapper가 있다.
+- Attached property에는 GetXXX와 SetXXX 형식의 static 메서드가 있다.
+- GetXXX, SetXXX 메서드가 GetValue 와 SetValue 메서드를 호출하려면 대상 객체가 DependencyObject에서 파생되어야 한다.
+- xaml 코드는 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Viewbox>
+          <TextBlock Text="{Binding ElementName=myWindow, Path=Counter}"/>
+      </Viewbox>
+  </Grid>
+  ```
+- MinWindow.xaml.cs 코드는 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Threading;
+  
+  namespace _7.Dependenc_Property
+  {
+      public partial class MainWindow : Window
+      {
+  
+          public MainWindow() //Instance Constructor
+          {
+              InitializeComponent();
+
+              // DispatcherTimer를 사용하여 타이머 기능을 만든다
+              DispatcherTimer timer = new DispatcherTimer(TimeSpan.FromSeconds(1),   DispatcherPriority.Normal,
+                delegate
+                {
+                    int newvalue = 0;
+                    if (Counter == int.MaxValue)
+                    {
+                        newvalue = 0;
+                    }
+                    else
+                    {
+                        newvalue = Counter + 1;
+                    }
+                    SetValue(CounterProperty, newvalue);
+                }, Dispatcher);
+  
+          }
+  
+          // 예제 4
+  
+          // propdp를 입력하고 Tab키를 두 번 누른다. 아래 내용 자동 입력된다.
+          // Dependency property의 이름을 Counter로 수정
+          // ownerclass를 MainWindow로 변경
+  
+          public int Counter
+          {
+              get { return (int)GetValue(CounterProperty); }
+              set { SetValue(CounterProperty, value); }
+          }
+  
+          // Using a DependencyProperty as the backing store for MyProperty.  This enables   animation, styling, binding, etc...
+          public static readonly DependencyProperty CounterProperty =
+              DependencyProperty.Register("Counter", typeof(int), typeof(MainWindow), new   PropertyMetadata(0));
+  
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/3cb045a3ef99135bdc7542adf9b2490e/image.png">
+
+<br>
+
+### 종합
+
+- xaml 코드는 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_7.Dependenc_Property.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_7.Dependenc_Property"
+          mc:Ignorable="d"
+          x:Name="myWindow"
+          Title="MainWindow" Height="200" Width="800">
+      <Grid ShowGridLines="True">
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 예제 0 - 1. Property와 새로운 패러다임 - 의존속성 -->
+          <GroupBox FontWeight="Bold" Grid.Column="0">
+              <GroupBox.Header>
+                  Buttons
+              </GroupBox.Header>
+              <StackPanel>
+                  <Button FontWeight="Medium">Button1</Button>
+                  <Button>Button2</Button>
+              </StackPanel>
+          </GroupBox>
+  
+          <!-- 예제 1 - 4. 사용자 정의 Dependency Property -->
+          <StackPanel Grid.Column="1">
+              <TextBox TextChanged="TextBox_TextChanged" Name="input">
+                  0
+              </TextBox>
+              <Grid>
+                  <Polygon Name="poly" Stroke="Black" Fill="LightGray"/>
+              </Grid>
+          </StackPanel>
+  
+          <!-- 예제 3. Attached Property 생성하기 -->
+          <StackPanel Grid.Column="2">
+              <TextBlock Name="txt1">Holder 1</TextBlock>
+              <TextBlock Name="txt2">Holder 2</TextBlock>
+          </StackPanel>
+  
+          <!-- 예제 4.  Dependency property를 사용하여 만드는 타이머 -->
+          <Grid Grid.Column="3">
+              <Viewbox>
+                  <TextBlock Text="{Binding ElementName=myWindow, Path=Counter}"/>
+              </Viewbox>
+          </Grid>
+  
+  
+      </Grid>
+  </Window>
+  ```
+- MinWindow.xaml.cs 코드는 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Threading;
+  
+  namespace _7.Dependenc_Property
+  {
+      public partial class MainWindow : Window
+      {
+  
+          //Dependency Property Field
+          // 클래스는 의존 속성 식별자에 대한 참조를 포함할 의존 속성 유형의 필드를 선언해야 한다.
+          public static readonly DependencyProperty SidesProperty;
+  
+          //Dependency Property CLR Wrapper
+          public int Sides
+          {
+              get { return (int)GetValue(SidesProperty); }
+              set { SetValue(SidesProperty, value); }
+          }
+  
+          static MainWindow()  //Static Constructor
+          {
+              // 인스턴스 할당하는 방법
+              // FrameworkPropertyMetadat 객체를 생성하고 의존 속성을 관리하는 방법을 설명하는 객체의 속성을 설정한다.
+              FrameworkPropertyMetadata md = new FrameworkPropertyMetadata();
+  
+              // md.AffectsArrange = true; // 의존 속성이 layout 프로세스의 정렬 단계에 영향을 주는지 여부를 지정한다.
+              // md.AffectsMeasure = true; // layout 프로세스의 측정 단계에 영향을 주는지 여부를 지정한다.
+              // md.AffectsParentArrange = true; // 부모 요소 layout의 측정단계에 잠재적으로 영향을 주는지 여부를 지정한다.
+              // md.AffectsRender = true; // 표준 정렬이나 측정 문제 이외의 이유로 요소의 다시 그리기가 필요한지 여부를 지정한다.
+              // md.BindsTwoWayByDefault = true; // 속성이 기본적으로 양방향으로 바인드 하는지의 여부를 지정한다.
+              // md.DefaultValue = (object)??; // 속성 값을 설정하는 다른 요소가 없는 경우 의존 속성의 기본값을 지정한다.
+              // md.Inherits = true; // 의존속성의 값이 상속되는지 여부를 지정한다.
+              // md.PropertyChangedCallback = (PropertyChangedCallback)??; // 의존 속성의 유효한 속성 값이 변경될 때 호출되는 콜백을 나타낸다.
+  
+              md.PropertyChangedCallback = OnSidesChanged;  //Set Callback
+  
+              // 의존 속성 identifier object를 가져오려면 WPF 속성 시스템에 의존 속성을 등록해야 한다.
+              SidesProperty = DependencyProperty.Register(
+                  "Sides", // Dependency Property Field Name, 속성 필드의 이름
+                  typeof(int), // Type of the Property, bool int 등과 같이 의존속성의 type
+                  typeof(MainWindow), // Type of Property Owner, 의존 속성을 선언하는 클래스의 type
+                  md); // Reference to Metadata, 메타데이터에 대한 참조
+  
+  
+              // 예제 3
+              CountProperty = DependencyProperty.RegisterAttached("Count", typeof(int), typeof(MainWindow));
+          }
+  
+  
+          public MainWindow() //Instance Constructor
+          {
+              InitializeComponent();
+  
+              // 예제 3
+               IntStorage is1 = new IntStorage();  // Create Targets.
+               IntStorage is2 = new IntStorage();
+  
+               SetCount(is1, 28);                // Store Values.
+               SetCount(is2, 500);
+               int i1 = GetCount(is1);           // Retrieve the values.
+               int i2 = GetCount(is2);
+  
+               txt1.Text = i1.ToString();          // Display the values.
+               txt2.Text = i2.ToString();
+  
+  
+              // 예제 4
+              // DispatcherTimer를 사용하여 타이머 기능을 만든다
+              DispatcherTimer timer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal,
+                delegate
+                {
+                    int newvalue = 0;
+                    if (Counter == int.MaxValue)
+                    {
+                        newvalue = 0;
+                    }
+                    else
+                    {
+                        newvalue = Counter + 1;
+                    }
+                    SetValue(CounterProperty, newvalue);
+                }, Dispatcher);
+  
+          }
+  
+          private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+          {
+              int SideCount;
+              bool success = int.TryParse(input.Text, out SideCount);
+              if (success && SideCount > 2 && 1000 > SideCount)
+                  Sides = SideCount;
+          }
+  
+          static void OnSidesChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+          {
+              MainWindow win = obj as MainWindow;
+              if (win == null || win.poly == null)
+                  return;
+  
+              const int n = 1; // 크기 배수
+              const int xCenter = 65;
+              const int yCenter = 50;
+              const int radius = 40;
+              double rads = Math.PI / win.Sides * 2;
+  
+              win.poly.Points.Clear();
+              win.poly.Points.Add(new Point((xCenter + radius) * n, yCenter * n));
+              for (double i = 1; i <= win.Sides - 1; i++)
+              {
+                  double x = (Math.Cos(rads * i) * radius) + xCenter;
+                  double y = (Math.Sin(rads * i) * radius) + yCenter;
+                  win.poly.Points.Add(new Point(n * x, n * y));
+              }
+          }
+  
+          // 예제 3
+  
+          public static readonly DependencyProperty CountProperty;
+  
+          public static int GetCount(IntStorage ints)
+          {
+              return (int)ints.GetValue(CountProperty);
+          }
+  
+          public static void SetCount(IntStorage ints, int value)
+          {
+              ints.SetValue(CountProperty, value);
+          }
+  
+  
+          // 예제 4
+  
+          // propdp를 입력하고 Tab키를 두 번 누른다.
+          // Dependency property의 이름을 Counter로 수정
+          // ownerclass를 MainWindow로 변경
+  
+          public int Counter
+          {
+              get { return (int)GetValue(CounterProperty); }
+              set { SetValue(CounterProperty, value); }
+          }
+  
+          // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+          public static readonly DependencyProperty CounterProperty =
+              DependencyProperty.Register("Counter", typeof(int), typeof(MainWindow), new PropertyMetadata(0));
+  
+      }
+  }
+  ```
+- IntStorage.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System.Windows;
+  
+  namespace _7.Dependenc_Property
+  {
+      public class IntStorage : DependencyObject
+      {
+      }
+  }
+  ```
+
 <br><br><br>
+
+
 
 # Ch 08. Data Binding
 
