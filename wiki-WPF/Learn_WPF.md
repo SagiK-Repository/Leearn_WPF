@@ -1570,6 +1570,180 @@
 
 <br>
 
+### 실습 2-2 HeaderedContentControl - GroupBox Element2
+
+- xaml 코드를 통해 다음과 같이 구성할 수 있다.
+  ```xml
+  <GroupBox Margin="5" Grid.Row="2" Grid.Column="2">
+      <GroupBox.Header>
+          <Image Margin="3" HorizontalAlignment="Left" Height="50" Source="3-5.jpg">
+          </Image>
+      </GroupBox.Header>
+      <StackPanel>
+          <Button Margin="3">Btn 1</Button>
+          <Button Margin="3">Btn 2</Button>
+      </StackPanel>
+  </GroupBox>
+  ```
+- 결과  
+  <img src="/uploads/e88a955bf812116c26ab96dd17f5f653/image.png">
+
+
+
+<br>
+
+### 실습 2-3 HeaderedContentControl - Expander Control
+
+- Expander Control은 button을 클릭하여 내용을 표시하거나 숨길 수 있는 GroupBox와 같다.
+- GroupBox와 같이 Header와 Content를 포함한다.
+- xaml을 다음과 같이 작성한다.
+  ```xml
+  <Grid Grid.Row="2" Grid.Column="3">
+      <Expander Header="Important Buttons">
+          <ScrollViewer>
+              <StackPanel>
+                  <Button>Button 1</Button>
+                  <Button>Button 2</Button>
+                  <Button>Button 3</Button>
+                  <Button>Button 4</Button>
+                  <Button>Button 5</Button>
+                  <Button>Button 6</Button>
+              </StackPanel>
+          </ScrollViewer>
+      </Expander>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/867db0cfbc2e64070aeca53150d363fa/image.png">
+
+<br>
+
+### ItemsControl
+
+- ContentControl 클래스는 하나의 content item만 포함할 수 있지만, ItemsControl 클래스는 원하는 수의 content item들을 가질 수 있다.
+
+<br>
+
+### 실습 2-4 ItemsControl - ListBox Control
+
+- ListBox는 사용자에게 표시되는 item들의 모음으로 사용자가 하나 이상의 항목을 선택할 수 있다.
+- 명시적으로 ListBoxItems 를 생성하지 않더라도 ListBox에 item을 배치할 수 있다. (TextBlock, Button 등)
+- xaml 코드를 통해 다음과 같이 구현한다.
+  ```xml
+  <ListBox Grid.Row="2" Grid.Column="4">
+      <ListBoxItem>Sweetie</ListBoxItem>
+      <ListBoxItem>Darwin</ListBoxItem>
+      <ListBoxItem>Florence</ListBoxItem>
+      <TextBlock>Sweetie</TextBlock>
+      <TextBlock>Darwin</TextBlock>
+      <Button>Florence</Button>
+  </ListBox>
+  ```
+- 결과  
+  <img src="/uploads/72f7398708fdb5edc03297bfc759b539/image.png">
+
+<br>
+
+### 실습 3-0 ItemsControl - Checking the Selection
+
+- 사용자가 ListBox에서 item을 선택한 경우, ListBox의 SelectedItem 속성을 사용하여 선택한 항목을 확인할 수 있다.
+- 이 속성은 처음 선택한 항목에 대한 개체 참조를 반환하거나 항목이 선택되지 않은 경우에 null을 반환한다.
+- xaml 코드를 통해 다음과 같이 구현한다.
+  ```xml
+  <StackPanel Grid.Row="3" Grid.Column="0">
+      <ListBox Name="listboxCats" HorizontalAlignment="Left" Width="100">
+          <ListBoxItem>Sweetie</ListBoxItem>
+          <ListBoxItem>Darwin</ListBoxItem>
+          <ListBoxItem>Florence</ListBoxItem>
+      </ListBox>
+      <Button Click="Button_Click30" HorizontalAlignment="Left" 
+          Width="100" Padding="10,3" Margin="0,5">Enter</Button>
+  </StackPanel>
+  ```
+- MainWindow.xaml.cs 코드는 다음과 같이 구현한다.
+  ```cs
+  private void Button_Click30(object sender, RoutedEventArgs e)
+  {
+      object obj = listboxCats.SelectedItem;
+      string selected = (obj == null)
+          ? "No item selected."
+          : (string)((ListBoxItem)obj).Content;
+  
+      MessageBox.Show(selected, "Selected Item");
+  }
+  ```
+- 결과  
+  <img src="/uploads/01bd1080688f2b0e26df27426319c56f/image.png">
+
+<br>
+
+
+### 실습 3-1 ItemsControl - Notification of Changed Selection
+
+- ListBox에서 선택한 item이 변경될 때마다 ListBox의 SelectionChanged 이벤트가 발생한다. 
+- code-behind에서 이벤트 핸들러를 생성할 때 이벤트 핸들러의 이름을 이벤트에 할당할 수 있으며 이벤트가 발생할 때 이벤트 핸들러를 호출한다.
+- xaml 코드를 통해 다음과 같이 구현한다.
+  ```xml
+  <StackPanel Grid.Row="3" Grid.Column="1">
+      <ListBox Name="listboxDogs"
+           HorizontalAlignment="Left" Width="100"
+           SelectionChanged="listboxDogs_SelectionChanged">
+          <ListBoxItem>Princess</ListBoxItem>
+          <ListBoxItem>Avonlea</ListBoxItem>
+          <ListBoxItem>Brumby</ListBoxItem>
+      </ListBox>
+  </StackPanel>
+  ```
+- MainWindow.xaml.cs 코드를 통해 다음과 같이 구현한다.
+  ```cs
+  private void listboxDogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+  {
+      ListBox lb = sender as ListBox;
+      ListBoxItem lbi = lb.SelectedItem as ListBoxItem;
+      MessageBox.Show(lbi.Content.ToString(), "Dog Selected");
+  }
+  ```
+- 결과  
+  <img src="/uploads/14c5d93621eda0c88a8c7927d22cfbda/image.png">
+
+<br>
+
+
+### 실습
+
+- xaml 코드를 통해 다음과 같이 구현한다.
+  ```xml
+  
+  ```
+- 결과  
+  <img src="">
+
+<br>
+
+
+### 실습
+
+- xaml 코드를 통해 다음과 같이 구현한다.
+  ```xml
+  
+  ```
+- 결과  
+  <img src="">
+
+<br>
+
+
+### 실습
+
+- xaml 코드를 통해 다음과 같이 구현한다.
+  ```xml
+  
+  ```
+- 결과  
+  <img src="">
+
+<br>
+
 
 <br><br><br>
 
