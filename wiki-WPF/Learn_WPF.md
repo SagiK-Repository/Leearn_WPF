@@ -1709,40 +1709,428 @@
 <br>
 
 
-### 실습
+### 실습 3-2 ItemsControl - Multiple Selections
 
+- ListBox에서 여러 개의 item들을 선택 가능하게 하는 옵션들이 있다. SelectionMode 속성을 사용한다.
+  - Single : 사용자가 item을 하나만 선택할 수 있다. Default.
+  - Extended
+    - 첫 번째 item 이후에 추가 item을 선택하려면 Ctrl키를 누른 상태에서 item을 선택해야 한다.
+    - item의 범위를 선택하려면 처음 항목을 선택하고 Shift키를 누른 상태에서 마지막 항목을 선택해야 한다.
+  - Multiple : 사용자는 클릭하기만 하면 여러 item을 선택할 수 있고, 특수키를 누르지 않아도 된다.
 - xaml 코드를 통해 다음과 같이 구현한다.
   ```xml
-  
+  <StackPanel Grid.Row="3" Grid.Column="2">
+      <ListBox Name="listboxCatss" HorizontalAlignment="Left" Width="100" SelectionMode="Multiple">
+          <ListBoxItem>Sweetie</ListBoxItem>
+          <ListBoxItem>Darwin</ListBoxItem>
+          <ListBoxItem>Florence</ListBoxItem>
+      </ListBox>
+      <Button Click="Button_Click32" HorizontalAlignment="Left" 
+          Width="100" Padding="10,3" Margin="0,5">Enter</Button>
+  </StackPanel>
+  ```
+- MainWindow.xaml.cs 코드를 다음과 같이 구현한다.
+  ```cs
+  private void Button_Click32(object sender, RoutedEventArgs e)
+  {
+      foreach (ListBoxItem item in listboxCatss.Items)
+      {
+          if (item.IsSelected)
+              MessageBox.Show((string)item.Content, "Is Selected");
+      }
+  }
   ```
 - 결과  
-  <img src="">
+  <img src="(/uploads/69097050e5952bdf1674022dbbc21aeb/image.png">
 
 <br>
 
 
-### 실습
+### 실습 3-3 ItemsControl - ComboBox Control
 
+- ComboBox는 선택한 item 하나만 표시하는 ListBox와 같다.
+- 끝에 있는 화살표를 클릭하면 list box가 컨트롤에서 drop 되어서 사용자가 목록에서 다른 item을 선택할 수 있다.
 - xaml 코드를 통해 다음과 같이 구현한다.
   ```xml
-  
+  <Canvas Grid.Row="3" Grid.Column="3">
+      <ComboBox Name="Example" SelectedIndex="0" Width="134">
+          <ComboBoxItem>First Item</ComboBoxItem>
+          <ComboBoxItem>Second Item</ComboBoxItem>
+          <ComboBoxItem>Third Item</ComboBoxItem>
+      </ComboBox>
+      <Button Padding="10,3" Canvas.Right="5" Canvas.Bottom="5"
+      HorizontalAlignment="Right" Click="Button_Click33">Enter</Button>
+  </Canvas>
+  ```
+- MainWindow.xaml.cs 코드를 다음과 같이 구현한다.
+  ```cs
+  private void Button_Click33(object sender, RoutedEventArgs e)
+  {
+      MessageBox.Show(Example.SelectionBoxItem.ToString(), "Selected");
+  }
   ```
 - 결과  
-  <img src="">
+  <img src="/uploads/9316f67e97ecc329d895970e83b45e2b/image.png">
 
 <br>
 
 
-### 실습
+### 실습 3-4 ItemsControl - Selecting and Entering Items
 
 - xaml 코드를 통해 다음과 같이 구현한다.
   ```xml
-  
+  <Canvas Grid.Row="3" Grid.Column="4">
+      <ComboBox Name="Example0" SelectedIndex="0" Width="134" IsEditable="true">
+          <ComboBoxItem>First Item</ComboBoxItem>
+          <ComboBoxItem>Second Item</ComboBoxItem>
+          <ComboBoxItem>Third Item</ComboBoxItem>
+      </ComboBox>
+      <Button Padding="10,3" Canvas.Right="5" Canvas.Bottom="5"
+      HorizontalAlignment="Right" Click="Button_Click34">Enter</Button>
+  </Canvas>
+  ```
+- MainWindow.xaml.cs 코드를 다음과 같이 구현한다.
+  ```cs
+  private void Button_Click34(object sender, RoutedEventArgs e)
+  {
+      MessageBox.Show(Example0.Text.ToString(), "Selected");
+  }
   ```
 - 결과  
-  <img src="">
+  <img src="/uploads/8e60bb55123b1e32713caa6268db6e67/image.png">
 
 <br>
+
+### 실습 종합
+
+<details><summary>종합</summary>
+
+
+- xaml
+  ```xml
+  <Window x:Class="_6.WPF_Content_Control.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_6.WPF_Content_Control"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!--0-0 Image Element-->
+          <Grid Grid.Row="0" Grid.Column="0">
+              <Image Source="3-5.jpg"/>
+          </Grid>
+  
+          <!--0-1 ContentControls - Label Control-->
+          <StackPanel Grid.Row="0" Grid.Column="1">
+              <Label Content="WPF Example Image" FontWeight="Bold"/>
+              <Label>
+                  <Image Source="3-5.jpg"></Image>
+              </Label>
+          </StackPanel>
+  
+          <!--0-2 ContentControls - Label Control - Accelerator key-->
+          <StackPanel Grid.Row="0" Grid.Column="2">
+              <Label Target="{Binding ElementName=firstName}">_First Name:</Label>
+              <TextBox Name="firstName"></TextBox>
+  
+              <Label Target="{Binding ElementName=lastName}">_Last Name:</Label>
+              <TextBox Name="lastName"></TextBox>
+          </StackPanel>
+  
+          <!--03 Button Control-->
+          <StackPanel Grid.Row="0" Grid.Column="3">
+              <Button Click="Button_Click">Click Me</Button>
+          </StackPanel>
+  
+          <!--04 CheckBox, RadioButton Controls-->
+          <StackPanel Grid.Row="0" Grid.Column="4">
+              <CheckBox Name="cb1" Margin="5,10,0,0">Option 1</CheckBox>
+              <CheckBox Name="cb2" Margin="5,0,0,0">Option 2</CheckBox>
+              <RadioButton Name="rb1" Margin="5,10,0,0">One of Three</RadioButton>
+              <RadioButton Name="rb2" Margin="5,0,0,0">Two of Three</RadioButton>
+              <RadioButton Name="rb3" Margin="5,0,0,0">Three of Three</RadioButton>
+          </StackPanel>
+  
+          <!--10 Grouping RadioButtons-->
+          <StackPanel Grid.Row="1" Grid.Column="0">
+              <RadioButton Margin="5,0,5,0">Default1</RadioButton>
+              <RadioButton Margin="5,0">Default2</RadioButton>
+  
+              <RadioButton GroupName="Group1" Margin="5,7,5,0">Group1-1</RadioButton>
+              <RadioButton GroupName="Group1" Margin="5,0">Group1-2</RadioButton>
+  
+              <RadioButton GroupName="Group2" Margin="5,7,5,0">Group2-1</RadioButton>
+              <RadioButton GroupName="Group2" Margin="5,0">Group2-1</RadioButton>
+          </StackPanel>
+  
+          <!--11 Window Ownership-->
+          <Grid Grid.Row="1" Grid.Column="1">
+              <Button Click="Button_Click1" VerticalAlignment="Top">
+                  Create Other Windows
+              </Button>
+          </Grid>
+  
+          <!--12 Modal Dialog Boxes-->
+          <Grid Grid.Row="1" Grid.Column="2">
+              <Button Click="Button_Click2" VerticalAlignment="Top">
+                  Create Dialog
+              </Button>
+          </Grid>
+  
+          <!--13 MessageBox Dialog Box-->
+          <StackPanel Grid.Row="1" Grid.Column="3">
+              <Button Click="Button_Click4">MessageBox</Button>
+          </StackPanel>
+  
+          <!--14 ScrollViewer-->
+          <Grid Grid.Row="1" Grid.Column="4">
+              <ScrollViewer>
+                  <StackPanel>
+                      <Button>Button1</Button>
+                      <Button>Button2</Button>
+                      <Button>Button3</Button>
+                      <Button>Button4</Button>
+                      <Button>Button5</Button>
+                      <Button>Button6</Button>
+                      <Button>Button7</Button>
+                      <Button>Button8</Button>
+                      <Button>Button9</Button>
+                  </StackPanel>
+              </ScrollViewer>
+          </Grid>
+  
+          <!--20 ScrollViewer Image-->
+          <Grid Grid.Row="2" Grid.Column="0">
+              <ScrollViewer>
+                  <Image Source="Pictures/2-2.jpg"/>
+              </ScrollViewer>
+          </Grid>
+  
+          <!--21 HeaderedContentControl - GroupBox Element-->
+          <GroupBox Header="Grouped Things" Margin="5" Grid.Row="2" Grid.Column="1">
+              <StackPanel>
+                  <Image Margin="3" HorizontalAlignment="Left" Height="50" Source="3-5.jpg">
+                  </Image>
+                  <Button Margin="3">Btn 1</Button>
+                  <Button Margin="3">Btn 2</Button>
+              </StackPanel>
+          </GroupBox>
+          
+          <!--22 HeaderedContentControl - GroupBox Element 2-->
+          <GroupBox Margin="5" Grid.Row="2" Grid.Column="2">
+              <GroupBox.Header>
+                  <Image Margin="3" HorizontalAlignment="Left" Height="50" Source="3-5.jpg">
+                  </Image>
+              </GroupBox.Header>
+              <StackPanel>
+                  <Button Margin="3">Btn 1</Button>
+                  <Button Margin="3">Btn 2</Button>
+              </StackPanel>
+          </GroupBox>
+  
+          <!--23 HeaderedContentControl - Expander Control-->
+          <Grid Grid.Row="2" Grid.Column="3">
+              <Expander Header="Important Buttons">
+                  <ScrollViewer>
+                      <StackPanel>
+                          <Button>Button 1</Button>
+                          <Button>Button 2</Button>
+                          <Button>Button 3</Button>
+                          <Button>Button 4</Button>
+                          <Button>Button 5</Button>
+                          <Button>Button 6</Button>
+                      </StackPanel>
+                  </ScrollViewer>
+              </Expander>
+          </Grid>
+  
+          <!--24 ItemsControl - ListBox Control -->
+          <ListBox Grid.Row="2" Grid.Column="4">
+              <ListBoxItem>Sweetie</ListBoxItem>
+              <ListBoxItem>Darwin</ListBoxItem>
+              <ListBoxItem>Florence</ListBoxItem>
+              <TextBlock>Sweetie</TextBlock>
+              <TextBlock>Darwin</TextBlock>
+              <Button>Florence</Button>
+          </ListBox>
+  
+          <!--30 ItemsControl - Checking the Selection -->
+          <StackPanel Grid.Row="3" Grid.Column="0">
+              <ListBox Name="listboxCats" HorizontalAlignment="Left" Width="100">
+                  <ListBoxItem>Sweetie</ListBoxItem>
+                  <ListBoxItem>Darwin</ListBoxItem>
+                  <ListBoxItem>Florence</ListBoxItem>
+              </ListBox>
+              <Button Click="Button_Click30" HorizontalAlignment="Left" 
+                  Width="100" Padding="10,3" Margin="0,5">Enter</Button>
+          </StackPanel>
+  
+          <!--31 ItemsControl - Notification of Changed Selection -->
+          <StackPanel Grid.Row="3" Grid.Column="1">
+              <ListBox Name="listboxDogs"
+                   HorizontalAlignment="Left" Width="100"
+                   SelectionChanged="listboxDogs_SelectionChanged">
+                  <ListBoxItem>Princess</ListBoxItem>
+                  <ListBoxItem>Avonlea</ListBoxItem>
+                  <ListBoxItem>Brumby</ListBoxItem>
+              </ListBox>
+          </StackPanel>
+  
+          <!--32 ItemsControl - Multiple Selections -->
+          <StackPanel Grid.Row="3" Grid.Column="2">
+              <ListBox Name="listboxCatss" HorizontalAlignment="Left" Width="100" SelectionMode="Multiple">
+                  <ListBoxItem>Sweetie</ListBoxItem>
+                  <ListBoxItem>Darwin</ListBoxItem>
+                  <ListBoxItem>Florence</ListBoxItem>
+              </ListBox>
+              <Button Click="Button_Click32" HorizontalAlignment="Left" 
+                  Width="100" Padding="10,3" Margin="0,5">Enter</Button>
+          </StackPanel>
+  
+          <!--33 ItemsControl - ComboBox Control -->
+          <Canvas Grid.Row="3" Grid.Column="3">
+              <ComboBox Name="Example" SelectedIndex="0" Width="134">
+                  <ComboBoxItem>First Item</ComboBoxItem>
+                  <ComboBoxItem>Second Item</ComboBoxItem>
+                  <ComboBoxItem>Third Item</ComboBoxItem>
+              </ComboBox>
+              <Button Padding="10,3" Canvas.Right="5" Canvas.Bottom="5"
+              HorizontalAlignment="Right" Click="Button_Click33">Enter</Button>
+          </Canvas>
+  
+          <!--34 ItemsControl - ComboBox Control -->
+          <Canvas Grid.Row="3" Grid.Column="4">
+              <ComboBox Name="Example0" SelectedIndex="0" Width="134" IsEditable="true">
+                  <ComboBoxItem>First Item</ComboBoxItem>
+                  <ComboBoxItem>Second Item</ComboBoxItem>
+                  <ComboBoxItem>Third Item</ComboBoxItem>
+              </ComboBox>
+              <Button Padding="10,3" Canvas.Right="5" Canvas.Bottom="5"
+              HorizontalAlignment="Right" Click="Button_Click34">Enter</Button>
+          </Canvas>
+  
+  
+      </Grid>
+  </Window>
+
+  ```
+- xaml.cs
+  ```cs
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Media;
+
+  namespace _6.WPF_Content_Control
+  {
+      /// <summary>
+      /// MainWindow.xaml에 대한 상호 작용 논리
+      /// </summary>
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+          }
+  
+          private void Button_Click(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("The Button has been clicked", "Button Message");
+          }
+  
+          private void Button_Click1(object sender, RoutedEventArgs e)
+          {
+              Window w1 = new Window();
+              w1.Background = Brushes.AliceBlue;
+              w1.Title = "Win 1";
+              w1.Height = 120;
+              w1.Width = 250;
+              w1.Content = "Independent Window";
+              w1.Show();
+  
+              Window w2 = new Window();
+              w2.Background = Brushes.PaleVioletRed;
+              w2.Title = "Win 2";
+              w2.Height = 120;
+              w2.Width = 250;
+              w2.Content = "ChildWindow";
+              w2.Owner = this;
+              w2.Show();
+          }
+  
+          private void Button_Click2(object sender, RoutedEventArgs e)
+          {
+              MyDialog dlg = new MyDialog();
+              string result = (true == dlg.ShowDialog())
+                  ? "Ok Clicked."
+                  : "Cancel";
+              MessageBox.Show(result, "Result");
+          }
+  
+          private void Button_Click4(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show(
+                  "The Button has been clicked",
+                  "Button Message",
+                  MessageBoxButton.OKCancel,
+                  MessageBoxImage.Information);
+          }
+  
+          private void Button_Click30(object sender, RoutedEventArgs e)
+          {
+              object obj = listboxCats.SelectedItem;
+              string selected = (obj == null)
+                  ? "No item selected."
+                  : (string)((ListBoxItem)obj).Content;
+  
+              MessageBox.Show(selected, "Selected Item");
+          }
+  
+          private void listboxDogs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+          {
+              ListBox lb = sender as ListBox;
+              ListBoxItem lbi = lb.SelectedItem as ListBoxItem;
+              MessageBox.Show(lbi.Content.ToString(), "Dog Selected");
+          }
+  
+          private void Button_Click32(object sender, RoutedEventArgs e)
+          {
+              foreach (ListBoxItem item in listboxCatss.Items)
+              {
+                  if (item.IsSelected)
+                      MessageBox.Show((string)item.Content, "Is Selected");
+              }
+          }
+  
+          private void Button_Click33(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show(Example.SelectionBoxItem.ToString(), "Selected");
+          }
+  
+          private void Button_Click34(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show(Example0.Text.ToString(), "Selected");
+          }
+      }
+  }
+  ```
+
+</details>
 
 
 <br><br><br>
