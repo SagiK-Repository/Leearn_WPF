@@ -806,13 +806,13 @@
   - `<Button xml:space = "preserve"> Click    Me </Button>`
 - 특수문자는 다음으로 대체한다.
   | Character          | Character Entity |
-  |--------------------|------------------|
-  | Ampersand(&)       | \&amp;            |
-  | Less than(<)       | \&lt;             |
-  | Greater than(>)    | \&gt;             |
-  | Nonebreaking space | \&nbsp;           |
-  | Apostrophe(')      | \&apos;           |
-  | Quotation mark(")  | \&quot;           |
+  | ------------------ | ---------------- |
+  | Ampersand(&)       | \&amp;           |
+  | Less than(<)       | \&lt;            |
+  | Greater than(>)    | \&gt;            |
+  | Nonebreaking space | \&nbsp;          |
+  | Apostrophe(')      | \&apos;          |
+  | Quotation mark(")  | \&quot;          |
 - MainWindow.xaml
   ```xml
   ...
@@ -1348,14 +1348,14 @@
 ### Window 클래스
 
 - Window 클래스는 ContentControl 클래스의 상속을 받는다.
-  | Name                  | Method or Property | Purposes                                            |
-  |-----------------------|--------------------|-----------------------------------------------------|
-  | Show                  | Method             | 창을 연 후 새로 열린 창이 닫힐 때까지 기다리지 않고 반환된다.                |
-  | ShowDialog            | Method             | 창을 연 후 새로 열린 창이 닫힌 경우에만 반환된다.                       |
-  | Hide                  | Method             | 창이 표시되지 않게 한다.                                      |
+  | Name                  | Method or Property | Purposes                                                                        |
+  | --------------------- | ------------------ | ------------------------------------------------------------------------------- |
+  | Show                  | Method             | 창을 연 후 새로 열린 창이 닫힐 때까지 기다리지 않고 반환된다.                   |
+  | ShowDialog            | Method             | 창을 연 후 새로 열린 창이 닫힌 경우에만 반환된다.                               |
+  | Hide                  | Method             | 창이 표시되지 않게 한다.                                                        |
   | Topmost               | Property           | 창을 맨 위에 표시할지 여부를 설정한다. 맨위에 있으면 true, 그렇지 않으면 false. |
-  | ShowInTaskBar         | Property           | 창이 작업표시줄에 있으면 true, 그렇지 않으면 false.                  |
-  | WindowStartupLocation | Property           | 창이 처음 표시될때의 위치를 설정한다.                               |
+  | ShowInTaskBar         | Property           | 창이 작업표시줄에 있으면 true, 그렇지 않으면 false.                             |
+  | WindowStartupLocation | Property           | 창이 처음 표시될때의 위치를 설정한다.                                           |
 
 <br>
 
@@ -3076,21 +3076,167 @@
 - 간단한 클래스를 만들고 몇 가지 속성에 바인딩 하는 방법을 알아보자.
 - xaml 코드를 다음과 같이 구성한다.
   ```xml
-  
+  <StackPanel Orientation="Horizontal">
+      <Label Name="lblFName" FontWeight="Bold"/>
+      <Label Name="lblAge"/>
+      <Label Name="lblColor"/>
+  </StackPanel>  
   ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+
+          Person p = new Person("Shirley", 34, "Green");
+
+          Binding nameBinding = new Binding("FirstName");
+          nameBinding.Source = p;
+          lblFName.SetBinding(ContentProperty, nameBinding);
+
+          Binding ageBinding = new Binding("Age");
+          ageBinding.Source = p;
+          lblAge.SetBinding(ContentProperty, ageBinding);
+
+          Binding colorBinding = new Binding("FavoriteColor");
+          colorBinding.Source = p;
+          lblColor.SetBinding(ContentProperty, colorBinding);
+      }
+  }
+
+  class Person
+  {
+      public string FirstName { get; set; }
+      public int Age { get; set; }
+      public string FavoriteColor { get; set; }
+  
+      public Person(string fName, int age, string color)
+      {
+          FirstName = fName;
+          Age = age;
+          FavoriteColor = color;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/77889dd075df7f99f92cb6f7d1a7640b/image.png">
+
+<br>
+
+### 10. Data Context
+
+- 이전 예제의 code-behind의 각 데이터 바인딩에는 바인딩 객체를 생성하는 라인, Source를 설정하는 라인, BindingExpression을 생성하는 라인이 필요했다. 세 바인딩 모두 동일한 source 개체를 사용했다.
+- 많은 바인딩에서 동일한 source 개체를 사용하는 경우 바인딩에 DataContext를 지정할 수 있다.
+- 조건
+  - 바인딩 되는 element의 트리의 상위에 있는 element의 DataContext 속성을 설정해야 한다.
+  - 특정 바인딩의 Source를 재정의하지 않는 한 바인딩의 Source 속성을 설정하지 않는다.
+  - 시스템에서 Source 속성에 대한 설정이 없는 바인딩 개체를 찾으면 element tree에서 DataContext property set을 사용하여 element를 찾는다. 찾으면 해당 값을 바인딩의 Source로 사용한다.
+- 예제 9를 다음과 같이 수정할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal">
+      <Label Name="lblFName" FontWeight="Bold"/>
+      <Label Name="lblAge"/>
+      <Label Name="lblColor"/>
+  </StackPanel>  
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+
+          Person p = new Person("Shirley", 34, "Green");
+          sp.DataContext = p; //Set the DataContext of the StackPanel
+
+          Binding nameBinding = new Binding("FirstName");
+          lblFName.SetBinding(ContentProperty, nameBinding);
+
+          Binding ageBinding = new Binding("Age");
+          lblAge.SetBinding(ContentProperty, ageBinding);
+
+          Binding colorBinding = new Binding("FavoriteColor");
+          lblColor.SetBinding(ContentProperty, colorBinding);
+      }
+  }
+
+  class Person
+  {
+      public string FirstName { get; set; }
+      public int Age { get; set; }
+      public string FavoriteColor { get; set; }
+  
+      public Person(string fName, int age, string color)
+      {
+          FirstName = fName;
+          Age = age;
+          FavoriteColor = color;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/77889dd075df7f99f92cb6f7d1a7640b/image.png">
 
 
 <br>
 
-### 5. Data
+### 12. Binding 및 ItemsContol
+
+- ItemsControl에는 데이터 목록을 저장할 수 있는 Items, ItemSource가 있다. 
+- ItemsSource 속성을 사용하여 외부 item 을 저장하고 사용하는 방법에 대해 알아본다.
+- ComboBox에서 이름을 선택하면 상단에 정보를 표시해주는 예제를 만들어본다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <StackPanel Orientation="Horizontal" Margin="5,10" DataContext="{Binding ElementName=comboPeople, Path=SelectedItem}">
+          <Label Name="lblFName" FontWeight="Bold"/>
+          <Label Name="lblAge"/>
+          <Label Name="lblColor"/>
+      </StackPanel>
+      <ComboBox Name="comboPeople" SelectedIndex="0" DisplayMemberPath="FirstName"/> <!-- Combo에 FirstName만 띄운다 -->
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+
+          Person[] people = { new Person( "Shirley", 34, "Green" ),
+              new Person( "Roy", 36, "Blue" ),
+              new Person( "Isabel", 25, "Orange" ),
+              new Person( "Manuel", 27, "Red" ) };
+
+          comboPeople.ItemsSource = people;
+
+          Binding nameBinding = new Binding("FirstName");
+          lblFName12.SetBinding(ContentProperty, nameBinding);
+
+          Binding ageBinding = new Binding("Age");
+          lblAge12.SetBinding(ContentProperty, ageBinding);
+
+          Binding colorBinding = new Binding("FavoriteColor");
+          lblColor12.SetBinding(ContentProperty, colorBinding);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/c473cd54aab3d86ee8d00bddf6b4a74a/image.png">
 
 <br>
 
-### 5. Data
+### 예제 RBG 슬라이더 만들기
 
-<br>
-
-### 5. Data
+- R, G, B값을 만들 수 있는 슬라이더를 세 개 만든다. 슬라이더의 Minimum값은 0이고, Maximum값은 255이다.
+- 실제 색을 보여줄 Button의 Background 속성에 R,G,B값을 MultiBinding을 사용하여 Binding한다.
+- 결과  
+  <img src="/uploads/bb60f4ffbc0a4b86228fdc8cf6c6f63f/image.png">
 
 <br>
 
