@@ -3591,6 +3591,736 @@
 
 # Ch 09. Routing Events 및 Command
 
+### 0. Summary(요약)
+
+- <img src="/uploads/c6e9a0b75f76a8e520b1a065e2c37a68/image.png" width="70%">
+
+### 1. Event란?
+
+- Windows 프로그래밍은 이벤트 기반이다.
+- 이벤트는 이벤트 핸들러 목록이 포함된 .NET 개체이다. 
+- XAML에서 개체가 특정 이벤트를 처리하도록 지정하고 개체에 대한 이벤트 핸들러의 이름을 지정할 수 있다.
+- Button 클래스에는 90개 이상의 이벤트가 연결될 수 있다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="0" Grid.Column="0">
+      <Button Name="myButton1" Padding="10"
+  	Click ="myButton_Click1"
+  	MouseEnter="myButton1_MouseEnter"
+  	MouseLeave="myButton1_MouseLeave">Click Me</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void myButton_Click1(object sender, RoutedEventArgs e)
+      {
+          string c = myButton1.Content.ToString();
+          myButton1.Content = (c == "Clicked" || c == "Clicked Again")
+          ? "Clicked Again"
+          : "Clicked";
+      }
+  
+      private void myButton1_MouseEnter(object sender, MouseEventArgs e)
+      {
+          myButton1.Content = "Mouse Over";
+      }
+  
+      private void myButton1_MouseLeave(object sender, MouseEventArgs e)
+      {
+          myButton1.Content = "Click Me";
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/16edd4f8ffcc309b71d734330a2086d0/image.png">
+
+<br>
+
+### 2. Event Handler 구문과 의미
+
+- 표준 이벤트 핸들러는 다음과 같은 특징을 가진다.
+  - 리턴 타입은 void 이어야 한다.
+  - 첫 번째 파라미터는 이벤트를 트리거 한 개체에 대한 참조이다. 
+    - 일반적으로 sender가 지정된다.
+    - 파라미터 타입은 object 이므로 object 멤버에 접근하려면 적절한 타입으로 다시 캐스팅해야 한다.
+  - 두 번째 파라미터는 이벤트를 통해 전달되는 추가 정보를 포함할 수 있는 개체이다.
+    - 이 파라미터의 타입은 EventArgs 또는 EventArgs의 하위 클래스이다.
+  - `void myButton_MouseEnter ( object sender, MouseEventArgs e )`
+- Attaching a Handler to an Event
+  - XAML 또는 C#을 사용하여 이벤트 핸들러를 이벤트에 연결할 수 있다.
+  - 이벤트 핸들러를 이벤트에 연결하는 것을 이벤트에 대한 subscribing 이라고한다.
+  - 마크업이 아닌 코드행에 이벤트 핸들러를 연결하려면 다음과 같이 C#의 += 연산자를 사용한다.
+  - `myButton.MouseEnter += myButton_MouseEnter;`
+
+<br>
+
+### 3. Routed Events 란?
+
+- WPF는 라우팅 된 이벤트에 대해 세 가지 라우팅 전략을 사용한다.
+  - Direct 라우팅 전략
+    - 표준 CLR 이벤트 동작과 가장 유사하다.
+    - element에 대해 이벤트가 발생하면, WPF는 이벤트를 발생시킨 element에서만 이벤트 핸들러를 확인한다.
+  - Bubbling 라우팅 전략
+    - 이벤트가 발생한 element를 먼저 확인한 후 트리 위쪽으로 이벤트를 전송하여 최상위 element로 이동한다.
+    - 각 연속적인 element에서 이벤트가 발생하며 해당 element에 핸들러가 있으면 핸들러가 호출된다.
+    - 예) Button -> Grif -> Window
+  - Tunneling 라우팅 전략
+    - 트리 맨 위에서 시작하여 아래로 진행되어 이벤트가 처음 발생한 element에 도달할 때까지 각 요소에 대한 이벤트가 일어난다.
+    - 일반적으로, 내장된 WPF 터널링 이벤트의 이름은 Priview로 시작한다.
+    - 예) Button <- Grif <- Window
+- Handling Routed Event
+  - 라우팅 된 이벤트의 첫 번째 핸들러는 기본적으로 CLR 이벤트의 핸들러와 동일하다.
+  - `void myHandler ( object sender, RoutedEventArgs e )`
+  - RoutedEventArgs 개체에는 라우팅 된 이벤트에서 중요한 정보를 가져오는 네 가지 속성이 있다.
+    - Source : 이벤트를 발생시킨 개체에 대한 참조이고 이벤트를 처리하는데 필요한 정보를 가지고 있을 수 있다.
+    - OriginalSource : 프로그래머들이 사용하는 element들은 실제로 우리가 일반적으로 신경 쓰지 않는 subelement들로 구성되어 있다. 실제로 클릭한 subelement에 대한 참조가 OriginalSource에 저장된다.
+    - Handled : 이벤트 라우팅을 중지하려면 이 속성을 true로 설정할 수 있다. default 값은 false이다.
+    - RoutedEvent : 하나의 이벤트가 아닌 여러개의 이벤트를 처리하는 것이 종종 유용하다. 이 경우 핸들러의 코드가 어떤 이벤트를 트리거 했는지 알아야 한다. 이 정보는 RoutedEvent 속성에서 가져올 수 있으며 이 속성은 호출된 원래 이벤트에 대한 참조를 반환한다.
+
+<br>
+
+### 3-1. Routed Events Bubbling 예제
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="1">
+      <Border Name="myBorder31" BorderThickness="10" BorderBrush="BurlyWood"   MouseUp="myBorder31_MouseUp">
+          <Label Name="myLabel31" Padding="10" MouseUp="myLabel31_MouseUp">
+              <Image Name="cat31" Source="3-5.jpg" Stretch="None"   MouseUp="cat31_MouseUp"/>
+          </Label>
+      </Border>
+      <StackPanel>
+          <Button Width="100" Name="Clear31" Padding="10, 3"   Click="Clear31_Click">Clear</Button>
+          <TextBlock Name="tb31" Margin="5 5 0 0"></TextBlock>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void myBorder31_MouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb31.Text += "Border sees it.\r\n";
+      }
+  
+      private void myLabel31_MouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb31.Text += "Label sees it.\r\n";
+      }
+  
+      private void cat31_MouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb31.Text += "Image sees it.\r\n";
+      }
+  
+      private void Clear31_Click(object sender, RoutedEventArgs e)
+      {
+          tb31.Text = "";
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/3e674571a0fbb0faa0d2032aff462ad3/image.png">
+
+<br>
+
+### 3-2. Routed Events Tunneling 예제
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="2">
+      <Border Name="myBorder32" BorderThickness="10" BorderBrush="BurlyWood"
+              MouseUp="myBorder32_MouseUp"   PreviewMouseUp="myBorder32_PreviewMouseUp">
+          <Label Name="myLabel32" Padding="10"
+                 MouseUp="myLabel32_MouseUp"   PreviewMouseUp="myLabel32_PreviewMouseUp">
+              <Image Name="cat32" Source="3-5.jpg" Stretch="None"
+                     MouseUp="cat32_MouseUp" PreviewMouseUp="cat32_PreviewMouseUp"/  >
+          </Label>
+      </Border>
+      <StackPanel>
+          <Button Width="100" Name="Clear32" Padding="10, 3"   Click="Clear32_Click">Clear</Button>
+          <TextBlock Name="tb32" Margin="5 5 0 0"></TextBlock>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void myBorder32_MouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb32.Text += "Bubbling : Border sees it.\r\n";
+      }
+  
+      private void myLabel32_MouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb32.Text += "Bubbling : Label sees it.\r\n";
+      }
+  
+      private void cat32_MouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb32.Text += "Bubbling : Image sees it.\r\n";
+      }
+  
+  
+      private void Clear32_Click(object sender, RoutedEventArgs e)
+      {
+          tb31.Text = "";
+      }
+  
+  
+      private void myBorder32_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb32.Text += "Tunneling : Border sees it.\r\n";
+      }
+  
+      private void myLabel32_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb32.Text += "Tunneling : Label sees it.\r\n";
+      }
+  
+      private void cat32_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+      {
+          tb32.Text += "Tunneling : Image sees it.\r\n";
+      }
+  
+  }
+  ```
+- 결과  
+  <img src="/uploads/bad7e46e96a9af1a0c9eccb729cd8b63/image.png">
+
+<br>
+
+### 4. Command
+
+- Target : TextBox
+- Source : Button, MenuItem, 키보드 자르기
+- 조건 : TextBox에서 선택한 텍스트가 있는 상태.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="0">
+      <Menu>
+          <MenuItem Header="_Cut" Click="Button_Click4"/>
+      </Menu>
+      <TextBox Name="txtBox4" Margin="5" FontWeight="Bold"/>
+      <Button Click="Button_Click4" FontWeight="Bold" Margin="5">Cut Text</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void Button_Click4(object sender, RoutedEventArgs e)
+      {
+          if (txtBox4.SelectedText.Length <= 0)
+              return;
+
+          Clipboard.SetData(DataFormats.Text, (object)txtBox4.SelectedText);
+          string pre = txtBox4.Text.Substring(0, txtBox4.SelectionStart);
+          string post = txtBox4.Text.Substring(txtBox4.SelectionStart + txtBox4.SelectionLength);
+          txtBox4.Text = txtBox4.Text = pre + post;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/e6090c249c43bd271218cf1686c4146d/image.png">
+
+<br>
+
+### 5. Built-in Command 및 종류
+
+- WPF는 직접 command를 작성하거나 built-in command를 사용할 수 있다.
+  - Command Source로 설계된 컨트롤에는 Command와 CommandTarget 속성이 있다.
+  - Command Target으로 설계된 컨트롤에는 built-in 바인딩과 built-in command 핸들러 코드가 있다.
+- WPF는 5가지 클래스에 100개 이상의 build-in command를 제공한다.
+  - ApplicationCommands : 클립보드 명령을 포함한 일반적인 Application command이다.
+  - ComponentCommands : 프로그램 또는 구성 요소의 항목을 이동하고 선택하는 것을 나타낸다.
+  - EditingCommands : 문서를 편집하는 것을 나타낸다.
+  - MediaCommands : 미디어 Application 제어하는 것을 나타낸다.
+  - NavigationCommands : 문서 이동에 사용되는 작업을 나타낸다.
+- 예제 프로그램
+  - Cut 버튼은 Cut command의 source이고 TextBox는 Command의 target이다.
+  - Paste 버튼은 Paste command의 source이고 TextBox는 commmand의 target이다.
+- 이 프로그램은 code-behind에서의 추가 없이 xaml에서만 만들 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="1">
+      <TextBox Name="cutFrom5"></TextBox>
+      <TextBox Name="pasteTo5"></TextBox>
+  
+      <StackPanel Orientation="Horizontal">
+          <Button Width="50"
+              Command="ApplicationCommands.Cut"
+              CommandTarget="{Binding ElementName=cutFrom5}">Cut</Button>
+  
+          <Button Width="50"
+              Command="ApplicationCommands.Paste"
+              CommandTarget="{Binding ElementName=pasteTo5}">Paste</Button>
+      </StackPanel>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/c50645284b1fa58265df163918e31cc4/image.png">
+
+<br>
+
+### 5-1 예제 code-behind에서 command를 연결
+
+- 예제 5에서 code-behind에서 command를 연결한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="2">
+      <TextBox Name="cutFrom51"></TextBox>
+      <TextBox Name="pasteTo51"></TextBox>
+
+      <StackPanel Orientation="Horizontal">
+          <Button Width="50" Name="btnCut51">Cut</Button>
+
+          <Button Width="50" Name="btnPaste51">Paste</Button>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void _09_CodeBehindCommand()
+      {
+          btnCut51.Command = ApplicationCommands.Cut;
+          btnCut51.CommandTarget = cutFrom51;
+
+          btnPaste51.Command = ApplicationCommands.Paste;
+          btnPaste51.CommandTarget = pasteTo51;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/3301a4be6de6e8f7ccb551955f01a55e/image.png">
+
+
+<br>
+
+### 6. The RoutedCommand 클래스
+
+- WPF command 아키텍처의 키는 RoutedCommand 클래스이다. 
+- 사용자 고유의 command를 생성하려면 다음 섹션에서 볼 수 있듯이 이 클래스의 인스턴스를 만들고 구성하고 사용할 컨트롤에 바인딩 해야 한다.
+- RoutedCommand 클래스에는 Execute 및 CanExecute라는 두 가지 주요 메서드가 있다.
+  - Command source의 작업으로 인해 command가 호출될 때 Excute 메서드가 호출된다.
+  - source가 command를 사용할 수 있는지를 확인하려는 경우 CanExecute 메서드가 호출된다.
+
+<br>
+
+### 7. Creating Custom Commands
+
+- 다음 예제 프로그램을 구성한다.
+  - Reverse 버튼은 Reverse command의 source이다.
+  - TextBox는 command target이다.
+  - 다른 command source는 키보드 제스처 Ctrl+R이다.
+  - 명령이 실행되면 버튼이나 키보드 제스처로 TextBox의 텍스트가 반전된다.
+  - TextBox에 텍스트가 없으면 버튼과 키보드 제스처가 비활성화된다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="2" Grid.Column="0">
+      <TextBox Name="txtBox" Margin="10 10"
+           FontWeight="Bold" Background="Aqua"/>
+      <Button Name="btnReverse" HorizontalAlignment="Center" Padding="10 3"
+          FontWeight="Bold" Margin="10 0"/>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void _07_CreatingCustomCommands()
+      {
+          btnReverse.Command = ReverseCommand.Reverse;
+          btnReverse.CommandTarget = txtBox;
+          btnReverse.Content = ((RoutedUICommand)(btnReverse.Command)).Text;
+
+          CommandBinding binding = new CommandBinding();
+          binding.Command = ReverseCommand.Reverse;
+          binding.Executed += ReverseString_Excuted;
+          binding.CanExecute += ReverseString_CanExecute;
+
+          CommandBindings.Add(binding);
+      }
+
+      public void ReverseString_CanExecute(object sender, CanExecuteRoutedEventArgs args)
+      {
+          args.CanExecute = txtBox.Text.Length > 0;
+      }
+
+      public void ReverseString_Excuted(object sender, ExecutedRoutedEventArgs args)
+      {
+          char[] temp = txtBox.Text.ToCharArray();
+          Array.Reverse(temp);
+          txtBox.Text = new string(temp);
+      }
+
+      public class ReverseCommand
+      {
+          private static RoutedUICommand reverse;
+
+          public static RoutedUICommand Reverse
+          { get { return reverse; } }
+
+          static ReverseCommand()
+          {
+              InputGestureCollection gestures = new InputGestureCollection();
+              gestures.Add(new KeyGesture(Key.R, ModifierKeys.Control, "Control-R"));
+
+              reverse = new RoutedUICommand("Reverse", "Reverse", typeof(ReverseCommand), gestures);
+          }
+      }
+
+  }
+  ```
+- 결과  
+  <img src="/uploads/5534e6627e1d768aaf9e6f922f4caea4/image.png">
+
+<br>
+
+
+## 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_9.RoutingEventAndCommand.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_9.RoutingEventAndCommand"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="550">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 1. Event란? -->
+          <StackPanel Grid.Row="0" Grid.Column="0">
+              <Button Name="myButton1" Padding="10"
+  			Click ="myButton_Click1"
+  			MouseEnter="myButton1_MouseEnter"
+  			MouseLeave="myButton1_MouseLeave">Click Me</Button>
+          </StackPanel>
+  
+          <!-- 3-1. Routed Events Bubbling 예제 -->
+          <StackPanel Orientation="Horizontal"  Grid.Row="0" Grid.Column="1">
+              <Border Name="myBorder31" BorderThickness="10"   BorderBrush="BurlyWood" MouseUp="myBorder31_MouseUp">
+                  <Label Name="myLabel31" Padding="10" MouseUp="myLabel31_MouseUp">
+                      <Image Name="cat31" Source="3-5.jpg" Stretch="None"   MouseUp="cat31_MouseUp"/>
+                  </Label>
+              </Border>
+              <StackPanel>
+                  <Button Width="100" Name="Clear31" Padding="10, 3"   Click="Clear31_Click">Clear</Button>
+                  <TextBlock Name="tb31" Margin="5 5 0 0"></TextBlock>
+              </StackPanel>
+          </StackPanel>
+  
+  
+          <!-- 3-2. Routed Events Tunneling 예제 -->
+          <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+              <Border Name="myBorder32" BorderThickness="10"   BorderBrush="BurlyWood"
+                      MouseUp="myBorder32_MouseUp"   PreviewMouseUp="myBorder32_PreviewMouseUp">
+                  <Label Name="myLabel32" Padding="10"
+                         MouseUp="myLabel32_MouseUp"   PreviewMouseUp="myLabel32_PreviewMouseUp">
+                      <Image Name="cat32" Source="3-5.jpg" Stretch="None"
+                             MouseUp="cat32_MouseUp"   PreviewMouseUp="cat32_PreviewMouseUp"/>
+                  </Label>
+              </Border>
+              <StackPanel>
+                  <Button Width="100" Name="Clear32" Padding="10, 3"   Click="Clear32_Click">Clear</Button>
+                  <TextBlock Name="tb32" Margin="5 5 0 0"></TextBlock>
+              </StackPanel>
+          </StackPanel>
+  
+          <!-- 4. Command -->
+          <StackPanel Grid.Row="1" Grid.Column="0">
+              <Menu>
+                  <MenuItem Header="_Cut" Click="Button_Click4"/>
+              </Menu>
+              <TextBox Name="txtBox4" Margin="5" FontWeight="Bold"/>
+              <Button Click="Button_Click4" FontWeight="Bold" Margin="5">Cut Text</  Button>
+          </StackPanel>
+  
+          <!-- 5. Built-in Command 및 종류 -->
+          <StackPanel Grid.Row="1" Grid.Column="1">
+              <TextBox Name="cutFrom5"></TextBox>
+              <TextBox Name="pasteTo5"></TextBox>
+  
+              <StackPanel Orientation="Horizontal">
+                  <Button Width="50"
+                      Command="ApplicationCommands.Cut"
+                      CommandTarget="{Binding ElementName=cutFrom5}">Cut</Button>
+  
+                  <Button Width="50"
+                      Command="ApplicationCommands.Paste"
+                      CommandTarget="{Binding ElementName=pasteTo5}">Paste</Button>
+              </StackPanel>
+          </StackPanel>
+  
+  
+          <!-- 5-1. code-behind에서 command를 연결 -->
+          <StackPanel Grid.Row="1" Grid.Column="2">
+              <TextBox Name="cutFrom51"></TextBox>
+              <TextBox Name="pasteTo51"></TextBox>
+  
+              <StackPanel Orientation="Horizontal">
+                  <Button Width="50" Name="btnCut51">Cut</Button>
+  
+                  <Button Width="50" Name="btnPaste51">Paste</Button>
+              </StackPanel>
+          </StackPanel>
+  
+          <!-- 7. Creating Custom Commands -->
+          <StackPanel Grid.Row="2" Grid.Column="0">
+              <TextBox Name="txtBox" Margin="10 10"
+                   FontWeight="Bold" Background="Aqua"/>
+              <Button Name="btnReverse" HorizontalAlignment="Center" Padding="10 3"
+                  FontWeight="Bold" Margin="10 0"/>
+          </StackPanel>
+      </Grid>
+  </Window>
+
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Text;
+  using System.Threading.Tasks;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Data;
+  using System.Windows.Documents;
+  using System.Windows.Input;
+  using System.Windows.Media;
+  using System.Windows.Media.Imaging;
+  using System.Windows.Navigation;
+  using System.Windows.Shapes;
+  
+  namespace _9.RoutingEventAndCommand
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+  
+              _09_CodeBehindCommand();
+  
+              _07_CreatingCustomCommands();
+          }
+  
+      }
+  }
+  
+  
+  // 1. Event란?
+  namespace _9.RoutingEventAndCommand
+  {
+      public partial class MainWindow : Window
+      {
+          private void myButton_Click1(object sender, RoutedEventArgs e)
+          {
+              string c = myButton1.Content.ToString();
+              myButton1.Content = (c == "Clicked" || c == "Clicked Again")
+              ? "Clicked Again"
+              : "Clicked";
+          }
+  
+          private void myButton1_MouseEnter(object sender, MouseEventArgs e)
+          {
+              myButton1.Content = "Mouse Over";
+          }
+  
+          private void myButton1_MouseLeave(object sender, MouseEventArgs e)
+          {
+              myButton1.Content = "Click Me";
+          }
+      }
+  }
+  
+  // 3-1. Routed Events Bubbling 예제
+  namespace _9.RoutingEventAndCommand
+  {
+      public partial class MainWindow : Window
+      {
+          private void myBorder31_MouseUp(object sender, MouseButtonEventArgs e)
+          {
+              tb31.Text += "Border sees it.\r\n";
+          }
+  
+          private void myLabel31_MouseUp(object sender, MouseButtonEventArgs e)
+          {
+              tb31.Text += "Label sees it.\r\n";
+          }
+  
+          private void cat31_MouseUp(object sender, MouseButtonEventArgs e)
+          {
+              tb31.Text += "Image sees it.\r\n";
+          }
+  
+          private void Clear31_Click(object sender, RoutedEventArgs e)
+          {
+              tb31.Text = "";
+          }
+      }
+  }
+  
+  // 3-2. Routed Events Tunneling 예제
+  namespace _9.RoutingEventAndCommand
+  {
+      public partial class MainWindow : Window
+      {
+          private void myBorder32_MouseUp(object sender, MouseButtonEventArgs e)
+          {
+              tb32.Text += "Bubbling : Border sees it.\r\n";
+          }
+  
+          private void myLabel32_MouseUp(object sender, MouseButtonEventArgs e)
+          {
+              tb32.Text += "Bubbling : Label sees it.\r\n";
+          }
+  
+          private void cat32_MouseUp(object sender, MouseButtonEventArgs e)
+          {
+              tb32.Text += "Bubbling : Image sees it.\r\n";
+          }
+  
+  
+          private void Clear32_Click(object sender, RoutedEventArgs e)
+          {
+              tb31.Text = "";
+          }
+  
+  
+          private void myBorder32_PreviewMouseUp(object sender,   MouseButtonEventArgs e)
+          {
+              tb32.Text += "Tunneling : Border sees it.\r\n";
+          }
+  
+          private void myLabel32_PreviewMouseUp(object sender,   MouseButtonEventArgs e)
+          {
+              tb32.Text += "Tunneling : Label sees it.\r\n";
+          }
+  
+          private void cat32_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+          {
+              tb32.Text += "Tunneling : Image sees it.\r\n";
+          }
+  
+      }
+  }
+  
+  
+  // 4. Command
+  namespace _9.RoutingEventAndCommand
+  {
+      public partial class MainWindow : Window
+      {
+          private void Button_Click4(object sender, RoutedEventArgs e)
+          {
+              if (txtBox4.SelectedText.Length <= 0)
+                  return;
+  
+              Clipboard.SetData(DataFormats.Text, (object)txtBox4.SelectedText);
+              string pre = txtBox4.Text.Substring(0, txtBox4.SelectionStart);
+              string post = txtBox4.Text.Substring(txtBox4.SelectionStart +   txtBox4.SelectionLength);
+              txtBox4.Text = txtBox4.Text = pre + post;
+          }
+      }
+  }
+  
+  
+  // 5-1 예제 code-behind에서 command를 연결
+  namespace _9.RoutingEventAndCommand
+  {
+      public partial class MainWindow : Window
+      {
+          public void _09_CodeBehindCommand()
+          {
+              btnCut51.Command = ApplicationCommands.Cut;
+              btnCut51.CommandTarget = cutFrom51;
+  
+              btnPaste51.Command = ApplicationCommands.Paste;
+              btnPaste51.CommandTarget = pasteTo51;
+          }
+      }
+  }
+  
+  
+  // 7. Creating Custom Commands
+  namespace _9.RoutingEventAndCommand
+  {
+      public partial class MainWindow : Window
+      {
+          public void _07_CreatingCustomCommands()
+          {
+              btnReverse.Command = ReverseCommand.Reverse;
+              btnReverse.CommandTarget = txtBox;
+              btnReverse.Content = ((RoutedUICommand)(btnReverse.Command)).Text;
+  
+              CommandBinding binding = new CommandBinding();
+              binding.Command = ReverseCommand.Reverse;
+              binding.Executed += ReverseString_Excuted;
+              binding.CanExecute += ReverseString_CanExecute;
+  
+              CommandBindings.Add(binding);
+          }
+  
+          public void ReverseString_CanExecute(object sender,   CanExecuteRoutedEventArgs args)
+          {
+              args.CanExecute = txtBox.Text.Length > 0;
+          }
+  
+          public void ReverseString_Excuted(object sender, ExecutedRoutedEventArgs   args)
+          {
+              char[] temp = txtBox.Text.ToCharArray();
+              Array.Reverse(temp);
+              txtBox.Text = new string(temp);
+          }
+  
+          public class ReverseCommand
+          {
+              private static RoutedUICommand reverse;
+  
+              public static RoutedUICommand Reverse
+              { get { return reverse; } }
+  
+              static ReverseCommand()
+              {
+                  InputGestureCollection gestures = new InputGestureCollection();
+                  gestures.Add(new KeyGesture(Key.R, ModifierKeys.Control,   "Control-R"));
+  
+                  reverse = new RoutedUICommand("Reverse", "Reverse", typeof  (ReverseCommand), gestures);
+              }
+          }
+  
+      }
+  }
+  ```
+- 결과  
+  <img src="">
+
+### 0. s
+
+<br>
+
 <br><br><br>
 
 # Ch 10. 다양한 Control 및 Element
