@@ -4325,6 +4325,259 @@
 
 # Ch 10. 다양한 Control 및 Element
 
+### 0. Summary(요약)
+
+- <img src="/uploads/c17b0fffc1fb465cf3ea78e63327aaf1/image.png" width="70%">
+
+<br>
+
+### 1. TextBox
+
+- TextBox는 사용자로부터 작은 크기의 텍스트를 검색하는 데 유용하다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Label Target="{Binding ElementName=txtbxName1}">_Enter Your Name</Label>
+      <TextBox Name="txtbxName1"/>
+      <Button HorizontalAlignment="Right" Padding="10 3"
+          Click="Button_Click1">Enter</Button>
+  </StackPanel>
+
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void Button_Click1(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("You entered: " + txtbxName1.Text, "TextBox Message");
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/d0982c127b682c614215f47b7db5e433/image.png">
+
+<br>
+
+### 2. Menus
+
+- Menus는 명령을 실행하거나 옵션을 설정하기 위해 사용자가 선택할 수 있는 옵션 목록이다. 
+- Context menus는 특정 element와 연결된다.
+  - 메뉴 항목 목록은 메뉴가 보일 때마다 표시되는 최상위 메뉴로 구성된다.
+  - 각 MenuItem 개체에는 메뉴 item에 label을 지정하는 문자열이 포함된 header 속성이 있다.
+  - 이벤트 핸들러를 MenuItem의 클릭 이벤트에 할당할 수 있다. 그러면 사용자가 메뉴 항목을 클릭할 때마다 핸들러를 실행한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Menu>
+      <MenuItem Header="File">
+          <MenuItem Header="New Game" Click="MenuItem2_Click"/>
+          <MenuItem Header="Exit" Click="MenuItem2_Click_1"/>
+      </MenuItem>
+      <MenuItem Header="Help" Click="MenuItem2_Click_2"/>
+  </Menu>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void MenuItem2_Click(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("Clicked New Game", "Menu Info");
+      }
+
+      private void MenuItem2_Click_1(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("Clicked Exit", "Menu Info");
+      }
+
+      private void MenuItem2_Click_2(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("Clicked Help", "Menu Info");
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/850991dd06e37ec378af12bbfbdf8e1a/image.png">
+
+<br>
+
+### 2-1. MenuItem 선택
+
+- MenuItem의 IsChecked 속성을 true로 설정하여 메뉴 라벨의 왼쪽에 체크 표시를 설정할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Menu>
+      <MenuItem Header="File">
+          <MenuItem Header="New Game" Click="MenuItem21_Click" 
+        InputGestureText="Alt+N">
+              <MenuItem.Icon>
+                  <Image Source="card1.jpg"/>
+              </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem Header="Shuffle Sound" Click="MenuItem21_Click_1"
+            IsChecked="True" InputGestureText="Alt+S"/>
+      </MenuItem>
+  </Menu>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+
+      private void MenuItem21_Click(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("Clicked New Game");
+      }
+
+      private void MenuItem21_Click_1(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("Clicked Shuffle Sound");
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/5b7dd50d0a53ab1f73ce5c80d00e7985/image.png">
+
+
+<br>
+
+### 2-2. 다른 타입의 Menu Header 설정
+
+- 지금까지 본 메뉴 label은 텍스트이지만, header 속성은 UIElement에서 파생된 모든 클래스의 개체를 할당할 수 있다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Menu Grid.Row="0" Grid.Column="3">
+      <MenuItem Header="File">
+          <MenuItem InputGestureText="Alt+K">
+              <MenuItem.Header>
+                  <Image Source="card1.jpg"/>
+              </MenuItem.Header>
+          </MenuItem>
+          <MenuItem InputGestureText="Alt+Q">
+              <MenuItem.Header>
+                  <Image Source="card2.jpg"/>
+              </MenuItem.Header>
+          </MenuItem>
+          <MenuItem InputGestureText="Alt+J">
+              <MenuItem.Header>
+                  <Image Source="card3.jpg"/>
+              </MenuItem.Header>
+          </MenuItem>
+      </MenuItem>
+  </Menu>
+  ```
+- 결과  
+  <img src="/uploads/504ad2b56c015b787a9bd8749e36d63d/image.png">
+
+<br>
+
+### 2-3. MenuItem 에 Command 할당
+
+- 키보드 단축키를 손으로 메뉴 항목에 연결하는 것은 번거로울 수 있다.
+- 하지만 command에 연결하는 것은 쉽다.
+- MenuItem의 Command 속성에 command를 할당하기만 하면 된다.
+- Header의 텍스트를 command 이름의 텍스트로 자동 설정할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Menu>
+          <MenuItem Header="File">
+              <MenuItem Command="ApplicationCommands.New"/>
+              <MenuItem Command="ApplicationCommands.Open"/>
+          </MenuItem>
+      </Menu>
+  </StackPanel>
+
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void _2_3_MenuItemCommand()
+      {
+          CommandBinding nBinding = new CommandBinding();    //Binding for New
+          nBinding.Command = ApplicationCommands.Open;
+          nBinding.Executed += DoOpen_Executed;
+          nBinding.CanExecute += DoOpen_CanExecute;
+
+          CommandBinding oBinding = new CommandBinding();    //Binding for Open
+          oBinding.Command = ApplicationCommands.New;
+          oBinding.Executed += DoNew_Executed;
+          oBinding.CanExecute += DoNew_CanExecute;
+
+          CommandBindings.Add(nBinding);
+          CommandBindings.Add(oBinding);
+      }
+
+      private void DoOpen_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+      {
+          e.CanExecute = true;
+      }
+
+      private void DoOpen_Executed(object sender, ExecutedRoutedEventArgs e)
+      {
+          MessageBox.Show("Open Command Executed", "Command Info");
+      }
+
+      private void DoNew_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+      {
+          e.CanExecute = true;
+      }
+
+      private void DoNew_Executed(object sender, ExecutedRoutedEventArgs e)
+      {
+          MessageBox.Show("New Command Executed", "Command Info");
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/b1ae2f4705d5add626ab11b18d26c12e/image.png">
+
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+
+
 <br><br><br>
 
 # Ch 11. Resources
