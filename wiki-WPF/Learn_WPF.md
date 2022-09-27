@@ -2644,6 +2644,460 @@
 
 # Ch 08. Data Binding
 
+### 0. Summary(요약)
+
+- <img src="/uploads/a264d77f5a547b90ddeee5dc5fb49c0e/image.png" width="70%">
+
+<br>
+
+### 1. Binding이란? - Slider와 TextBox Binding
+
+- Slider가 움직이면서 그 위치를 TextBox에 표시하는 WPF를 만들어본다.
+  - Slider에 대한 이벤트 핸들러를 작성하여 위치가 변경될 때마다 핸들러를 호출하고 TextBox를 업데이트할 수 있다. 이 방법은 이벤트 핸들러 코드를 작성하여 적절한 이벤트와 연결을 해야 한다.
+  - 하지만, 데이터 바인딩을 통해 보다 더 간편한 방법으로 연결한다.
+  - 데이터 바인딩은 두 개체의 연결로, 두 개체 중 하나는 항상 다른 개체의 값으로 최신 상태를 유지한다. 데이터 바인딩을 사용하면 TextBox.Text 속성과 Slider.Value 속성 간의 연결을 생성하면 된다. WPF는 업데이트가 발생할 때 자동으로 처리한다.
+- xaml 예제
+  ```xml
+  <StackPanel>
+      <TextBox Margin="10" Text="{Binding ElementName=sldrSlider, Path=Value}"/>
+      <Slider Name="sldrSlider" TickPlacement="TopLeft" Margin="10"/>
+      <!--<Slider Name="sldrSlider"... Value="10"/>-->
+  </StackPanel>
+  ```
+- Binding markup extension을 사용하여 XAML에서 바인딩을 만들거나, code-behind에 바인딩을 만들 수 있다.
+- 이때 TextBox는 Source, Slider는 Target이 된다.
+- 한 속성은 source property라고 하고, 다른 하나는 target property라고 한다.  
+  <img src="/uploads/a1e980e502d1c563731b6744d889be49/image.png" width="70%">
+- 바인딩을 통해 source property를 target property와 연결한다.  
+  ```xml
+  <TextBox Text="{Binding ElementName=sldrSlider, Path=Value}"/>
+  ```
+  - ElementName 파라미터 : 바인딩 되는 컨트롤의 이름이다.
+  - Path 파라미터 : 바인딩 작업의 대상이 되는 요소의 속성이다.
+  - Markup extension안에는 따옴표(")를 사용하지 않는다.
+  - 파라미터들은 콤마(,) 로 구분한다.
+- 결과  
+  <img src="/uploads/2eb628087985b54f55ceb6ec315ecef3/image.png">
+
+<br>
+
+### 2. Code-behind에서 바인딩
+
+- TextBox의 문자열이 바뀔 때마다 Label의 문자열도 업데이트 되게 한다.
+- 이때, XAML에서 진행하는 것이 아닌, Code-behind에서 진행한다.
+- xaml은 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="0" Grid.Column="1">
+      <Label Name="displayText"/>
+      <TextBox Name="sourceInfo"/>
+  </StackPanel>
+  ```
+- xaml.cs은 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+
+          Binding myBinding = new Binding();    // Create the Binding
+          myBinding.Source = sourceInfo;        // Set the Source
+          myBinding.Path = new PropertyPath("Text");   // Set the Path
+
+          //Connect the Source and the Target.
+          displayText.SetBinding(Label.ContentProperty, myBinding);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/152794bc299c925ec8da9fda0aad3759/image.png">
+
+
+<br>
+
+### 3. 바인딩 방향
+
+- 바인딩 개체의 Mode 속성을 다음 값 중 하나로 설정하여 업데이트 방향을 설정할 수 있다.
+  - OneWay : Source가 바뀌면 target을 업데이트한다.
+  - TwoWay : 양방향. Source가 바뀌면 target을 업데이트하고, target이 바뀌면 source를 업데이트한다.
+  - OneWayToSource : Target이 바뀌면 source를 업데이트한다.
+  - OneTime : Target을 한 번만 source의 초기값으로 업데이트하고 이후에는 다시 target을 업데이트하지 않는다.
+  - Default : Target의 default 바인딩 모드를 사용한다.
+- 1번 예제에서 xaml 내용을 수정하여 방향을 설정해본다.  
+  ```xml
+  <TextBox Margin="10" Text="{Binding ElementName=sldrSlider1, Path=Value, Mode=TwoWay}"/>
+  ```
+- TwoWay의 경우 TextBox를 수정하거나 Slider를 움직이면 서로 값이 업데이트 됨을 알 수 있다.
+  ```xml
+  <TextBox Margin="10" Text="{Binding ElementName=sldrSlider1, Path=Value, Mode=OneWay}"/>
+  ```
+- OneWay는 Slider(source) -> TextBox(target)의 바인딩만 허용된다.
+  ```xml
+  <TextBox Margin="10" Text="{Binding ElementName=sldrSlider1, Path=Value, Mode=OneWayToSource}"/>
+  ```
+- OneWayToSource는 TextBox(target) -> Slider(source)의 바인딩만 허용된다.
+- 결과  
+  <img src="/uploads/c23c018a9cc7c97433a9fd4279cbaff6/image.png">
+
+
+<br>
+
+### 4. Trigger
+
+- 앞 예제는 Slider를 움직이면 TextBox의 값은 바로 업데이트되었지만, TextBox의 값을 바꾸면 포커스를 바꿀 때까지 Slider는 변하지 않았다.
+- 이러한 차이는 업데이트 방향과, 바인딩 개체의 UpdateSourceTrigger의 값에 따라 달라진다.  
+  <img src="/uploads/444ac643d7a17449c2a81ea1aa30b2de/image.png" width="70%">
+- TwoWay와 OneWayToSource 모드의 경우, UpdateSourceTrigger 속성을 설정하여 target에서 source로의 업데이트 동작을 지정할 수 있다.
+  - PropertyChanged
+  - LostFocus
+  - Explicit
+- xaml을 다음과 같이 수정하여 TextBox-Slider간의 실시간 업데이트가 됨을 확인한다.
+  ```xml
+  <TextBox Margin="10" Text="{Binding ElementName=sldrSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+  ```
+- 결과  
+  <img src="/uploads/fd688c77d813a183c633f96c6e7aabb2/image.png">
+
+<br>
+
+### 4-1. Trigger Button Binding
+
+- 버튼을 누르면 업데이트 되는 바인딩을 구성해본다.
+- xaml을 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="0" Grid.Column="3">
+      <TextBox Name="tbValue" Margin="10" Text="{Binding ElementName=sldrSlider2, Path=Value, UpdateSourceTrigger=Explicit}"/>
+      <Slider Name="sldrSlider2" TickPlacement="TopLeft" Margin="10"/>
+      <Button Click="Button_Click03">Trigger</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  private void Button_Click(object sender, RoutedEventArgs e)
+  {
+      BindingExpression be = tbValue.GetBindingExpression(TextBox.TextProperty);
+      be.UpdateSource();
+  }
+  ```
+- 결과  
+  <img src="/uploads/25fbdd79cf7ca5c0fd5ee6fbe5f546b3/image.png">
+
+<br>
+
+### 5. Data Converters
+
+- DataConverter를 활용해 Binding되는 값을 변환시킬 수 있다.
+- 기존의 예제에서 Slider를 움직이면 TextBox에 소수점 14자리 까지 포함하여 나타내는데, Data Converter를 활용하면 소수점 2자리까지 표현할 수 있다.
+- ValueConversion 클래스의 구조는 다음과 같다.  
+  <img src="/uploads/f0d73ffc58243fff4b808137e75924a6/image.png" width="70%">
+  - Convert()는 Source -> Target 방향으로 변환이 필요할 때 호출된다.
+  - ConvertBack()는 Target -> Source 방향으로 변환이 필요할 때 호출된다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <TextBox Margin="10">
+          <TextBox.Text>
+              <Binding ElementName="sldrSlider" Path="Value">
+                 <Binding.Converter>
+                      <local:DisplayTwoDecPlaces/>
+                  </Binding.Converter>
+             </Binding>
+          </TextBox.Text>
+      </TextBox>
+      <Slider Name="sldrSlider" TickPlacement="TopLeft" Margin="10"/>
+  </StackPanel>
+
+  <!--또는-->
+
+  <Window.Resources>
+      <ResourceDictionary>
+          <local:DisplayTwoDecPlaces x:Key="displayTwoDecPlaces"/>
+      </ResourceDictionary>
+  </Window.Resources>
+ 
+  <StackPanel>
+      <TextBox Margin="10" Text="{Binding ElementName=sldrSlider, Path=Value, Converter={StaticResource displayTwoDecPlaces}}"/>
+      <Slider Name="sldrSlider" TickPlacement="TopLeft" Margin="10"/>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  [ValueConversion(typeof(double), typeof(string))]
+  public class DisplayTwoDecPlaces : IValueConverter
+  {
+      public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+      {
+          double dValue = (double)value;
+          return dValue.ToString("F2"); // 소수점 2자리 수
+      }
+  
+      public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+      {
+          double dValue;
+          double.TryParse((string)value, out dValue);
+          return dValue;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/5650c72a2090382cfc4c6afa055c7d78/image.png">
+
+<br>
+
+### 6. 여러 개의 속성에 Binding
+
+- Dependency 속성은 수에 관계없이 동시에 여러 개를 바인딩 할 수 있다.
+- 한 개의 Label에 2개의 ComboBox가 있다. 이 2개의 ComboBox는 각각 다른 속성을 Label에 부여하는 바인딩을 만들어본다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="1">
+      
+      <Label Name="displayText06" Margin="5" FontSize="16" Content="My Test"
+             FontFamily="{Binding ElementName=fontBox, Path=Text}"
+             FontWeight="{Binding ElementName=weightBox, Path=Text}"/>
+  
+      <ComboBox Name="fontBox" SelectedIndex="0" Margin="5,0,5,2">
+          <ComboBoxItem>ARIAL</ComboBoxItem>
+          <ComboBoxItem>Couier New</ComboBoxItem>
+      </ComboBox>
+  
+      <ComboBox Name="weightBox" SelectedIndex="0" Margin="5,0,5,2">
+          <ComboBoxItem>Normal</ComboBoxItem>
+          <ComboBoxItem>Bold</ComboBoxItem>
+      </ComboBox>
+      
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/f4ebbeaa07f7a7de584e7d1ce1cd9765/image.png">
+
+<br>
+
+### 6-1. 예제 Text & Size
+
+- 한 개의 Label에 한 개의 TextBox를 갖는다.
+- TextBox에 입력된 값은 Label에 입력되고, 크기 또한 TextBox에 입력된 값으로 지정한다.
+- 즉, 내용과 크기를 동시에 지정한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Label Name="displayText" Margin="5"/>
+      <TextBox Name="SourceInfo">10</TextBox>
+  </StackPanel>
+  ```
+- xaml.cs를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+
+          Binding bindingShared = new Binding();
+          bindingShared.Source = SourceInfo;
+          bindingShared.Path = new PropertyPath("Text");
+
+          displayText.SetBinding(Label.ContentProperty, bindingShared);
+          displayText.SetBinding(Label.FontSizeProperty, bindingShared);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/ab565a9979002453a6db118676fd668b/image.png">
+
+### 6-2. 예제 Text & Size in XAML
+
+- 예제 6-1을 xaml에서만 구성할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Label Name="displayText" Margin="5"
+          FontSize="{Binding ElementName=sourceInfo, Path=Text}"
+          Content="{Binding ElementName=sourceInfo, Path=Text }"/>
+      <TextBox Name="sourceInfo">10</TextBox>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/963705e21db0772a489e244f81d11741/image.png">
+
+<br>
+
+### 7. MultiBinding
+
+- 여러 속성을 하나의 컨트롤에 바인딩 해야 할 경우 MultiBinding을 사용한다.
+  - 이때 사용하는 Converter는 IMultiValueConverter를 상속받는 converter이다.
+  - Convert() 메소드에서 values 배열에 변환할 데이터가 들어온다.
+- FirstName과 LastName을 입력하면 FullName이 완성되는 프로그램을 구성해본다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <ResourceDictionary>
+          <local:TextConverter x:Key="TextConverter"/>
+      </ResourceDictionary>
+  </Window.Resources>
+
+  <StackPanel Margin="10" Grid.Row="1" Grid.Column="4">
+
+      <TextBlock Text="First Name" VerticalAlignment="Top"/>
+      <TextBox x:Name="txtFirstName" VerticalAlignment="Top" Width="120"/>
+      
+      <TextBlock Text="Last Name" VerticalAlignment="Top" Margin="0 10 0 0"/>
+      <TextBox x:Name="txtLastName" VerticalAlignment="Top" Width="120" Margin="0 0 0 10"/>
+      
+      <TextBlock Text="Full Name" VerticalAlignment="Top"/>
+      <TextBox VerticalAlignment="Top" Width="200">
+
+          <TextBox.Text>
+              <MultiBinding Converter="{StaticResource TextConverter}" UpdateSourceTrigger="PropertyChanged">
+                  <Binding ElementName="txtFirstName" Path="Text" />
+                  <Binding ElementName="txtLastName" Path="Text" />
+              </MultiBinding>
+          </TextBox.Text>
+
+      </TextBox>
+
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public class TextConverter : IMultiValueConverter
+  {
+      public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+      {
+          string one = values[0] as string;
+          string two = values[1] as string;
+          if (!string.IsNullOrEmpty(one) && !string.IsNullOrEmpty(two))
+          {
+              return one + two;
+          }
+          return null;
+      }
+  
+      public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+      {
+          return null;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/3587356b396f1cae51075b95ac866538/image.png">
+
+<br>
+
+### 8. Binding 제거
+
+- ClearBinding 메서드를 사용하여 특정 바인딩을 제거하고, ClearAllBinding 메서드를 사용하여 모든 바인딩을 제거할 수 있다.
+- (예제 6)에 Binding을 지우거나 모든 Binding을 지울 수 있는 예제를 만들어본다.
+- FontFamily 바인딩을 지우거나, 모두 지우거나가 가능하다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="2" Grid.Column="0">
+      <Label Name="displayText20" Margin="5" FontSize="16"
+         Content="My Text"
+         FontFamily="{Binding ElementName=fontBox, Path=Text}"
+         FontWeight="{Binding ElementName=weightBox, Path=Text}"/>
+      
+      <Grid>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition></ColumnDefinition>
+              <ColumnDefinition></ColumnDefinition>
+          </Grid.ColumnDefinitions>
+          
+          <StackPanel>
+              <ComboBox Name="fontBox20" SelectedIndex="0" Margin="5,0,5,2">
+                  <ComboBoxItem>Arial</ComboBoxItem>
+                  <ComboBoxItem>Courier New</ComboBoxItem>
+              </ComboBox>
+              <ComboBox Name="weightBox20" SelectedIndex="0" Margin="5,0,5,  2">
+                <ComboBoxItem>Normal</ComboBoxItem>
+                  <ComboBoxItem>Bold</ComboBoxItem>
+              </ComboBox>
+          </StackPanel>
+  
+          <StackPanel Grid.Column="1">
+              <Button Name="ClearFont" Margin="5,0,5,2"
+                  Click="ClearFont_Click">Clear Font</Button>
+              <Button Name="ClearAll" Margin="5,0,5,2"
+                  Click="ClearAll_Click">Clear All</Button>
+              <Button Name="CreateBindings" Margin="5,0,5,2"
+                  Click="CreateBindings_Click">Create Bindings</Button>
+          </StackPanel>
+      </Grid>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+      }
+  
+     // Clear the FontFamily binding.
+      private void ClearFont_Click(object sender, RoutedEventArgs e)
+      {
+          BindingOperations.ClearBinding(displayText, FontFamilyProperty);
+      }
+  
+     // Clear all the bindings.
+      private void ClearAll_Click(object sender, RoutedEventArgs e)
+      {
+          BindingOperations.ClearAllBindings(displayText);
+      }
+  
+     // Re-create the two bindings.
+      private void CreateBindings_Click(object sender, RoutedEventArgs e)
+      {
+          //Create the FontFamily binding.
+          Binding fontBinding = new Binding();
+          fontBinding.Source = fontBox;
+          fontBinding.Path = new PropertyPath("Text");
+          fontBinding.Mode = BindingMode.OneWay;
+          displayText.SetBinding(FontFamilyProperty, fontBinding);
+  
+         //Create the FontWeight binding.
+          Binding weightBinding = new Binding();
+          weightBinding.Source = weightBox;
+          weightBinding.Path = new PropertyPath("Text");
+          weightBinding.Mode = BindingMode.OneWay;
+          displayText.SetBinding(FontWeightProperty, weightBinding);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/9db58a084fefc8515f707ab0f292003f/image.png">
+
+
+<br>
+
+### 9. Binding Nonelement
+
+- 간단한 클래스를 만들고 몇 가지 속성에 바인딩 하는 방법을 알아보자.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  
+  ```
+
+
+<br>
+
+### 5. Data
+
+<br>
+
+### 5. Data
+
+<br>
+
+### 5. Data
+
+<br>
+
+### 5. Data
+
+<br>
+
 <br><br><br>
 
 # Ch 09. Routing Events 및 Command
