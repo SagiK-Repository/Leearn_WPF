@@ -1,0 +1,23 @@
+﻿using System;
+using System.Windows.Data;
+using System.Globalization;
+
+namespace _8.Data_Binding
+{
+    [ValueConversion(typeof(double), typeof(string))]
+    public class DisplayTwoDecPlaces : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double dValue = (double)value;
+            return dValue.ToString("F2"); // 소수점 2자리 수
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double dValue;
+            double.TryParse((string)value, out dValue);
+            return dValue;
+        }
+    }
+}

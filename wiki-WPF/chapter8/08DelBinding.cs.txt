@@ -1,0 +1,48 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
+
+namespace _8.Data_Binding
+{
+    public partial class MainWindow : Window
+    {
+        // Clear the FontFamily binding.
+        private void ClearFont_Click(object sender, RoutedEventArgs e)
+        {
+            BindingOperations.ClearBinding(displayText20, FontFamilyProperty);
+        }
+
+        // Clear all the bindings.
+        private void ClearAll_Click(object sender, RoutedEventArgs e)
+        {
+            BindingOperations.ClearAllBindings(displayText20);
+        }
+
+        // Re-create the two bindings.
+        private void CreateBindings_Click(object sender, RoutedEventArgs e)
+        {
+            //Create the FontFamily binding.
+            Binding fontBinding = new Binding();
+            fontBinding.Source = fontBox20;
+            fontBinding.Path = new PropertyPath("Text");
+            fontBinding.Mode = BindingMode.OneWay;
+            displayText20.SetBinding(FontFamilyProperty, fontBinding);
+
+            //Create the FontWeight binding.
+            Binding weightBinding = new Binding();
+            weightBinding.Source = weightBox20;
+            weightBinding.Path = new PropertyPath("Text");
+            weightBinding.Mode = BindingMode.OneWay;
+            displayText20.SetBinding(FontWeightProperty, weightBinding);
+        }
+
+    }
+
+    internal class _08DelBinding
+    {
+    }
+}

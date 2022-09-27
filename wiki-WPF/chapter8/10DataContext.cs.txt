@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows;
+
+namespace _8.Data_Binding
+{
+
+    public partial class MainWindow : Window
+    {
+        public void _10_DataContext()
+        {
+            Person p = new Person("Shirley", 34, "Green");
+            sp.DataContext = p; //Set the DataContext of the StackPanel
+
+            Binding nameBinding = new Binding("FirstName");
+            lblFName10.SetBinding(ContentProperty, nameBinding);
+
+            Binding ageBinding = new Binding("Age");
+            lblAge10.SetBinding(ContentProperty, ageBinding);
+
+            Binding colorBinding = new Binding("FavoriteColor");
+            lblColor10.SetBinding(ContentProperty, colorBinding);
+        }
+    }
+
+    internal class _10DataContext
+    {
+    }
+}

@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows.Media;
+
+namespace _8.Data_Binding
+{
+    public class ColorConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            values[0] = Byte.Parse((string)values[0]);
+            values[1] = Byte.Parse((string)values[1]);
+            values[2] = Byte.Parse((string)values[2]);
+
+            Color color = Color.FromRgb((byte)values[0], (byte)values[1], (byte)values[2]);
+            SolidColorBrush bg = new SolidColorBrush(color);
+
+            return bg;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException("Cannot convert back");
+        }
+    }
+
+    public class DisplayInt : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double dValue = (double)value;
+
+            if ((double)value < 10)
+                return "  " + dValue.ToString("F0");
+            else if ((double)value < 100 && (double)value > 10)
+                return " " + dValue.ToString("F0");
+            else
+                return dValue.ToString("F0");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double dValue;
+            double.TryParse((string)value, out dValue);
+            return dValue;
+        }
+    }
+
+}

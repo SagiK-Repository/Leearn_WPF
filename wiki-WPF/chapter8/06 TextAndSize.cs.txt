@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace _8.Data_Binding
+{
+    public partial class MainWindow : Window
+    {
+        public void _06_TextSize()
+        {
+            Binding bindingShared = new Binding();
+            bindingShared.Source = SourceInfo63;
+            bindingShared.Path = new PropertyPath("Text");
+ 
+            displayText63.SetBinding(Label.ContentProperty, bindingShared);
+            displayText63.SetBinding(Label.FontSizeProperty, bindingShared);
+        }
+    }
+
+    internal class _06_TextAndSize
+    {
+    }
+}

@@ -3235,16 +3235,359 @@
 
 - R, G, B값을 만들 수 있는 슬라이더를 세 개 만든다. 슬라이더의 Minimum값은 0이고, Maximum값은 255이다.
 - 실제 색을 보여줄 Button의 Background 속성에 R,G,B값을 MultiBinding을 사용하여 Binding한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="2" Grid.Column="4">
+
+      <StackPanel Orientation="Horizontal" Margin="5">
+          <TextBlock Text="R : "/>
+          <Slider Width="130" Minimum="0" Maximum="255" x:Name="slider1"/>
+      </StackPanel>
+  
+      <StackPanel Orientation="Horizontal" Margin="5">
+          <TextBlock Text="G : "/>
+          <Slider Width="130" Minimum="0" Maximum="255" x:Name="slider2"/>
+      </StackPanel>
+  
+      <StackPanel Orientation="Horizontal" Margin="5">
+          <TextBlock Text="B : "/>
+          <Slider Width="130" Minimum="0" Maximum="255" x:Name="slider3"/>
+      </StackPanel>
+  
+      <StackPanel Orientation="Horizontal" Margin="5">
+          <TextBlock Text="R : " HorizontalAlignment="Center"/>
+          <TextBox Width="25" x:Name="valueR" Text="{Binding ElementName=slider1, Path=Value, Converter={StaticResource DisplayInt}}"/>
+          <TextBlock Text=" G : " HorizontalAlignment="Center"/>
+          <TextBox Width="25" x:Name="valueG" Text="{Binding ElementName=slider2, Path=Value, Converter={StaticResource DisplayInt}}"/>
+          <TextBlock Text=" B : " HorizontalAlignment="Center"/>
+          <TextBox Width="25" x:Name="valueB" Text="{Binding ElementName=slider3, Path=Value, Converter={StaticResource DisplayInt}}"/>
+      </StackPanel>
+  
+      <Button x:Name="colorButton" Height="30" Foreground="White" Content="COLOR">
+          <Button.Background>
+              <MultiBinding Converter="{StaticResource XAMLResourceColorConverter}">
+                  <Binding ElementName="valueR" Path="Text"/>
+                  <Binding ElementName="valueG" Path="Text"/>
+                  <Binding ElementName="valueB" Path="Text"/>
+              </MultiBinding>
+          </Button.Background>
+      </Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public class ColorConverter : IMultiValueConverter
+  {
+      public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+      {
+          values[0] = Byte.Parse((string)values[0]);
+          values[1] = Byte.Parse((string)values[1]);
+          values[2] = Byte.Parse((string)values[2]);
+          
+          Color color = Color.FromRgb((byte)values[0], (byte)values[1], (byte)values[2]);
+          SolidColorBrush bg = new SolidColorBrush(color);
+          
+          return bg;
+      }
+
+      public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+      {
+          throw new NotSupportedException("Cannot convert back");
+      }
+  }
+
+  public class DisplayInt : IValueConverter
+  {
+      public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+      {
+          double dValue = (double)value;
+      
+          if ((double)value < 10)
+              return "  " + dValue.ToString("F0");
+          else if ((double)value < 100 && (double)value > 10)
+              return " " + dValue.ToString("F0");
+          else
+              return dValue.ToString("F0");
+      }
+      
+      public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+      {
+          double dValue;
+          double.TryParse((string)value, out dValue);
+          return dValue;
+      }
+  }
+  ```
 - 결과  
   <img src="/uploads/bb60f4ffbc0a4b86228fdc8cf6c6f63f/image.png">
 
 <br>
 
-### 5. Data
-
-<br>
 
 <br><br><br>
+
+### 종합
+- xaml
+  ```xml
+  <Window x:Class="_8.Data_Binding.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/  2006"
+          xmlns:local="clr-namespace:_8.Data_Binding"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Window.Resources>
+          <ResourceDictionary>
+              <local:DisplayTwoDecPlaces x:Key="displayTwoDecPlaces"/>
+              <local:TextConverter x:Key="TextConverter"/>
+              <local:ColorConverter x:Key="XAMLResourceColorConverter"/>
+              <local:DisplayInt x:Key="DisplayInt"/>
+          </ResourceDictionary>
+      </Window.Resources>
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 1. Binding이란? - Slider와 TextBox Binding -->
+  
+          <StackPanel Grid.Row="0" Grid.Column="0">
+              <TextBox Margin="10" Text="{Binding ElementName=sldrSlider,   Path=Value}"/>
+              <Slider Name="sldrSlider" TickPlacement="TopLeft" Margin="10"/>
+          </StackPanel>
+  
+          <!-- 2. Code-behind에서 바인딩 -->
+          <StackPanel Grid.Row="0" Grid.Column="1">
+              <Label Content="Code-behind Binding"/>
+              <Label Name="displayText"/>
+              <TextBox Name="sourceInfo"/>
+          </StackPanel>
+  
+          <!-- 3. 바인딩 방향 -->
+          <StackPanel Grid.Row="0" Grid.Column="2">
+              <Label Content="OneWay(text -> slider)"/>
+              <TextBox Margin="10" Text="{Binding ElementName=sldrSlider1,   Path=Value, Mode=OneWay}"/>
+              <Slider Name="sldrSlider1" TickPlacement="TopLeft" Margin="10"/  >
+          </StackPanel>
+  
+          <!-- 4. Trigger -->
+          <StackPanel Grid.Row="0" Grid.Column="3">
+              <TextBox Margin="10" Text="{Binding ElementName=sldrSlider0,   Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
+              <Slider Name="sldrSlider0" TickPlacement="TopLeft" Margin="10"/  >
+          </StackPanel>
+  
+          <!-- 4-1. Trigger Button Binding -->
+          <StackPanel Grid.Row="0" Grid.Column="4">
+              <TextBox Name="tbValue" Margin="10" Text="{Binding   ElementName=sldrSlider2, Path=Value,   UpdateSourceTrigger=Explicit}"/>
+              <Slider Name="sldrSlider2" TickPlacement="TopLeft" Margin="10"/  >
+              <Button Click="Button_Click03">Trigger</Button>
+          </StackPanel>
+  
+          <!-- 5. Data Converters -->
+          <StackPanel Grid.Row="1" Grid.Column="0">
+              <TextBox Margin="10" Text="{Binding ElementName=sldrSlider5,   Path=Value
+                  ,Converter={StaticResource displayTwoDecPlaces} }"/>
+              <Slider Name="sldrSlider5" TickPlacement="TopLeft" Margin="10"/  >
+          </StackPanel>
+  
+          <!-- 6. 여러 개의 속성에 Binding -->
+  
+          <StackPanel Grid.Row="1" Grid.Column="1">
+              
+              <Label Name="displayText06" Margin="5" FontSize="16"   Content="My Test"
+                     FontFamily="{Binding ElementName=fontBox, Path=Text}"
+                     FontWeight="{Binding ElementName=weightBox, Path=Text}"/  >
+  
+              <ComboBox Name="fontBox" SelectedIndex="0" Margin="5,0,5,2">
+                  <ComboBoxItem>ARIAL</ComboBoxItem>
+                  <ComboBoxItem>Couier New</ComboBoxItem>
+              </ComboBox>
+  
+              <ComboBox Name="weightBox" SelectedIndex="0" Margin="5,0,5,2">
+                  <ComboBoxItem>Normal</ComboBoxItem>
+                  <ComboBoxItem>Bold</ComboBoxItem>
+              </ComboBox>
+              
+          </StackPanel>
+  
+          <!-- 6-1. 예제 Text & Size -->
+          <StackPanel Grid.Row="1" Grid.Column="2">
+              <Label Name="displayText61" Margin="5"/>
+              <TextBox Name="SourceInfo61">5</TextBox>
+          </StackPanel>
+          
+          <!-- 6-2. 예제 Text & Size in xaml -->
+          <StackPanel Grid.Row="1" Grid.Column="3">
+              <Label Name="displayText63" Margin="5"
+              FontSize="{Binding ElementName=SourceInfo63, Path=Text}"
+              Content="{Binding ElementName=SourceInfo63, Path=Text }"/>
+              <TextBox Name="SourceInfo63">10</TextBox>
+          </StackPanel>
+  
+  
+  
+          <!-- 7. MultiBinding -->
+          <StackPanel Margin="10" Grid.Row="1" Grid.Column="4">
+              <TextBlock Text="First Name" VerticalAlignment="Top"/>
+              <TextBox x:Name="txtFirstName" VerticalAlignment="Top"   Width="120"/>
+              <TextBlock Text="Last Name" VerticalAlignment="Top" Margin="0   10 0 0"/>
+              <TextBox x:Name="txtLastName" VerticalAlignment="Top"   Width="120" Margin="0 0 0 10"/>
+              <TextBlock Text="Full Name" VerticalAlignment="Top"/>
+              <TextBox VerticalAlignment="Top" Width="200">
+                  <TextBox.Text>
+                      <MultiBinding Converter="{StaticResource TextConverter}  " UpdateSourceTrigger="PropertyChanged">
+                          <Binding ElementName="txtFirstName" Path="Text" />
+                          <Binding ElementName="txtLastName" Path="Text" />
+                      </MultiBinding>
+                  </TextBox.Text>
+              </TextBox>
+          </StackPanel>
+  
+          <!-- 8. Binding 제거 -->
+          <StackPanel Grid.Row="2" Grid.Column="0">
+              <Label Name="displayText20" Margin="5" FontSize="16"
+                 Content="My Text"
+                 FontFamily="{Binding ElementName=fontBox, Path=Text}"
+                 FontWeight="{Binding ElementName=weightBox, Path=Text}"/>
+              
+              <Grid>
+                  <Grid.ColumnDefinitions>
+                      <ColumnDefinition></ColumnDefinition>
+                      <ColumnDefinition></ColumnDefinition>
+                  </Grid.ColumnDefinitions>
+                  
+                  <StackPanel>
+                      <ComboBox Name="fontBox20" SelectedIndex="0" Margin="5,  0,5,2">
+                          <ComboBoxItem>Arial</ComboBoxItem>
+                          <ComboBoxItem>Courier New</ComboBoxItem>
+                      </ComboBox>
+                      <ComboBox Name="weightBox20" SelectedIndex="0"   Margin="5,0,5,2">
+                          <ComboBoxItem>Normal</ComboBoxItem>
+                          <ComboBoxItem>Bold</ComboBoxItem>
+                      </ComboBox>
+                  </StackPanel>
+  
+                  <StackPanel Grid.Column="1">
+                      <Button Name="ClearFont" Margin="5,0,5,2"
+                          Click="ClearFont_Click">Clear Font</Button>
+                      <Button Name="ClearAll" Margin="5,0,5,2"
+                          Click="ClearAll_Click">Clear All</Button>
+                      <Button Name="CreateBindings" Margin="5,0,5,2"
+                          Click="CreateBindings_Click">Create Bindings</  Button>
+                  </StackPanel>
+              </Grid>
+          </StackPanel>
+  
+  
+          <!-- 9. Binding Nonelement -->
+          <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+              <Label Name="lblFName" FontWeight="Bold"/>
+              <Label Name="lblAge"/>
+              <Label Name="lblColor"/>
+          </StackPanel>
+  
+          <!-- 10. Data Context -->
+          <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal"   Name="sp">
+              <Label Name="lblFName10" FontWeight="Bold"/>
+              <Label Name="lblAge10"/>
+              <Label Name="lblColor10"/>
+          </StackPanel>
+  
+  
+          <!-- 12. Binding 및 ItemsContol -->
+          <StackPanel Grid.Row="2" Grid.Column="3" >
+              <StackPanel Orientation="Horizontal" Margin="5,10"   DataContext="{Binding ElementName=comboPeople,   Path=SelectedItem}">
+                  <Label Name="lblFName12" FontWeight="Bold"/>
+                  <Label Name="lblAge12"/>
+                  <Label Name="lblColor12"/>
+              </StackPanel>
+              <ComboBox Name="comboPeople" SelectedIndex="0"   DisplayMemberPath="FirstName"/>
+              <!-- Combo에 FirstName만 띄운다 -->
+          </StackPanel>
+  
+          <!-- RGB Slider -->
+          <StackPanel Grid.Row="2" Grid.Column="4">
+  
+              <StackPanel Orientation="Horizontal" Margin="5">
+                  <TextBlock Text="R : "/>
+                  <Slider Width="130" Minimum="0" Maximum="255"   x:Name="slider1"/>
+              </StackPanel>
+  
+              <StackPanel Orientation="Horizontal" Margin="5">
+                  <TextBlock Text="G : "/>
+                  <Slider Width="130" Minimum="0" Maximum="255"   x:Name="slider2"/>
+              </StackPanel>
+          
+              <StackPanel Orientation="Horizontal" Margin="5">
+                  <TextBlock Text="B : "/>
+                  <Slider Width="130" Minimum="0" Maximum="255"   x:Name="slider3"/>
+              </StackPanel>
+  
+              <StackPanel Orientation="Horizontal" Margin="5">
+                  <TextBlock Text="R : " HorizontalAlignment="Center"/>
+                  <TextBox Width="25" x:Name="valueR" Text="{Binding   ElementName=slider1, Path=Value, Converter={StaticResource   DisplayInt}}"/>
+                  <TextBlock Text=" G : " HorizontalAlignment="Center"/>
+                  <TextBox Width="25" x:Name="valueG" Text="{Binding   ElementName=slider2, Path=Value, Converter={StaticResource   DisplayInt}}"/>
+                  <TextBlock Text=" B : " HorizontalAlignment="Center"/>
+                  <TextBox Width="25" x:Name="valueB" Text="{Binding   ElementName=slider3, Path=Value, Converter={StaticResource   DisplayInt}}"/>
+              </StackPanel>
+  
+              <Button x:Name="colorButton" Height="30" Foreground="White"   Content="COLOR">
+                  <Button.Background>
+                      <MultiBinding Converter="{StaticResource   XAMLResourceColorConverter}">
+                          <Binding ElementName="valueR" Path="Text"/>
+                          <Binding ElementName="valueG" Path="Text"/>
+                          <Binding ElementName="valueB" Path="Text"/>
+                      </MultiBinding>
+                  </Button.Background>
+              </Button>
+  
+          </StackPanel>
+  
+  
+      </Grid>
+  </Window>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System.Windows;
+  
+  namespace _8.Data_Binding
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+              _02_CodeBehindBinding(); // chapter02
+  
+              _06_TextSize(); // Chapter06
+  
+              _09_BindingNonelement(); // Chapter09
+  
+              _10_DataContext(); // Chapter10
+  
+              _12_BindingItemsContol(); // Chapter12
+  
+          }
+  
+      }
+  
+  }
+  ```
+<br>
+
 
 # Ch 09. Routing Events 및 Command
 

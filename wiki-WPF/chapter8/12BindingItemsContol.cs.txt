@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Windows;
+
+namespace _8.Data_Binding
+{
+
+    public partial class MainWindow : Window
+    {
+        public void _12_BindingItemsContol()
+        {
+            Person[] people = { new Person( "Shirley", 34, "Green" ),
+                new Person( "Roy", 36, "Blue" ),
+                new Person( "Isabel", 25, "Orange" ),
+                new Person( "Manuel", 27, "Red" ) };
+
+            comboPeople.ItemsSource = people;
+
+            Binding nameBinding = new Binding("FirstName");
+            lblFName12.SetBinding(ContentProperty, nameBinding);
+
+            Binding ageBinding = new Binding("Age");
+            lblAge12.SetBinding(ContentProperty, ageBinding);
+
+            Binding colorBinding = new Binding("FavoriteColor");
+            lblColor12.SetBinding(ContentProperty, colorBinding);
+        }
+    }
+
+    internal class _12BindingItemsContol
+    {
+    }
+}

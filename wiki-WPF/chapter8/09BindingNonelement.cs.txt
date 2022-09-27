@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Data;
+
+namespace _8.Data_Binding
+{
+
+    public partial class MainWindow : Window
+    {
+        public void _09_BindingNonelement()
+        {
+            Person p = new Person("Shirley", 34, "Green");
+
+            Binding nameBinding = new Binding("FirstName");
+            nameBinding.Source = p;
+            lblFName.SetBinding(ContentProperty, nameBinding);
+
+            Binding ageBinding = new Binding("Age");
+            ageBinding.Source = p;
+            lblAge.SetBinding(ContentProperty, ageBinding);
+
+            Binding colorBinding = new Binding("FavoriteColor");
+            colorBinding.Source = p;
+            lblColor.SetBinding(ContentProperty, colorBinding);
+        }
+    }
+}
+
+// Person.cs
+namespace _8.Data_Binding
+{
+    internal class _09BindingNonelement
+    {
+    }
+
+    class Person
+    {
+        public string FirstName { get; set; }
+        public int Age { get; set; }
+        public string FavoriteColor { get; set; }
+
+        public Person(string fName, int age, string color)
+        {
+            FirstName = fName;
+            Age = age;
+            FavoriteColor = color;
+        }
+    }
+
+}
