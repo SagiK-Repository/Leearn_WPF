@@ -6274,8 +6274,39 @@
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
+- <img src="/uploads/1abaa9eae8c38fd83120a358d7512781/image.png" width="70%">
 
+### 1. Control의 동작과 모양의 분리
+
+<br>
+
+### 1. 0
+
+<br>
+
+### 1. 0
+
+<br>
+
+### 1. 0
+
+<br>
+
+### 1. 0
+
+<br>
+
+### 1. 0
+
+<br>
+
+### 1. 0
+
+<br>
+
+### 1. 0
+
+<br>
 
 <br><br><br>
 
