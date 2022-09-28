@@ -6626,8 +6626,549 @@
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
+- <img src="/uploads/4a1e51e751cdef518d244dc683304de4/image.png" width="70%">
 
+### 1. Navigation의 두 가지 타입
+
+- 웹 브라우저는 한 번에 한 페이지만 표시한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Page x:Class="_14.Page_Navigation.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_14.Page_Navigation"
+          mc:Ignorable="d"
+          WindowTitle="Simple Page 1">
+      <Grid>
+          <StackPanel>
+              <TextBlock>This is Page1</TextBlock>
+          </StackPanel>
+      </Grid>
+  </Page>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System.Windows.Controls;
+  
+  namespace _14.Page_Navigation
+  {
+      public partial class MainWindow : Page
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/9ae3eaebbba3031ba8c60fc5a4088b8e/image.png">
+
+<br>
+
+### 1-1. Navigation의 두 가지 타입
+
+- 솔루션 탐색기 > 프로젝트 > 오른쪽 마우스 > 추가 > 새항목 > 페이지(WPF) > 이름 변경 > 추가
+- Page1.xaml를 생성한다.
+  ```xml
+    <Grid>
+        <TextBlock>
+            This is Page 2. Go to
+            <Hyperlink NavigateUri="MainWindow.xaml">Page 0</Hyperlink>
+        </TextBlock>
+    </Grid>
+  ```
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Page x:Class="_14.Page_Navigation.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_14.Page_Navigation"
+          mc:Ignorable="d"
+          WindowTitle="Simple Page 1">
+      <Grid>
+          <StackPanel>
+              <TextBlock>
+                  This is Page0 Go to
+                  <Hyperlink NavigateUri="Page1.xaml">Page 1</Hyperlink>
+              </TextBlock>
+          </StackPanel>
+      </Grid>
+  </Page>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System.Windows.Controls;
+  
+  namespace _14.Page_Navigation
+  {
+      public partial class MainWindow : Page
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/74ea3deab6f19b0d72fefd23756746ba/image.png">
+
+<br>
+
+### 1-2. Frames
+
+- NavigationWindow와는 달리 Frame 을 최상위 수준의 navigation host로 사용할 수 없다.
+  - Frame은 ContentControl 클래스에서 파생되므로 컨트롤을 배치할 수 있는 위치에 Frame을 배치할 수 있다.
+  - Frame은 자체 navigation bar를 생성함으로써 자체적으로 navigation 활동을 처리할 수 있다. Default로 이 기능은 NavigationWindow 또는 Frame 내부에 이 기능이 없는 경우에만 작동한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="0" Grid.Column="2">
+      <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="5">
+      ... and that government of the people, by the people, for
+      the people, shall not perish from the earth. --A. Lincoln
+      </TextBlock>
+
+      <Frame Grid.Row="1" Source="Page1.xaml" Margin="5"
+         BorderBrush="Black" BorderThickness="1">
+      </Frame>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/b318ea830893b74008e823c0a92d6023/image.png">
+
+<br>
+
+### 1-3. Frames의 Journal Options
+
+- Default로 Frame이 NavigationWindow 또는 다른 활성화된 journal이 있는 Frame으로 둘러싸인 경우 Frame의 탐색은 해당 navigation host의 journal과 병합되고 처리된다.
+- Navigation host로 둘러싸인 활성 journal이 없는 경우 프레임은 자체 journal을 활성화한다.
+- Frame의 JournalOwnership 속성을 세 값중 하나로 설정하여 journaling 동작을 명시적으로 설정할 수 있다.
+- Automatic : `<Frame Source="Page1.xaml"/>`
+  - Navigation host로 둘러싸인 활성 journal이 없는 경우 프레임은 자체 journal을 활성화한다.
+- OwnsJournal : `<Frame Source="Page1.xaml" JournalOwnership="OwnsJournal"/>`
+  - Frame은 navigation host에 관계없이 자체 journal을 사용한다.
+- UsesParentJournal	 : `<Frame Source="Page1.xaml" JournalOwnership="UsesParentJournal"/>`
+  - 활성 journal이 있는 enclosing navigation host 가 있는 경우 Frame의 탐색 기록은 해당 호스트의 journal에 의해 유지된다. 그렇지 않으면 Frame에 대한 Navigation 기록이 저장되지 않는다.
+- 이전 예제에서 `<Frame Source="Page1.xaml" JournalOwnership="OwnsJournal"/>`를 추가해서 구성한다.
+- 결과  
+  <img src="/uploads/5d910e3b031c8d7203654b4fc6e3d927/image.png">
+
+<br>
+
+### 2. 프로그래밍 방식으로 Navigation
+
+- Code-behind에서 탐색을 프로그래밍 방식으로 하는 것이 필요할 수 있다.
+- NavigationService 객체를 가져와서 Navigate 메서드를 호출하면 된다.
+- PageLandscape.xaml, PagePortrait.xaml를 구성한다.
+- PageLandscape.xaml
+  ```xml
+  <Page ... Title="PageLandscape">
+      <Grid>
+          <Grid.RowDefinitions>
+              <RowDefinition Height="*"/>
+              <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+          <Image Margin="5" Grid.Row="0" Source="card1.jpg"></Image>
+          <TextBlock Margin="5" FontWeight="Bold" Grid.Row="1">
+              Avolea playing in the Snow
+          </TextBlock>
+      </Grid>
+  </Page>
+  ```
+- PagePortrait.xaml
+  ```xml
+  <Page ... Title="PagePortrait">
+      <Grid>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <Image Margin="5" Grid.Column="0" Source="card1.jpg"></Image>
+          <TextBlock Margin="5" FontWeight="Bold" TextWrapping="Wrap" Grid.  Column="1">
+              Avolea<LineBreak/>playing<LineBreak/>in the<LineBreak/>Snow
+          </TextBlock>
+      </Grid>
+  </Page>
+  ```
+- MainWindow.xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="0">
+      <ListBox Name="lbxSelection" BorderBrush="Black" Margin="2"
+           Padding="3" SelectedIndex="0" HorizontalAlignment="Left">
+          <ListBoxItem>Landscape</ListBoxItem>
+          <ListBoxItem>Portrait</ListBoxItem>
+      </ListBox>
+      <Button HorizontalAlignment="Left" Margin="2"
+          Padding="4" Click="Button_Click2">Show Picture</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Page
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+      }
+
+      private void Button_Click2(object sender, System.Windows.RoutedEventArgs e)
+      {
+          NavigationService navService = NavigationService.GetNavigationService(this);
+          string selString = ((ListBoxItem)lbxSelection.SelectedItem).Content.ToString();
+
+          if (selString == "Portrait")
+          {
+              PagePortrait pp = new PagePortrait();
+              navService.Navigate(pp);
+          }
+
+          else
+          {
+              PageLandscape pl = new PageLandscape();
+              navService.Navigate(pl);
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/91da2dd112594d2e59515500f4850826/image.png" width="70%">
+
+
+
+<br>
+
+### 2-1. Page로 데이터 전달
+
+- 페이지로 데이터를 전달하는 가장 일반적인 방법은 아래와 같이 Page 객체를 생성한 후 Navigate 메서드로 보내는 것이다.
+- MainWindow.xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="1" Grid.Column="2">
+      <Button Click="Button_Click21">Click Me</Button>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  private void Button_Click21(object sender, RoutedEventArgs e)
+  {
+      Page2 p1 = new Page2("This too shall pass.");
+      NavigationService ns = NavigationService.GetNavigationService(this);
+      ns.Navigate(p1);
+  }
+  ```
+- Page2.xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Page ... Title="Page2">
+      <Grid>
+          <TextBlock Name="tb"></TextBlock>
+      </Grid>
+  </Page>
+  ```
+- Page2.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class Page2 : Page
+  {
+      public Page2()
+      {
+          InitializeComponent();
+      }
+
+      public Page2(string inputString)
+      {
+          InitializeComponent();
+          tb.Text = inputString;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/2607c58afce8cabcf69d26c5c09e8cb6/image.png">
+
+<br>
+
+### 2-2. Page에서 데이터 가져오기
+
+- 페이지에서 데이터를 가져오는 방법을 알아본다.
+- PageFunction 클래스는 반환할 객체의 타입을 지정하는 클래스이다.
+- 솔루션 탐색기 > 프로젝트 > 오른쪽 마우스 > 페이지 추가> 대화상자의 template 섹션 > 페이지 함수(WPF) > 이름에 PageFunction 이름을 입력 > 추가
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="3">
+      <Button Click="Button_Click22" Margin="5">Get Data From Page</Button>
+      <TextBox Name="textBox22" Margin="5"></TextBox>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  private void Button_Click22(object sender, RoutedEventArgs e)
+  {
+      UserInputPageFunction uiPageFunction = new UserInputPageFunction();
+      uiPageFunction.Return += handlePageFunctionInput;
+      this.NavigationService.Navigate(uiPageFunction);
+  }
+
+  private void handlePageFunctionInput(object sender, ReturnEventArgs<string> e)
+  {
+      string stringReturned = (string)e.Result;
+      if (stringReturned != null)
+          textBox22.Text = stringReturned;
+  }
+  ```
+- UserInputPageFunction.xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <PageFunction x:Class="_14.Page_Navigation.UserInputPageFunction"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:local="clr-namespace:_14.Page_Navigation"
+        mc:Ignorable="d" 
+        d:DesignHeight="450" d:DesignWidth="800"
+        Title="UserInputPageFunction"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        x:TypeArguments="sys:String" >
+      <StackPanel>
+          <TextBox Name="pfTextBox" Margin="5"></TextBox>
+          <Button Margin="5" Click="Button_Click">Return Data</Button>
+      </StackPanel>
+  </PageFunction>
+  ```
+- UserInputPageFunction.xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class UserInputPageFunction : PageFunction<String>
+  {
+      public UserInputPageFunction()
+      {
+          InitializeComponent();
+      }
+
+      private void Button_Click(object sender, RoutedEventArgs e)
+      {
+          string returnValue = pfTextBox.Text;
+          OnReturn(new ReturnEventArgs<string>(returnValue));
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/470f2cee629c05bf64f931b5d4db4218/image.png">
+
+<br>
+
+### 3. XAML Browser 어플리케이션
+
+- XBAP 어플리케이션은 자체적인 실행 프로그램으로 실행되지 않는다. 대신, Internet Explorer 또는 Firefox와 같은 웹 브라우저 내에서 실행되어야 한다.
+- XBAP 어플리케이션 만들기
+  - Visual Studio > 새프로젝트 > WPF 브라우저 앱(.NET Framework)
+    - FirstXBAP.exe : 이 파일에는 애플리케이션에 대한 CIL 코드가 있다. (CIL 코드는 .NET 실행파일을 구성하는 공용 중간 언어 코드이다.)
+    - FirstXBAP.exe.manifest : 이 파일에는 애플리케이션에 대한 메타데이터가 있다.
+    - FirstXBAP.xbap : 이 파일에는 애플리케이션 배포 정보가 포함되어 있다.
+- 배포 및 실행
+  - XBAP를 사용하면 프로그램의 표준 설치를 수행할 필요가 없다. 대신 사용자가 browse할 위치에 프로그램을 게시한다. 
+  - 이 프로세스는 표준 프로그램 설치 절차보다 훨씬 사용자 친화적이다.
+    - 1. XBAP 프로젝트를 만든다.
+    - 2. Page2.xaml 과 Page3.xaml을 추가한다.
+    - 3. 이 챕터의 첫 번째 하이퍼링크 예제 프로그램을 XBAP 프로젝트의 세 개의 페이지에 복사한다.
+- xbap 파일 만들기
+  - 하드 드라이브에 C:/Temp/Test와 같은 폴더를 만든다.
+  - 프로젝트에서 오른쪽 마우스 - 게시를 클릭한다.
+  - 게시 마법사 창에서 게시할 위치를 생성한 폴더 경로로 한 다음 마침을 클릭한다.
+- 결과  
+  <img src="/uploads/5c4d53b39f942bb1991ef81462201a0a/image.png">
+
+<br>
+
+
+### 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Page x:Class="_14.Page_Navigation.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_14.Page_Navigation"
+          mc:Ignorable="d"
+          WindowTitle="Simple Page 1">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 1. Navigation -->
+          <StackPanel Grid.Row="0" Grid.Column="0">
+              <TextBlock>This is Page1</TextBlock>
+          </StackPanel>
+          
+          <!-- 1-1. Navigation -->
+          <StackPanel Grid.Row="0" Grid.Column="1">
+              <TextBlock>
+                    This is Page0 Go to
+                    <Hyperlink NavigateUri="Page1.xaml">Page 1</Hyperlink>
+              </TextBlock>
+              <TextBlock>
+                    <Hyperlink NavigateUri="Page1.xaml">Page 1</Hyperlink>
+              </TextBlock>
+          </StackPanel>
+  
+          <!-- 1-2. Frames -->
+          <Grid Grid.Row="0" Grid.Column="2">
+              <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="5">
+              ... and that government of the people, by the people, for
+              the people, shall not perish from the earth. --A. Lincoln
+              </TextBlock>
+  
+              <Frame Grid.Row="1" Source="Page1.xaml" Margin="5"
+                 BorderBrush="Black" BorderThickness="1">
+              </Frame>
+          </Grid>
+  
+          <!-- 1-3. Frames의 Journal Options -->
+          <Grid Grid.Row="0" Grid.Column="3">
+              <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <TextBlock Grid.Row="0" TextWrapping="Wrap" Margin="5">
+              ... and that government of the people, by the people, for
+              the people, shall not perish from the earth. --A. Lincoln
+              </TextBlock>
+  
+              <Frame Grid.Row="1" Source="Page1.xaml" Margin="5" JournalOwnership="OwnsJournal"
+                 BorderBrush="Black" BorderThickness="1">
+              </Frame>
+          </Grid>
+  
+  
+          <!-- 2. Code-behind Navigation -->
+          <StackPanel Grid.Row="1" Grid.Column="0">
+              <ListBox Name="lbxSelection" BorderBrush="Black" Margin="2"
+                   Padding="3" SelectedIndex="0" HorizontalAlignment="Left">
+                  <ListBoxItem>Landscape</ListBoxItem>
+                  <ListBoxItem>Portrait</ListBoxItem>
+              </ListBox>
+              <Button HorizontalAlignment="Left" Margin="2"
+                  Padding="4" Click="Button_Click2">Show Picture</Button>
+          </StackPanel>
+          
+          
+          <!-- 2-1. Code-behind Navigation -->
+          <Grid Grid.Row="1" Grid.Column="2">
+              <Button Click="Button_Click21">Click Me</Button>
+          </Grid>
+          
+          
+          <!-- 2-2. Get Data From Page -->
+          <StackPanel Grid.Row="1" Grid.Column="3">
+              <Button Click="Button_Click22" Margin="5">Get Data From Page</Button>
+              <TextBox Name="textBox22" Margin="5"></TextBox>
+          </StackPanel>
+  
+      </Grid>
+  </Page>
+
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Collections.Generic;
+  using System.Linq;
+  using System.Text;
+  using System.Threading.Tasks;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Data;
+  using System.Windows.Documents;
+  using System.Windows.Input;
+  using System.Windows.Media;
+  using System.Windows.Media.Imaging;
+  using System.Windows.Navigation;
+  using System.Windows.Shapes;
+  
+  namespace _14.Page_Navigation
+  {
+  
+  
+      public partial class MainWindow : Page
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+          }
+  
+          private void Button_Click2(object sender, System.Windows.RoutedEventArgs e)
+          {
+              NavigationService navService = NavigationService.GetNavigationService(this);
+              string selString = ((ListBoxItem)lbxSelection.SelectedItem).Content.ToString();
+  
+              if (selString == "Portrait")
+              {
+                  PagePortrait pp = new PagePortrait();
+                  navService.Navigate(pp);
+              }
+  
+              else
+              {
+                  PageLandscape pl = new PageLandscape();
+                  navService.Navigate(pl);
+              }
+          }
+  
+          // 2-1. Page로 데이터 전달
+          private void Button_Click21(object sender, RoutedEventArgs e)
+          {
+              Page2 p1 = new Page2("This too shall pass.");
+              NavigationService ns = NavigationService.GetNavigationService(this);
+              ns.Navigate(p1);
+          }
+  
+  
+  
+          // 2-2. Get Data From Page
+          private void Button_Click22(object sender, RoutedEventArgs e)
+          {
+              UserInputPageFunction uiPageFunction = new UserInputPageFunction();
+              uiPageFunction.Return += handlePageFunctionInput;
+              this.NavigationService.Navigate(uiPageFunction);
+          }
+  
+          private void handlePageFunctionInput(object sender, ReturnEventArgs<string> e)
+          {
+              string stringReturned = (string)e.Result;
+              if (stringReturned != null)
+                  textBox22.Text = stringReturned;
+          }
+      }
+  }
+  ```
+
+<br>
+
+### 0. 0
+
+<br>
+
+### 0. 0
+
+<br>
 
 <br><br><br>
 
