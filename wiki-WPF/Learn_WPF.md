@@ -7176,7 +7176,7 @@
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
+- <img src="/uploads/5f6ef23d660c0b6c3de52812a8121053/image.png" width="70%">
 
 
 <br><br><br>
