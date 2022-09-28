@@ -5661,13 +5661,357 @@
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
-
-### 0. s
+- <img src="/uploads/ee44367193b573c688ef51f973adab7b/image.png" width="70%">
 
 <br>
 
-### 0. s
+### 1. Style 이란?
+
+- WPF에서는 속성 설정 그룹을 Style로 수집하여 여러 요소에 적용할 수 있다.
+  ```xml
+  <Window.Resources>
+      <Style ...>
+      ...
+      </Style>
+  </Window.Resources>
+  ```
+- Style을 정의하고 적용하는 방법에는 두 가지가 있다.
+  - Named Style을 사용하면 선언할 때 이름을 지정한다. style 이름을 사용하여 선택한 element에 명시적으로 적용한다.
+  - Targeted Style을 사용하면 선언할 때 target type을 지정한다. 스타일은 해당 유형의 element에 자동으로 적용된다.
+
+<br>
+
+### 2. Named Styles
+
+  ```xml
+  <Style x:Key="button Style">
+      <Setter Property="Button.Height" Value="40" />
+      <Setter Property="Button.Width" Value="110" />
+      <Setter Property="Button.FontSize" Value="16" />
+      <Setter Property="Button.FontWeight" Value="Bold" />
+  </Style>
+  ```
+- Style을 지정하려면 x:Key 를 사용한다. (일반적으로 Style의 이름은 Style로 끝나야 한다)
+- Style의 속성 값은 Setter 라는 element를 사용하여 설정된다. Setter 는 Property 및 Value라는 두 가지 속성을 필요로 한다.
+- Property 는 target element의 속성을 지정한다.
+- Value 는 target propetry를 설정할 값을 지정한다. 예제 코드의 값은 간단하지만 복잡한 값의 경우, attribute element 구문을 사용해야 한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <Style x:Key="buttonStyle">
+          <Setter Property="Button.Height" Value="40"/>
+          <Setter Property="Button.Width" Value="110"/>
+          <Setter Property="Button.FontSize" Value="16"/>
+          <Setter Property="Button.FontWeight" Value="Bold"/>
+      </Style>
+  </Window.Resources>
+
+  <StackPanel>
+      <Button Style="{StaticResource buttonStyle}">Button 1</Button>
+      <Button Style="{StaticResource buttonStyle}">Button 2</Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/8f245393bb2ad71535fceae89a3e8fff/image.png">
+
+<br>
+
+### 2-1. Named Styles
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <Style x:Key="buttonStyle">
+          <Setter Property="Control.FontSize" Value="16"/>
+          <Setter Property="Control.FontWeight" Value="Bold"/>
+      </Style>
+  </Window.Resources>
+
+  <GroupBox Header="Some Buttons" BorderBrush="Black" Margin="5"
+            Style="{StaticResource buttonStyle}">
+      <StackPanel Margin="5">
+          <Button Style="{StaticResource buttonStyle}">Button 1</Button>
+          <Button Style="{StaticResource buttonStyle}">Button 2</Button>
+      </StackPanel>
+  </GroupBox>
+  ```
+- 결과  
+  <img src="/uploads/d5e27d54a86ff256d75561ba16d2f45a/image.png">
+
+
+<br>
+
+### 3. Targeted Styles
+
+- Target style은 정확히 한 가지 유형의 target element에 사용하도록 설계되었다.
+  - xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <Style TargetType="Button">
+          <Setter Property="FontSize" Value="16"/>
+          <Setter Property="FontWeight" Value="Bold"/>
+      </Style>
+  </Window.Resources>
+
+  <GroupBox Header="Some Buttons" BorderBrush="Black" Margin="5">
+      <StackPanel>
+          <Button>Button 1</Button>
+          <Button>Button 2</Button>
+      </StackPanel>
+  </GroupBox>
+  ```
+- 결과  
+  <img src="/uploads/440a3cd310e6d244eaa3c18ded57cbe7/image.png">
+
+<br>
+
+### 4. Named and Targeted Styles 비교
+
+- Named Styles
+  - x:Key 를 사용하여 스타일을 지정한다.
+  - 두 가지 이상의 element 유형에 Named Style을 적용할 수 있다.
+  - Setter에 클래스 이름이 필요하다. 클래스 이름은 Style을 적용할 모든 유형의 Base 클래스여야 한다.
+- Targeted Styles
+  - Style은 x:Key 속성을 사용하면 안 된다.
+  - TargetType 속성을 사용하여 스타일을 적용해야 하는 정확한 type을 제공한다.
+  - Setter 는 클래스 이름이 필요하지 않다.
+  - Style은 element tree에서 주어진 type 아래의 모든 element 에 자동으로 적용된다.
+
+<br>
+
+### 5. EventSetters
+
+- Style의 Setter 집합에서 각 Setter는 하나의 dependency property 값을 설정할 수 있다.
+- 속성을 설정하는 것 이상을 수행해야 하는 경우가 있다. code-behind에서 코드를 실행해야 하는 경우 WPF는 EventSetter element를 제공한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <Style TargetType="Button">
+          <EventSetter Event="MouseEnter" Handler="Button_MouseEnter"/>
+      </Style>
+  </Window.Resources>
+
+  <StackPanel>
+      <Button Width="75" Height="40">0</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void Button_MouseEnter(object sender, MouseEventArgs e)
+      {
+          Button btn = (Button)sender;
+          int value;
+          if (int.TryParse((string)btn.Content, out value))
+          {
+              value++;
+              btn.Content = value.ToString();
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/ba4492e2f7afdad43d6a38f89478847c/image.png">
+
+<br>
+
+### 6. Style의 컬렉션
+
+- Style에는 여러 가지 중요한 컬렉션이 있다.
+  - Trigger 속성은 트리거 개체의 모음이다. 이것들은 조건적인 스타일이다.
+  - Resource 속성을 사용하여 Setter 및 Trigger에 사용되는 logical resource를 저장할 수 있다.
+
+<br>
+
+### 7. Property Triggers
+
+- Property trigger를 조건적 스타일로 생각할 수 있고, 여기서 조건은 특성 dependency property의 값에 기반한다.
+- 해당 속성에 특정 값이 있는 경우 Style이 적용된다.
+- 속성의 값이 더 이상 적용되지 않으면, Style이 즉시 중단되고 element가 "Nontriggered" 상태로 되돌아간다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <Style TargetType="Button">
+          <Setter Property="FontStyle" Value="Italic"/>
+          <Style.Triggers>
+              <Trigger Property="IsMouseOver" Value="True">
+                  <Setter Property="FontWeight" Value="Bold"/>
+                  <Setter Property="FontSize" Value="20"/>
+              </Trigger>
+          </Style.Triggers>
+      </Style>
+  </Window.Resources>
+
+  <StackPanel>
+      <Button>Button 1</Button>
+      <Button>Button 2</Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/5797ce8804016955987876c4cd80e64e/image.png">
+
+<br>
+
+### 8. MultiTriggers
+
+- 세트의 모든 조건이 True인 경우에만 트리거를 발생시키려면 MultiTrigger element를 사용할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <Style TargetType="Button">
+
+          <Setter Property="FontStyle" Value="Italic"/>
+
+          <Style.Triggers>
+              <MultiTrigger>
+                  <MultiTrigger.Conditions>
+                      <Condition Property="IsMouseOver" Value="True"/>
+                      <Condition Property="IsFocused" Value="True"/>
+                  </MultiTrigger.Conditions>
+
+                  <MultiTrigger.Setters>
+                      <Setter Property="FontWeight" Value="Bold"/>
+                      <Setter Property="FontSize" Value="20"/>
+                  </MultiTrigger.Setters>
+              </MultiTrigger>
+          </Style.Triggers>
+      </Style>
+  </Window.Resources>
+
+  <StackPanel>
+      <Button>Button 1</Button>
+      <Button>Button 2</Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/dad4f895f26f078f522d23c233ccb920/image.png">
+
+<br>
+
+### 9. Other Types of Triggers
+
+- Trigger 및 MultiTrigger는 속성 값에 의해 트리거 되기 때문에 property trigger이다. 아래의 표는 여러 유형의 트리거 사용을 요약한 것이다.
+
+| Name             | Usage                                                                                                                                                         |
+|------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Trigger          | 특정 dependency property의 값이 특정한 값을 가질 때, 그 기간 동안 Setter를 적용한다.                                                                                                 |
+| MultiTrigger     | MultiTrigger는 Condition 집합의 모든 값이 충족되는 시점과 그 기간 동안 Setter를 적용한다.                                                                                              |
+| EventTrigger     | EventTrigger는 특정 이벤트를 수신할 때 적용되는 element가 활성화된다. 이것들은 19장에서 다루는 애니메이션에 흔히 사용된다.                                                                               |
+| DataTrigger      | 일부 속성의 값이 특정한 값을 가질 때 DataTrigger가 활성화된다. Trigger와 마찬가지로 속성은 dependency property 일 수 있다. 그러나 데이터 속성이 element에 바인딩 된 경우 dependency property가 아닌 .NET 속성일 수 있다. |
+| MultiDataTrigger | MultiDataTrigger는 활성화되기 전에 충족해야 하는 데이터 값 Condition이 여러 개인 DataTrigger이다.                                                                                      |
+
+
+<br>
+
+### 연습문제 1
+
+- Button을 두 개 생성하고 한 버튼의 Background는 Teal, FontWeight는 ExtraBold로, 다른 버튼의 Background는 Red, FontWeight는 ExtraBold로 설정한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+      <Button Content="Btn 1" Width="50" Height="50" Margin="10"
+          Style="{StaticResource leftStyle}"/>
+      <Button Content="Btn 2" Width="50" Height="50" Margin="10"
+          Style="{StaticResource rightStyle}"/>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/71026a011dfc0c137019a141fb3c9e48/image.png">
+
+<br>
+
+### 연습문제 2
+
+- 연습문제 1에서 만들었던 왼쪽 버튼의 Background를 Style을 이용하여 Blue로 바꾼다.
+  - 조건 : 1번에서 만들었던 Window.Resources 또는 Application.Resources의 Style을 변경하지 않는다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
+      <Button Content="Btn 1" Width="50" Height="50" Margin="10">
+          <Button.Style>
+              <Style TargetType="Button">
+                  <Setter Property="Background" Value="Blue"/>
+              </Style>
+          </Button.Style>
+      </Button>
+      <Button Content="Btn 2" Width="50" Height="50" Margin="10"
+          Style="{StaticResource rightStyle}"/>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/ece0ac0c2069d79a7ac1c619632cf3ae/image.png">
+
+### 연습문제 3
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
+      <Button Content="Btn 1" Width="50" Height="50" Margin="10">
+          <Button.Style>
+              <Style TargetType="Button">
+                  <Setter Property="Background" Value="Blue"/>
+              </Style>
+          </Button.Style>
+      </Button>
+      <Button Content="Btn 2" Width="50" Height="50" Margin="10"
+          Style="{StaticResource rightStyle}"/>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/5db5b42ca325ee7e8ec07f33edca02b1/image.png">
+
+### 연습문제 4
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="1" Grid.Column="3">
+      <Button Content="My Button" Width="100" Height="50" FontSize="18">
+          <Button.Style>
+              <Style TargetType="Button">
+                  <Setter Property="Foreground" Value="Blue"/>
+                  <Style.Triggers>
+                      <Trigger Property="IsMouseOver" Value="True">
+                          <Setter Property="Foreground" Value="Red"/>
+                          <Setter Property="FontWeight" Value="ExtraBold"/>
+                      </Trigger>
+                  </Style.Triggers>
+              </Style>
+          </Button.Style>
+      </Button>
+  </Grid>
+
+  ```
+- 결과  
+  <img src="/uploads/89a5901a68ea552b0429e168d8306c63/image.png">
+
+### 연습문제 5
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="4" >
+      <CheckBox Name="chkBox" Content="Button Change" Margin="10"/>
+      
+      <Button Content="My Button" Width="100" Height="50" FontSize="18">
+          
+          <Button.Style>
+              <Style TargetType="Button">
+                  <Setter Property="Foreground" Value="Blue"/>
+                  <Style.Triggers>
+                      
+                      <DataTrigger Binding="{Binding ElementName=chkBox, Path=IsChecked}" Value="True">
+                          <Setter Property="Foreground" Value="Red"/>
+                          <Setter Property="FontWeight" Value="ExtraBold"/>
+                      </DataTrigger>
+                  </Style.Triggers>
+              </Style>
+          </Button.Style>
+          
+      </Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/7203229abf8c1cb7c357f6a26c7b9b96/image.png">
 
 <br>
 
