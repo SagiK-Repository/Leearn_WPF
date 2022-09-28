@@ -4536,87 +4536,684 @@
 
 <br>
 
-### 0. s
+### 3. ContextMenus
+
+- ContextMenu는 특정 element와 연관된 동작의 메뉴이며 사용자가 요소를 마우스 오른쪽 버튼으로 클릭하면 컨텍스트 메뉴가 표시된다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="1" Grid.Column="0">
+      <Image Name="picture3" Source="card1.jpg">
+          <Image.ContextMenu>
+              <ContextMenu>
+                  <MenuItem Header="Original" Click="MenuItem3_Click"/>
+                  <MenuItem Header="Flip on V Axis" Click="MenuItem3_Click_1"/>
+                  <MenuItem Header="Flip on H Axis" Click="MenuItem3_Click_2"/>
+              </ContextMenu>
+          </Image.ContextMenu>
+      </Image>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void MenuItem3_Click(object sender, RoutedEventArgs e)
+      {
+          picture3.LayoutTransform = new ScaleTransform(1, 1);
+      }
+
+      private void MenuItem3_Click_1(object sender, RoutedEventArgs e)
+      {
+          picture3.LayoutTransform = new ScaleTransform(-1, 1);
+      }
+
+      private void MenuItem3_Click_2(object sender, RoutedEventArgs e)
+      {
+          picture3.LayoutTransform = new ScaleTransform(1, -1);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/33d84432edae1995ec3341599b618c46/image.png">
+
 
 <br>
 
-### 0. s
+### 4. ToolBars
+
+- ToolBar는 컨트롤 또는 elemnet를 위한 컨테이너이다. 
+- 사용자가 프로그램의 가장 일반적인 기능에 빠르게 액세스할 수 있는 버튼과 ComboBox가 포함되어있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="1">
+      <ToolBar>
+          <Menu>
+              <MenuItem Header="File">
+                  <MenuItem Header="New Game"/>
+                  <MenuItem Header="Change Opponent"/>
+              </MenuItem>
+          </Menu>
+          <Button Width="40">Bet</Button>
+          <Button Width="40">Fold</Button>
+          <ComboBox Width="70" SelectedIndex="0">
+              <ComboBoxItem>Clubs</ComboBoxItem>
+              <ComboBoxItem>Diamonds</ComboBoxItem>
+              <ComboBoxItem>Hearts</ComboBoxItem>
+              <ComboBoxItem>Spades</ComboBoxItem>
+          </ComboBox>
+      </ToolBar>
+  </StackPanel>
+
+  ```
+- 결과  
+  <img src="/uploads/b7d88a3085f81986d0f6495fe9ead53c/image.png">
 
 <br>
 
-### 0. s
+### 5. StatusBars
+
+- StatusBar 는 사용자의 입력에 사용하도록 설계되지 않았다는 점을 제외하면 ToolBar 와 유사하다. 
+- 사용자에게 정보를 표시하는 목적이 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <DockPanel LastChildFill="False" Grid.Row="1" Grid.Column="2">
+      <StatusBar DockPanel.Dock="Bottom">
+          <TextBlock>Backup In Progress</TextBlock>
+          <ProgressBar Height="20" Width="20" Value="65"/>
+          <Image Height="30" Source="card2.jpg"/>
+      </StatusBar>
+  </DockPanel>
+  ```
+- 결과  
+  <img src="/uploads/1f19dee6c1b1806d4fcc2aa85959f65e/image.png">
 
 <br>
 
-### 0. s
+### 6. ToolTips
+
+- ToolTip 이란 마우스가 화면의 한 element 위로 이동할 때 자동으로 나타나는 작은 정보 창이다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="3">
+      <Button ToolTip="Important Button">Start Game</Button>
+      <ComboBox ToolTip="Choose a Suit" SelectedIndex="0">
+          <ComboBoxItem ToolTip="Black Suit">Clubs</ComboBoxItem>
+          <ComboBoxItem ToolTip="Red Suit">Diamons</ComboBoxItem>
+          <ComboBoxItem ToolTip="Red Suit">Hearts</ComboBoxItem>
+          <ComboBoxItem ToolTip="Black Suit">Spades</ComboBoxItem>
+      </ComboBox>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/1b8205c4b5b10625c287b4f4d248faef/image.png">
 
 <br>
 
-### 0. s
+### 7. 범위를 표시하는 컨트롤 - ProgressBar
+
+- Range control은 설정된 범위 내에 제한된 숫자 값을 나타내는 RangeBase클래스에서 파생된다.
+- ProgressBar의 default 범위는 0.0~100.0이고 백분율을 나타낸다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+<StackPanel Grid.Row="1" Grid.Column="4">
+    <TextBlock Margin="5" FontWeight="Bold">Current Percent Done</TextBlock>
+    <ProgressBar Name="pBar" Margin="5" Height="20" Value="60"/>
+    <TextBlock Text="{Binding ElementName=pBar, Path=Value}" Margin="5"/>
+</StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/5cd25f4ebd27818e4701c143d34d7ca7/image.png">
 
 <br>
 
-### 0. s
+### 7-2. The ProgressBar
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="2" Grid.Column="0">
+      <ProgressBar Name="pBar71" Value="0" Margin="5" Height="10"/>
+
+      <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+          <TextBlock Text="{Binding ElementName=pBar71, Path=Value}" Margin="5"/>
+          <Button DockPanel.Dock="Right" Margin="5" Click="Button71_Click">
+              Next Step
+          </Button>
+      </DockPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void Button71_Click(object sender, RoutedEventArgs e)
+      {
+          pBar71.Value += 10.0;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/9b732a909f024b90d6342b22dfc6ab3c/image.png">
 
 <br>
 
-### 0. s
+### 7-3. The ProgressBar
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="2" Grid.Column="1" >
+      <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="3*"/>
+          <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <TextBlock Grid.Row="0" Margin="5" FontWeight="Bold">
+      Current Percent Done
+      </TextBlock>
+
+      <ProgressBar Orientation="Vertical" Grid.Row="1" Name="pBar73"
+               Value="76" Margin="5" Width="20"/>
+      <TextBlock Text="{Binding ElementName=pBar73, Path=Value}"
+             Grid.Row="2" Margin="5"/>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/d3a169fe1064c3eeeef84cca01694a06/image.png">
+
 
 <br>
 
-### 0. s
+### 7-4. The Slider
+
+- Slider 컨트롤은 ProgressBar와 달리 사용자는 Slider에서 Thumb이라고 하는 작은 "knob"를 앞뒤로 끌면 Slider의 값을 변경할 수 있다.
+  - TickFrequency 속성은 1개 unit마다 눈금 표시가 있어야 함을 지정한다.
+  - TickPlacement 속성 값은 BottomRight로 설정된다.
+  - 기본적으로 Slider의 범위는 0.0~10.0 이다.
+  - IsSnapToTickEnabled를 true로 설정하여 눈금에 thumb를 스냅할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="2" Grid.Column="2" >
+      <Slider TickFrequency="1" TickPlacement="BottomRight" Margin="10" 
+              IsSelectionRangeEnabled="True" SelectionStart="2.0" SelectionEnd="7.0" />
+
+      <Slider TickFrequency="2" TickPlacement="BottomRight" Margin="10" 
+              IsSelectionRangeEnabled="True" SelectionStart="1.0" SelectionEnd="3.0" />
+
+      <Slider TickFrequency="0.5" TickPlacement="TopLeft" Margin="10" />
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/e45f1d592e7c1d4a4300a66dd727624a/image.png">
 
 <br>
 
-### 0. s
-
-<br>
-
-### 0. s
-
-<br>
 
 
 
 <br><br><br>
 
+### 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_10.Control_And_Element.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_10.Control_And_Element"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 1. TextBox -->
+          <StackPanel Grid.Row="0" Grid.Column="0">
+              <Label Target="{Binding ElementName=txtbxName1}">_Enter Your Name</  Label>
+              <TextBox Name="txtbxName1"/>
+              <Button HorizontalAlignment="Right" Padding="10 3"
+                  Click="Button_Click1">Enter</Button>
+          </StackPanel>
+  
+          <!-- 2. Menus -->
+          <Menu Grid.Row="0" Grid.Column="1">
+              <MenuItem Header="File">
+                  <MenuItem Header="New Game" Click="MenuItem2_Click"/>
+                  <MenuItem Header="Exit" Click="MenuItem2_Click_1"/>
+              </MenuItem>
+              <MenuItem Header="Help" Click="MenuItem2_Click_2"/>
+          </Menu>
+  
+  
+          <!-- 2-1. MenuItem -->
+          <Menu Grid.Row="0" Grid.Column="2">
+              <MenuItem Header="File">
+                  <MenuItem Header="New Game" Click="MenuItem21_Click" 
+                InputGestureText="Alt+N">
+                      <MenuItem.Icon>
+                          <Image Source="card1.jpg"/>
+                      </MenuItem.Icon>
+                  </MenuItem>
+                  <MenuItem Header="Shuffle Sound" Click="MenuItem21_Click_1"
+                    IsChecked="True" InputGestureText="Alt+S"/>
+              </MenuItem>
+          </Menu>
+  
+          <!-- 2-2. another Menu Header -->
+          <Menu Grid.Row="0" Grid.Column="3">
+              <MenuItem Header="File">
+                  <MenuItem InputGestureText="Alt+K">
+                      <MenuItem.Header>
+                          <Image Source="card1.jpg"/>
+                      </MenuItem.Header>
+                  </MenuItem>
+                  <MenuItem InputGestureText="Alt+Q">
+                      <MenuItem.Header>
+                          <Image Source="card2.jpg"/>
+                      </MenuItem.Header>
+                  </MenuItem>
+                  <MenuItem InputGestureText="Alt+J">
+                      <MenuItem.Header>
+                          <Image Source="card3.jpg"/>
+                      </MenuItem.Header>
+                  </MenuItem>
+              </MenuItem>
+          </Menu>
+  
+          <!-- 2-3. MenuItem Command -->
+          <StackPanel Grid.Row="0" Grid.Column="4">
+              <Menu>
+                  <MenuItem Header="File">
+                      <MenuItem Command="ApplicationCommands.New"/>
+                      <MenuItem Command="ApplicationCommands.Open"/>
+                  </MenuItem>
+              </Menu>
+          </StackPanel>
+  
+          <!-- 3. ContextMenus -->
+          <Grid Grid.Row="1" Grid.Column="0">
+              <Image Name="picture3" Source="card1.jpg">
+                  <Image.ContextMenu>
+                      <ContextMenu>
+                          <MenuItem Header="Original" Click="MenuItem3_Click"/>
+                          <MenuItem Header="Flip on V Axis"   Click="MenuItem3_Click_1"/>
+                          <MenuItem Header="Flip on H Axis"   Click="MenuItem3_Click_2"/>
+                      </ContextMenu>
+                  </Image.ContextMenu>
+              </Image>
+          </Grid>
+  
+          <!-- 4. ToolBars -->
+          <StackPanel Grid.Row="1" Grid.Column="1">
+              <ToolBar>
+                  <Menu>
+                      <MenuItem Header="File">
+                          <MenuItem Header="New Game"/>
+                          <MenuItem Header="Change Opponent"/>
+                      </MenuItem>
+                  </Menu>
+                  <Button Width="40">Bet</Button>
+                  <Button Width="40">Fold</Button>
+                  <ComboBox Width="70" SelectedIndex="0">
+                      <ComboBoxItem>Clubs</ComboBoxItem>
+                      <ComboBoxItem>Diamonds</ComboBoxItem>
+                      <ComboBoxItem>Hearts</ComboBoxItem>
+                      <ComboBoxItem>Spades</ComboBoxItem>
+                  </ComboBox>
+              </ToolBar>
+          </StackPanel>
+  
+          <!-- 5. StatusBars -->
+          <DockPanel LastChildFill="False" Grid.Row="1" Grid.Column="2">
+              <StatusBar DockPanel.Dock="Bottom">
+                  <TextBlock>Backup In Progress</TextBlock>
+                  <ProgressBar Height="20" Width="20" Value="65"/>
+                  <Image Height="30" Source="card2.jpg"/>
+              </StatusBar>
+          </DockPanel>
+  
+          <!-- 6. ToolTips -->
+          <StackPanel Grid.Row="1" Grid.Column="3">
+              <Button ToolTip="Important Button">Start Game</Button>
+              <ComboBox ToolTip="Choose a Suit" SelectedIndex="0">
+                  <ComboBoxItem ToolTip="Black Suit">Clubs</ComboBoxItem>
+                  <ComboBoxItem ToolTip="Red Suit">Diamons</ComboBoxItem>
+                  <ComboBoxItem ToolTip="Red Suit">Hearts</ComboBoxItem>
+                  <ComboBoxItem ToolTip="Black Suit">Spades</ComboBoxItem>
+              </ComboBox>
+          </StackPanel>
+  
+          <!-- 7. ProgressBar -->
+          <StackPanel Grid.Row="1" Grid.Column="4">
+              <TextBlock Margin="5" FontWeight="Bold">Current Percent Done</  TextBlock>
+              <ProgressBar Name="pBar" Margin="5" Height="20" Value="60"/>
+              <TextBlock Text="{Binding ElementName=pBar, Path=Value}" Margin="5"/>
+          </StackPanel>
+  
+          <!-- 7-2. The ProgressBar -->
+          <StackPanel Grid.Row="2" Grid.Column="0">
+              <ProgressBar Name="pBar71" Value="0" Margin="5" Height="10"/>
+  
+              <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                  <TextBlock Text="{Binding ElementName=pBar71, Path=Value}"   Margin="5"/>
+                  <Button DockPanel.Dock="Right" Margin="5" Click="Button71_Click">
+                      Next Step
+                  </Button>
+              </DockPanel>
+          </StackPanel>
+  
+          <!-- 7-3. The ProgressBar -->
+          <Grid Grid.Row="2" Grid.Column="1" >
+              <Grid.RowDefinitions>
+                  <RowDefinition Height="*"/>
+                  <RowDefinition Height="3*"/>
+                  <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+  
+              <TextBlock Grid.Row="0" Margin="5" FontWeight="Bold">
+              Current Percent Done
+              </TextBlock>
+  
+              <ProgressBar Orientation="Vertical" Grid.Row="1" Name="pBar73"
+                       Value="76" Margin="5" Width="20"/>
+              <TextBlock Text="{Binding ElementName=pBar73, Path=Value}"
+                     Grid.Row="2" Margin="5"/>
+          </Grid>
+  
+          <!-- 7-4. The Slider -->
+  
+          <StackPanel Grid.Row="2" Grid.Column="2" >
+              <Slider TickFrequency="1" TickPlacement="BottomRight" Margin="10" 
+                      IsSelectionRangeEnabled="True" SelectionStart="2.0"   SelectionEnd="7.0" />
+  
+              <Slider TickFrequency="2" TickPlacement="BottomRight" Margin="10" 
+                      IsSelectionRangeEnabled="True" SelectionStart="1.0"   SelectionEnd="3.0" />
+  
+              <Slider TickFrequency="0.5" TickPlacement="TopLeft" Margin="10" />
+          </StackPanel>
+  
+      </Grid>
+  </Window>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System.Windows;
+  using System.Windows.Input;
+  using System.Windows.Media;
+  
+  namespace _10.Control_And_Element
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+              _2_3_MenuItemCommand();
+          }
+  
+      }
+  }
+  
+  
+  // 1. TextBox 
+  namespace _10.Control_And_Element
+  {
+      public partial class MainWindow : Window
+      {
+          private void Button_Click1(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("You entered: " + txtbxName1.Text, "TextBox   Message");
+          }
+      }
+  }
+  
+  
+  
+  // 2. Menus
+  namespace _10.Control_And_Element
+  {
+      public partial class MainWindow : Window
+      {
+          private void MenuItem2_Click(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("Clicked New Game", "Menu Info");
+          }
+  
+          private void MenuItem2_Click_1(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("Clicked Exit", "Menu Info");
+          }
+  
+          private void MenuItem2_Click_2(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("Clicked Help", "Menu Info");
+          }
+      }
+  }
+  
+  
+  // 2-1. MenuItem
+  namespace _10.Control_And_Element
+  {
+      public partial class MainWindow : Window
+      {
+  
+          private void MenuItem21_Click(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("Clicked New Game");
+          }
+  
+          private void MenuItem21_Click_1(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("Clicked Shuffle Sound");
+          }
+      }
+  }
+  
+  
+  // 2-3. MenuItem Command
+  namespace _10.Control_And_Element
+  {
+      public partial class MainWindow : Window
+      {
+          public void _2_3_MenuItemCommand()
+          {
+              CommandBinding nBinding = new CommandBinding();    //Binding for New
+              nBinding.Command = ApplicationCommands.Open;
+              nBinding.Executed += DoOpen_Executed;
+              nBinding.CanExecute += DoOpen_CanExecute;
+  
+              CommandBinding oBinding = new CommandBinding();    //Binding for Open
+              oBinding.Command = ApplicationCommands.New;
+              oBinding.Executed += DoNew_Executed;
+              oBinding.CanExecute += DoNew_CanExecute;
+  
+              CommandBindings.Add(nBinding);
+              CommandBindings.Add(oBinding);
+          }
+  
+          private void DoOpen_CanExecute(object sender, CanExecuteRoutedEventArgs   e)
+          {
+              e.CanExecute = true;
+          }
+  
+          private void DoOpen_Executed(object sender, ExecutedRoutedEventArgs e)
+          {
+              MessageBox.Show("Open Command Executed", "Command Info");
+          }
+  
+          private void DoNew_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+          {
+              e.CanExecute = true;
+          }
+  
+          private void DoNew_Executed(object sender, ExecutedRoutedEventArgs e)
+          {
+              MessageBox.Show("New Command Executed", "Command Info");
+          }
+      }
+  }
+  
+  
+  // 3. ContextMenus
+  namespace _10.Control_And_Element
+  {
+      public partial class MainWindow : Window
+      {
+          private void MenuItem3_Click(object sender, RoutedEventArgs e)
+          {
+              picture3.LayoutTransform = new ScaleTransform(1, 1);
+          }
+  
+          private void MenuItem3_Click_1(object sender, RoutedEventArgs e)
+          {
+              picture3.LayoutTransform = new ScaleTransform(-1, 1);
+          }
+  
+          private void MenuItem3_Click_2(object sender, RoutedEventArgs e)
+          {
+              picture3.LayoutTransform = new ScaleTransform(1, -1);
+          }
+      }
+  }
+  
+  
+  // 7-2. The ProgressBar
+  namespace _10.Control_And_Element
+  {
+      public partial class MainWindow : Window
+      {
+          private void Button71_Click(object sender, RoutedEventArgs e)
+          {
+              pBar71.Value += 10.0;
+          }
+      }
+  }
+  ```
+
 # Ch 11. Resources
+
+### 0. Summary(요약)
+
+- <img src="/uploads/872428721a1d9b4e63b12af8cfbd3739/image.png" width="70%">
+
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
 
 <br><br><br>
 
 # Ch 12. Styles
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+
 <br><br><br>
 
 # Ch 13. Control Templates
+
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
 
 <br><br><br>
 
 # Ch 14. Page Navigation 프로그램
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+
 <br><br><br>
 
 # Ch 15. 다양한 Data Binding
+
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
 
 <br><br><br>
 
 # Ch 16. Tree, Tab, 그 외 다른 Control들
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+
 <br><br><br>
 
 # Ch 17. Text 및 Documents
+
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
 
 <br><br><br>
 
 # Ch 18. WPF의 Graphic
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+
 <br><br><br>
 
 # Ch 19. Animation
 
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
+
 <br><br><br>
 
 # Ch 20. Audio 및 Video
+
+### 0. Summary(요약)
+
+- <img src="" width="70%">
+
 
 <br><br><br>
 
