@@ -6015,6 +6015,243 @@
 
 <br>
 
+## 종합
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_12.Style.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_12.Style"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Window.Resources>
+          <Style x:Key="buttonStyle2">
+              <Setter Property="Button.Height" Value="40"/>
+              <Setter Property="Button.Width" Value="110"/>
+              <Setter Property="Button.FontSize" Value="16"/>
+              <Setter Property="Button.FontWeight" Value="Bold"/>
+          </Style>
+          <Style x:Key="buttonStyle21">
+              <Setter Property="Control.FontSize" Value="16"/>
+              <Setter Property="Control.FontWeight" Value="Bold"/>
+          </Style>
+          <!-- 3 -->
+          <Style TargetType="Button">
+              <Setter Property="FontSize" Value="16"/>
+              <Setter Property="FontWeight" Value="Bold"/>
+              <!-- 5 -->
+              <EventSetter Event="MouseEnter" Handler="Button_MouseEnter"/>
+              <!-- 7 -->
+              <Setter Property="FontStyle" Value="Italic"/>
+              <Style.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True">
+                      <Setter Property="FontWeight" Value="Bold"/>
+                      <Setter Property="FontSize" Value="20"/>
+                  </Trigger>
+                  <!-- 8 -->
+                  <MultiTrigger>
+                      <MultiTrigger.Conditions>
+                          <Condition Property="IsMouseOver" Value="True"/>
+                          <Condition Property="IsFocused" Value="True"/>
+                      </MultiTrigger.Conditions>
+  
+                      <MultiTrigger.Setters>
+                          <Setter Property="FontWeight" Value="Heavy"/>
+                          <Setter Property="FontSize" Value="30"/>
+                      </MultiTrigger.Setters>
+                  </MultiTrigger>
+              </Style.Triggers>
+           </Style>
+          <!-- 연습문제1, 2 -->
+          <Style TargetType="Button" x:Key="leftStyle">
+              <Setter Property="Background" Value="Teal"/>
+              <Setter Property="FontWeight" Value="ExtraBold"/>
+          </Style>
+          <Style TargetType="Button" x:Key="rightStyle">
+              <Setter Property="Background" Value="Red"/>
+              <Setter Property="FontWeight" Value="ExtraBold"/>
+          </Style>
+  
+          <!-- 연습문제3 -->
+          <Style TargetType="Button" x:Key="myStyle1">
+              <Setter Property="Background" Value="Orange"/>
+              <Setter Property="Foreground" Value="White"/>
+          </Style>
+          <Style BasedOn="{StaticResource myStyle1}" TargetType="Button"   x:Key="myStyle2">
+              <Setter Property="FontWeight" Value="ExtraBold"/>
+          </Style>
+          <Style BasedOn="{StaticResource myStyle2}" TargetType="Button"   x:Key="myStyle3">
+              <Setter Property="BorderBrush" Value="Black"/>
+              <Setter Property="BorderThickness" Value="3"/>
+          </Style>
+  
+      </Window.Resources>
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 2. Named Styles -->
+          <StackPanel Grid.Row="0" Grid.Column="0">
+              <Button Style="{StaticResource buttonStyle2}">Button 1</Button>
+              <Button Style="{StaticResource buttonStyle2}">Button 2</Button>
+          </StackPanel>
+  
+          <!-- 2-1. Named Styles -->
+          <GroupBox Header="Some Buttons" BorderBrush="Black" Margin="5"
+                Style="{StaticResource buttonStyle21}" Grid.Row="0" Grid.  Column="1">
+              <StackPanel Margin="5">
+                  <Button Style="{StaticResource buttonStyle21}">Button 1</Button>
+                  <Button Style="{StaticResource buttonStyle21}">Button 2</Button>
+              </StackPanel>
+          </GroupBox>
+          
+          <!-- 3. Target Style -->
+          <GroupBox Header="Some Buttons" BorderBrush="Black" Margin="5"  Grid.  Row="0" Grid.Column="2">
+              <StackPanel>
+                  <Button>0</Button>
+                  <Button>Button 2</Button>
+              </StackPanel>
+          </GroupBox>
+  
+          <!-- 5. EventSetters -->
+          <StackPanel Grid.Row="0" Grid.Column="3">
+              <Button Width="75" Height="40">0</Button>
+          </StackPanel>
+  
+          <!-- 7. Property Triggers -->
+          <StackPanel Grid.Row="0" Grid.Column="4">
+              <Button>Button 1</Button>
+              <Button>Button 2</Button>
+          </StackPanel>
+  
+          <!-- 연습문제1 -->
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.  Row="1" Grid.Column="0">
+              <Button Content="Btn 1" Width="50" Height="50" Margin="10"
+                  Style="{StaticResource leftStyle}"/>
+              <Button Content="Btn 2" Width="50" Height="50" Margin="10"
+                  Style="{StaticResource rightStyle}"/>
+          </StackPanel>
+          
+          <!-- 연습문제2 -->
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.  Row="1" Grid.Column="1">
+              <Button Content="Btn 1" Width="50" Height="50" Margin="10">
+                  <Button.Style>
+                      <Style TargetType="Button">
+                          <Setter Property="Background" Value="Blue"/>
+                      </Style>
+                  </Button.Style>
+              </Button>
+              <Button Content="Btn 2" Width="50" Height="50" Margin="10"
+                  Style="{StaticResource rightStyle}"/>
+          </StackPanel>
+  
+          <!-- 연습문제3 -->
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.  Row="1" Grid.Column="2">
+              <Button Content="Btn1" Width="40" Height="50" Margin="10"
+                  Style="{StaticResource myStyle1}"/>
+              <Button Content="Btn2" Width="40" Height="50" Margin="10"
+                  Style="{StaticResource myStyle2}"/>
+              <Button Content="Btn3" Width="40" Height="50" Margin="10"
+                  Style="{StaticResource myStyle3}"/>
+          </StackPanel>
+          
+          <!-- 연습문제4 -->
+          <Grid Grid.Row="1" Grid.Column="3">
+              <Button Content="My Button" Width="100" Height="50" FontSize="18">
+                  <Button.Style>
+                      <Style TargetType="Button">
+                          <Setter Property="Foreground" Value="Blue"/>
+                          <Style.Triggers>
+                              <Trigger Property="IsMouseOver" Value="True">
+                                  <Setter Property="Foreground" Value="Red"/>
+                                  <Setter Property="FontWeight" Value="ExtraBold"/>
+                              </Trigger>
+                          </Style.Triggers>
+                      </Style>
+                  </Button.Style>
+              </Button>
+          </Grid>
+          
+          <!-- 연습문제5 -->
+          <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.  Row="1" Grid.Column="4" >
+              <CheckBox Name="chkBox" Content="Button Change" Margin="10"/>
+              
+              <Button Content="My Button" Width="100" Height="50" FontSize="18">
+                  
+                  <Button.Style>
+                      <Style TargetType="Button">
+                          <Setter Property="Foreground" Value="Blue"/>
+                          <Style.Triggers>
+                              
+                              <DataTrigger Binding="{Binding ElementName=chkBox,   Path=IsChecked}" Value="True">
+                                  <Setter Property="Foreground" Value="Red"/>
+                                  <Setter Property="FontWeight" Value="ExtraBold"/>
+                              </DataTrigger>
+                          </Style.Triggers>
+                      </Style>
+                  </Button.Style>
+                  
+              </Button>
+              
+          </StackPanel>
+  
+  
+      </Grid>
+  </Window>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Input;
+  
+  namespace _12.Style
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+          }
+  
+  
+      }
+  }
+  
+  // 5. EventSetters
+  namespace _12.Style
+  {
+      public partial class MainWindow : Window
+      {
+  
+          private void Button_MouseEnter(object sender, MouseEventArgs e)
+          {
+              Button btn = (Button)sender;
+              int value;
+              if (int.TryParse((string)btn.Content, out value))
+              {
+                  value++;
+                  btn.Content = value.ToString();
+              }
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="">
+
+
 ### 0. s
 
 <br>
