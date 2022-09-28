@@ -6278,33 +6278,345 @@
 
 ### 1. Control의 동작과 모양의 분리
 
-<br>
-
-### 1. 0
-
-<br>
-
-### 1. 0
+- 컨트롤의 기본 동작을 변경하지 않고도 컨트롤의 전체 모양을 변경할 수 있다.
+- 컨트롤의 모양은 ControlTemplate 클래스의 object에 의해 결정된다.
 
 <br>
 
-### 1. 0
+### 2. 간단한 Control Template 만들기
+
+- 기본 버튼 템플릿을 사용하고 템플릿을 교체하는 예제이다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="0" Grid.Column="0">
+      <Button FontWeight="Bold" Click="Button_Click2" Name="myButton">
+          Click Me
+      </Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void Button_Click2(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("Button Clicked", "Button Message");
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/88f60a33b337b655cc9c37b7abd503f7/image.png">
 
 <br>
 
-### 1. 0
+### 2-1. 간단한 Control Template 만들기
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="0" Grid.Column="1">
+      <Button FontWeight="Bold" Click="Button_Click21" Name="myButton21" Template="{StaticResource myButtonTemplate}">
+          Click Me
+      </Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void Button_Click2(object sender, RoutedEventArgs e)
+      {
+          MessageBox.Show("Button Clicked", "Button Message");
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/20059937536160c2962eb2082c4c96b9/image.png">
 
 <br>
 
-### 1. 0
+### 3. ContentPresenter 클래스
+
+- ControlTemplate의 TargetType 속성을 Button으로 설정해준다.
+- `<ControlTemplate x:Key="myButtonTemplate" TargetType="Button">`
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="0" Grid.Column="2">
+      <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate3}"
+        Name="myButton3">Click Me</Button>
+      <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate3}"
+        Name="myButton31">Button 2</Button>
+      <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate3}"
+        Name="myButton32">Button 3</Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/e17f85b17a6b4cd545506650adecbd43/image.png">
 
 <br>
 
-### 1. 0
+### 4. Template Binding
+
+- ContentPresenter가 templated parent 의 추가 속성을 사용하려는 경우에 TemplateBinding 클래스를 사용한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="0">
+      <Button Template="{StaticResource btnTemplate}">
+          Button1
+      </Button>
+      <Button Template="{StaticResource btnTemplate}" Padding="7">
+          Button2
+      </Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/fb46b9aad64876aaaaa228d7bb157217/image.png">
+
 
 <br>
 
-### 1. 0
+### 5. ControlTemplate Triggers
+
+- Default ControlTemplate 의 일반 버튼에는 여러 가지 시각적 상태가 있다.
+- 상태는 운영체제와 테마에 따라 달라진다.
+- 마우스가 버튼 위에 있을 때, 버튼 위에 있지 않을 때, 버튼을 클릭했을 때 버튼의 배경이 바뀐다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="1">
+      <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate5}"
+          Name="myButton51">
+          Click Me
+      </Button>
+      <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate5}"
+          Name="myButton52">
+          Click Me
+      </Button>
+      <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate5}"
+          Name="myButton53">
+          Click Me
+      </Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/e28f54f4362ff41c19f9112cf5d2ba6e/image.png">
+
+<br>
+
+### 연습문제
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <Style TargetType="Button" x:Key="btnTemplate6">
+          <Setter Property="Foreground" Value="White"/>
+          <Setter Property="Width" Value="150"/>
+          <Setter Property="Height" Value="30"/>
+          <Setter Property="Margin" Value="10"/>
+          <Setter Property="Template">
+              <Setter.Value>
+                  <ControlTemplate TargetType="Button">
+                      <Grid>
+                          <Ellipse Fill="LightPink"/>
+                          <ContentPresenter HorizontalAlignment="Center"   VerticalAlignment="Center"/>
+                      </Grid>
+                  </ControlTemplate>
+              </Setter.Value>
+          </Setter>
+      </Style>
+  </Window.Resources>
+  <StackPanel>
+      <Button Content="My Button 1" Style="{StaticResource btnTemplate6}"/>
+      <Button Content="My Button 2" Style="{StaticResource btnTemplate6}"/>
+      <Button Content="My Button 3" Style="{StaticResource btnTemplate6}"/>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/ce7935a557a0340c36f02ce03d5aad92/image.png">
+
+<br>
+
+### 종합
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_13.Control_Templates.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_13.Control_Templates"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      
+      <Window.Resources>
+          <ControlTemplate x:Key="myButtonTemplate">
+              <Border Padding="5" Background="LightPink" BorderBrush="DeepPink" BorderThickness="2" HorizontalAlignment="Center" CornerRadius="5">
+                  <TextBlock>Click Here</TextBlock>
+              </Border>
+          </ControlTemplate>
+          
+          <ControlTemplate x:Key="myButtonTemplate3" TargetType="Button">
+              <Border Padding="5" Background="LightPink" BorderBrush="DeepPink" BorderThickness="2" HorizontalAlignment="Center" CornerRadius="5">
+                  <ContentPresenter/>
+              </Border>
+          </ControlTemplate>
+  
+          <ControlTemplate x:Key="btnTemplate" TargetType="Button">
+              <Grid>
+                  <Ellipse Fill="LightPink" Stroke="DeepPink" StrokeThickness="2"/>
+                  <ContentPresenter HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="{TemplateBinding Padding}"/>
+              </Grid>
+          </ControlTemplate>
+          
+          <!-- 5 -->
+          <ControlTemplate x:Key="myButtonTemplate5" TargetType="Button">
+              <Border Padding ="5"  Background="White" 
+                      BorderBrush="DeepPink" CornerRadius="5"
+                      BorderThickness="5" HorizontalAlignment="Center"
+                      Name="templateBorder">
+                  <ContentPresenter/>
+              </Border>
+  
+              <ControlTemplate.Triggers>
+                  <Trigger Property="IsMouseOver" Value="True">
+                      <Setter TargetName="templateBorder"
+                              Property="Background" Value="LightGray"/>
+                  </Trigger>
+                  <Trigger Property="IsPressed" Value="True">
+                      <Setter TargetName="templateBorder"
+                              Property="Padding" Value="2"/>
+                      <Setter TargetName="templateBorder"
+                              Property="BorderThickness" Value="8"/>
+                  </Trigger>
+              </ControlTemplate.Triggers>
+          </ControlTemplate>
+          
+          <!-- 연습문제 -->
+          <Style TargetType="Button" x:Key="btnTemplate6">
+              <Setter Property="Foreground" Value="White"/>
+              <Setter Property="Width" Value="150"/>
+              <Setter Property="Height" Value="30"/>
+              <Setter Property="Margin" Value="10"/>
+              <Setter Property="Template">
+                  <Setter.Value>
+                      <ControlTemplate TargetType="Button">
+                          <Grid>
+                              <Ellipse Fill="LightPink"/>
+                              <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                          </Grid>
+                      </ControlTemplate>
+                  </Setter.Value>
+              </Setter>
+          </Style>
+  
+      </Window.Resources>
+      
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 2. Control Template -->
+          <StackPanel Grid.Row="0" Grid.Column="0">
+              <Button FontWeight="Bold" Click="Button_Click2" Name="myButton2">
+                  Click Me
+              </Button>
+          </StackPanel>
+          
+          <!-- 2-1. Control Template -->
+          <StackPanel Grid.Row="0" Grid.Column="1">
+              <Button FontWeight="Bold" Click="Button_Click21" Name="myButton21" Template="{StaticResource myButtonTemplate}">
+                  Click Me
+              </Button>
+          </StackPanel>
+  
+          <!-- 3. ContentPresenter -->
+          <StackPanel Grid.Row="0" Grid.Column="2">
+              <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate3}"
+                Name="myButton3">Click Me</Button>
+              <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate3}"
+                Name="myButton31">Button 2</Button>
+              <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate3}"
+                Name="myButton32">Button 3</Button>
+          </StackPanel>
+  
+          <!-- 4. Template Binding -->
+          <StackPanel Grid.Row="1" Grid.Column="0">
+              <Button Template="{StaticResource btnTemplate}">
+                  Button1
+              </Button>
+              <Button Template="{StaticResource btnTemplate}" Padding="7">
+                  Button2
+              </Button>
+          </StackPanel>
+  
+  
+          <!-- 5. ControlTemplate Triggers -->
+          <StackPanel Grid.Row="1" Grid.Column="1">
+              <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate5}"
+                  Name="myButton51">
+                  Click Me
+              </Button>
+              <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate5}"
+                  Name="myButton52">
+                  Click Me
+              </Button>
+              <Button FontWeight="Bold" Template="{StaticResource myButtonTemplate5}"
+                  Name="myButton53">
+                  Click Me
+              </Button>
+          </StackPanel>
+          
+          <!-- 6. 연습문제 -->
+          <StackPanel Grid.Row="1" Grid.Column="2">
+              <Button Content="My Button 1" Style="{StaticResource btnTemplate6}"/>
+              <Button Content="My Button 2" Style="{StaticResource btnTemplate6}"/>
+              <Button Content="My Button 3" Style="{StaticResource btnTemplate6}"/>
+          </StackPanel>
+  
+      </Grid>
+  </Window>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System.Windows;
+  
+  namespace _13.Control_Templates
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+          }
+  
+      }
+  }
+
+  // 2. Control Template
+  namespace _13.Control_Templates
+  {
+      public partial class MainWindow : Window
+      {
+          private void Button_Click2(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("Button Clicked", "Button Message");
+          }
+  
+  
+          private void Button_Click21(object sender, RoutedEventArgs e)
+          {
+              MessageBox.Show("Button Clicked", "Button Message");
+          }
+      }
+  }
+  ```
 
 <br>
 
