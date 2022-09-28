@@ -5109,30 +5109,551 @@
 
 - <img src="/uploads/872428721a1d9b4e63b12af8cfbd3739/image.png" width="70%">
 
+<br>
 
-### 0. s
+### 1. 두 가지 유형의 Resources
+
+- 첫 번째 유형의 Resource는 프로그램의 소스 코드에서 생성되지 않은 item을 나타낸다. 
+  - 예를 들어 코드 외부의 이미지 또는 아이콘이 포함된다.
+  - Windows 프로그래밍이 시작된 이후 사용되었기 때문에 일반적인 의미의 리소스이다.
+  - 이러한 리소스를 2진수로 컴파일 할 경우 Assembly Resource 또는 Binary Resource라고 한다.
+- WPF는 새로운 방식으로 Resource를 사용하여 .NET code object를 설명한다.
+  - 일반적으로 XAML 마크업과 관련이 있지만 code-behind에도 사용할 수 있다.
+  - 이러한 리소스를 Logical Resources, Object Resources, XAML Resource라고 한다.
 
 <br>
 
-### 0. s
+### 2. ResourceDictionary
+
+- WPF는 ResourceDictionary 라고 하는 Dictionary class를 제공하며 이는 WPF의 Logical Resource의 기본이다.
+- C# 코드에서 어떤 일이 나타나는지 보는 것이 더 쉬우므로 먼저 code-behind에서 어떻게 하는지 아래의 예제에서 확인한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Name="sp2">
+      <Button Name="btn2">Button1</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+
+          sp2.Resources.Add("background", Brushes.Silver);
+
+          btn2.Background = (Brush)btn2.FindResource("background");
+
+          // Resource를 못 찾으면 예외가 발생한다. 따라서 아래 TryFindResource 코드를 통해 적절히 처리한다.
+          // btn2.Background = (Brush)btn2.TryFindResource("background");
+
+          if (btn2.Background == null)
+              btn2.Background = Brushes.AliceBlue;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/f2cc950b2b48d0ca38ac09f0317f00b6/image.png">
 
 <br>
 
-### 0. s
+### 2-1. ResourceDictionary
+
+- Resource가 얼마나 유용하게 사용될 수 있는지 보여주는 예를 살펴본다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Name="sp21" Grid.Row="0" Grid.Column="1">
+      <TextBlock FontFamily="Arial Black" Margin="7">Some Buttons</TextBlock>
+      <Button Height="40" Name="btn211" FontWeight="Bold">
+          <Button.Background>
+              <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
+                  <GradientStop Color="White" Offset="0"/>
+                  <GradientStop Color="Black" Offset="1"/>
+              </LinearGradientBrush>
+          </Button.Background>
+          Button 1
+      </Button>
+
+      <Button Height="40" Name="btn212" FontWeight="Bold">
+          <Button.Background>
+              <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
+                  <GradientStop Color="White" Offset="0"/>
+                  <GradientStop Color="Black" Offset="1"/>
+              </LinearGradientBrush>
+          </Button.Background>
+          Button 2
+      </Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/51728f3d6b5d50f59a0838487811a70d/image.png">
+
 
 <br>
 
-### 0. s
+### 2-2. ResourceDictionary
+
+- 2-1 방법에 비해, 각 버튼에서 GradientBrush를 정의하는 대신 한 번 리소스로 정의하고 element 트리(예: Window object) 상위에 저장하는 것이 더 좋은 방법이다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <LinearGradientBrush x:Key="gradBrush" StartPoint="0 0" EndPoint="1 1">
+          <GradientStop Color="White" Offset="0"/>
+          <GradientStop Color="Black" Offset="1"/>
+      </LinearGradientBrush>
+  </Window.Resources>  
+
+  <StackPanel Background="{StaticResource gradBrush}" Name="sp">
+      <TextBlock FontFamily="ArialBlack" Margin="7"
+                 Background="{StaticResource gradBrush}">Some Buttons</TextBlock>
+      <Button Height="40" Name="btn1" FontWeight="Bold"
+              Background="{StaticResource gradBrush}">Button 1</Button>
+      <Button Height="40" Name="btn2" FontWeight="Bold"
+              Background="{StaticResource gradBrush}">Button 2</Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/65fd10d0e2b4c2ae8b4e1bef41e5b8f1/image.png">
 
 <br>
 
-### 0. s
+### 2-3. StaticResources 및 DynamicResources
+
+- ResourceDictionary 에서 StaticResource를 읽을 때 해당 참조가 속성에 한번 할당된다.
+- DynamicResource를 사용하는 경우 라이브러리의 리소스가 변경되면 이전 참조가 있는 속성이 커버 아래에서 자동으로 업데이트된다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Background="{DynamicResource gradBrush}" Name="sp23" Grid.Row="0" Grid.Column="3">
+      <TextBlock FontFamily="Arial Black" Margin="7"
+             Background="{DynamicResource gradBrush}">Some Buttons</TextBlock>
+      <Button Height="40" Name="btn231" FontWeight="Bold"
+          Background="{StaticResource gradBrush}">Button 1</Button>
+      <Button Height="40" Name="btn232" FontWeight="Bold"
+          Background="{DynamicResource gradBrush}">Button 2</Button>
+      <Button HorizontalAlignment="Right" Click="Button_Click23">Change</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      private void Button_Click23(object sender, RoutedEventArgs e)
+      {
+          this.Resources["gradBrush"] = Brushes.Silver;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/e3534b886f873d386bec8304ada889ed/image.png">
 
 <br>
 
-### 0. s
+### 2-4. StaticResources 및 DynamicResources
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Name="sp24">
+      <Button Name="btn241">Button 1</Button>
+      <Button Name="btn242">Button 2</Button>
+      <Button Name="btn243">Button 3</Button>
+      <Button Name="btn244">Button 4</Button>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+       sp24.Resources.Add("background", Brushes.Aqua);
+       btn242.Background = (Brush)sp24.Resources["background"];
+       btn243.Background = (Brush)btn243.FindResource("background");
+       btn244.SetResourceReference(BackgroundProperty, "background");
+  }
+  ```
+- 결과  
+  <img src="/uploads/6b5064ca4d260c578ad424ed3d0e3d8c/image.png">
 
 <br>
+
+### 3. Assembly Resources
+
+- Assembly Resource는 소스코드에서 생성되지 않는 이미지 같은 digital object이다. 
+- 실행파일에 리소스를 포함하려면 먼저 Visual Studio 프로젝트에 리소스를 추가한다.
+  - (솔루션 탐색기 - 프로젝트 이름 - 오른쪽 마우스 - 기존 항목 추가) 다음으로 Visual Studio에서 WPF가 사용하는 형식으로 실행 파일에 리소스를 포함하도록 지정해야 한다.
+  - (리소스 이름 - 오른쪽 마우스 - 속성) 속성창에서 빌드 작업에 대해 Resource를 선택한다.
+- 실행 파일에 포함시키지 않으려는 리소스의 경우, 다음 코드가 있는 경우 Visual Studio에서 아무 작업도 수행할 필요가 없다.
+
+
+<br>
+
+### 4. 코드에서 Assembly Resource 에 접근
+
+- 리소스 파일의 이름을 문자열로 지정하고 이를 사용할 속성에만 할당하면 XAML의 어셈블리 리소스를 쉽게 사용할 수 있다.
+  - `<Image Source="Balloons.jpg"/>` : Balloons.jpg를 이미지 element의 Source 속성에 지정한다.
+  - `Uri uri2 = new Uri( "C:/Pictures/HotAirBalloons.jpg" );`
+  - `Uri uri1 = new Uri( "/DogInSnow.jpg", UriKind.Relative );`
+- 이미지를 2개 출력해본다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Name="sp4" Orientation="Horizontal">
+  </StackPanel>
+
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      Uri uri1 = new Uri("card1.jpg", UriKind.Relative);
+      Uri uri2 = new Uri("D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\11. Resources\\card2.jpg");
+      BitmapImage bi1 = new BitmapImage(uri1);
+      Image balloons = new Image();
+      balloons.Source = bi1;
+
+      BitmapImage bi2 = new BitmapImage(uri2);
+      Image dogInSnow = new Image();
+      dogInSnow.Source = bi2;
+
+      sp4.Children.Add(balloons);
+      sp4.Children.Add(dogInSnow);
+     
+  }
+  ```
+- 결과  
+  <img src="/uploads/8abdbf1159bf9cade657f901a5b97d23/image.png">
+
+<br>
+
+### 4-1. Pack URIs
+
+- URI 양식은 Pack URI라고 하는 형식의 약어이며, 다른 어셈블리와 위치에서 리소스에 접근 하는 프로그램에서 볼 수 있다.
+- 실용적인 관점에서 보면, 팩 URI 구문이 꽤 boilerplate 이다.
+  - Boilerplate code : 최소한의 변경으로 재사용 할 수 있는 코드. 각종 문서에서 반복적으로 인용되는 문서의 한 부분.
+- `pack://application:,,,/ImageLibrary;component/CatsOnTheBed.jpg`
+  - "pack://application:,,," : Scheme and Authority
+  - "/ImageLibrary;" : External Assembly
+  - "component" : Keyword
+  - "/CatsOnTheBed.jpg" : Path
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Name="sp41" Orientation="Horizontal">
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          InitializeComponent();
+          Uri uri = new Uri("pack://application:,,,/card1.jpg");
+          BitmapImage bi = new BitmapImage(uri);
+          Image dogInSnow = new Image();
+          dogInSnow.Source = bi;
+          sp41.Children.Add(dogInSnow); // Add to StackPanel, named "sp".
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/790d310992eb3098f55df6d7d07b95f7/image.png">
+
+<br>
+
+### 4-2. 다른 DLL에 Resource있을 때 찾아오는 방법 예제 - 다른 프로젝트의 jpg 파일을 사용할 때
+
+- Chapter 10에서 image 1개를 가져오는 코드를 작성한다.
+- 솔루션 탐색기 > 프로젝트 > 참조 > 오른쪽 마우스 > 참조 추가(R)... > 프로젝트 > Chapter10의 프로젝트를 참조 추가한다.
+- `Uri uri = new Uri("pack://application:,,,/10. Control_And_Element;/card3.jpg");`를 활용해 이미지를 불러온다.
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  // 4-2 다른 DLL에 Resource있을 때 찾아오는 방법 예제 - 다른 프로젝트의 jpg 파일을 사용할 때
+  Uri dogUri = new Uri("pack://application:,,,/PackURLs;component/card3.jpg");
+  //Uri dogUri = new Uri("pack://application:,,,/10. Control_And_Element;component/card3.jpg");
+  BitmapImage bmi = new BitmapImage(dogUri);
+  Image img = new Image();
+  img.Source = bmi;
+  sp41.Children.Add(img);
+  ```
+- 결과  
+  <img src="/uploads/c540f5245da66e896137592e8fab0043/image.png">
+
+
+<br>
+
+
+### 4-3. 다른 DLL에 Resource있을 때 찾아오는 방법 예제 - WPF 컨트롤 라이브러리 사용
+
+- 파일(F)메뉴 > 새로만들기 > 프로젝트 추가 > WPF 사용자 정의 컨트롤 라이브러리 (.NET Framework) (🔴이름 비슷한게 많으니 주의할 것) > 이름 설정(예 WpfControlLibrary1) > 확인
+- UserControl1.xaml에 다음과 같은 코드를 구성한다.
+  ```xml
+  <ResourceDictionary x:Class="UserControl1"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:local="clr-namespace:WpfControlLibrary1">
+      <Style x:Key="buttonStyle" TargetType="Button">
+          <Setter Property="Height" Value="40"/>
+          <Setter Property="Width" Value="110"/>
+          <Setter Property="FontSize" Value="16"/>
+          <Setter Property="FontWeight" Value="Bold"/>
+          <Setter Property="BorderThickness" Value="4"/>
+      </Style>
+  </ResourceDictionary>
+  ```
+- WpfControlLibrary1를 빌드하면 (이때, xaml.cs 내용을 비워야 한다면 비운다.) dll을 만든다.
+- 기존 프로젝트에서 WpfControlLibrary1를 참조추가한다.
+- 이후 App.xaml에 다음 소스를 추가한다.
+  ```xml
+  <Application.Resources>
+      <ResourceDictionary>
+          <ResourceDictionary.MergedDictionaries>
+              <ResourceDictionary
+                  Source="pack://application:,,,/WpfControlLibrary1;component/UserControl1.xaml"/>
+          </ResourceDictionary.MergedDictionaries>
+      </ResourceDictionary>
+  </Application.Resources>
+  ```
+- 프로젝트에서 Style 적용이 가능해졌다.
+  ```xml
+  <Button Content="test" Style="{StaticResource buttonStyle}"></Button>
+  ```
+- 결과  
+  <img src="/uploads/61815bf82c1168f33850b498b4bca121/image.png">
+
+<br>
+
+
+### 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_11.Resources.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_11.Resources"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="350" Width="800">
+      <Window.Resources>
+          <LinearGradientBrush x:Key="gradBrush" StartPoint="0 0" EndPoint="1 1">
+              <GradientStop Color="White" Offset="0"/>
+              <GradientStop Color="Black" Offset="1"/>
+          </LinearGradientBrush>
+      </Window.Resources>
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 2. ResourceDictionary -->
+          <StackPanel Name="sp2" Grid.Row="0" Grid.Column="0">
+              <Button Name="btn2">Button1</Button>
+          </StackPanel>
+          
+          <!-- 2-1. ResourceDictionary -->
+          <StackPanel Name="sp21" Grid.Row="0" Grid.Column="1">
+              <TextBlock FontFamily="Arial Black" Margin="7">Some Buttons</TextBlock>
+              <Button Height="40" Name="btn211" FontWeight="Bold">
+                  <Button.Background>
+                      <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
+                          <GradientStop Color="White" Offset="0"/>
+                          <GradientStop Color="Black" Offset="1"/>
+                      </LinearGradientBrush>
+                  </Button.Background>
+                  Button 1
+              </Button>
+  
+              <Button Height="40" Name="btn212" FontWeight="Bold">
+                  <Button.Background>
+                      <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
+                          <GradientStop Color="White" Offset="0"/>
+                          <GradientStop Color="Black" Offset="1"/>
+                      </LinearGradientBrush>
+                  </Button.Background>
+                  Button 2
+              </Button>
+          </StackPanel>
+          
+          <!-- 2-2. ResourceDictionary -->
+          <StackPanel Background="{StaticResource gradBrush}" Name="sp22" Grid.Row="0" Grid.Column="2">
+              <TextBlock FontFamily="ArialBlack" Margin="7"
+                     Background="{StaticResource gradBrush}">Some Buttons</TextBlock>
+              <Button Height="40" Name="btn221" FontWeight="Bold"
+                  Background="{StaticResource gradBrush}">Button 1</Button>
+              <Button Height="40" Name="btn222" FontWeight="Bold"
+                  Background="{StaticResource gradBrush}">Button 2</Button>
+          </StackPanel>
+  
+  
+          <!-- 2-3. StaticResources 및 DynamicResources -->
+          <StackPanel Background="{DynamicResource gradBrush}" Name="sp23" Grid.Row="0" Grid.Column="3">
+              <TextBlock FontFamily="Arial Black" Margin="7"
+                     Background="{DynamicResource gradBrush}">Some Buttons</TextBlock>
+              <Button Height="40" Name="btn231" FontWeight="Bold"
+                  Background="{StaticResource gradBrush}">Button 1</Button>
+              <Button Height="40" Name="btn232" FontWeight="Bold"
+                  Background="{DynamicResource gradBrush}">Button 2</Button>
+              <Button HorizontalAlignment="Right" Click="Button_Click23">Change</Button>
+          </StackPanel>
+  
+  
+          <!-- 2-4. StaticResources 및 DynamicResources -->
+          <StackPanel Name="sp24" Grid.Row="0" Grid.Column="4">
+              <Button Name="btn241">Button 1</Button>
+              <Button Name="btn242">Button 2</Button>
+              <Button Name="btn243">Button 3</Button>
+              <Button Name="btn244">Button 4</Button>
+          </StackPanel>
+  
+          <!-- 4. 코드에서 Assembly Resource 에 접근 -->
+          <StackPanel Name="sp4" Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+          </StackPanel>
+  
+          <!-- 4-1. Pack URIs -->
+          <StackPanel Name="sp41" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+          </StackPanel>
+  
+          <!-- 4-3. WPF 컨트롤 라이브러리 사용 Resource-->
+          <StackPanel Grid.Row="1" Grid.Column="2">
+              <Button Content="test" Style="{StaticResource buttonStyle}"/>
+              <Button Content="buttonStyle" Style="{StaticResource buttonStyle}"/>
+          </StackPanel>
+          
+          
+      </Grid>
+  </Window>
+    ```
+  - xaml.cs 코드를 다음과 같이 구성한다.
+    ```cs
+  using System;
+  using System.Windows;
+  using System.Windows.Controls;
+  using System.Windows.Media;
+  using System.Windows.Media.Imaging;
+  
+  namespace _11.Resources
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+              _2_ResourceDictionary();
+              _2_4_StaticResourcesDynamicResources();
+              _4_CodeAssemblyResource();
+              _4_1_CodeAssemblyResource();
+  
+          }
+  
+      }
+  }
+  
+  
+  // 2. ResourceDictionary
+  namespace _11.Resources
+  {
+      public partial class MainWindow : Window
+      {
+          public void _2_ResourceDictionary()
+          {
+              sp2.Resources.Add("background", Brushes.Silver);
+  
+  
+              btn2.Background = (Brush)btn2.FindResource("background");
+  
+              // Resource를 못 찾으면 예외가 발생한다. 따라서 아래 코드를 통해 적절히 처리한다.
+              // btn2.Background = (Brush)btn2.TryFindResource("background");
+  
+              if (btn2.Background == null)
+                  btn2.Background = Brushes.AliceBlue;
+          }
+      }
+  }
+  // 2. ResourceDictionary
+  namespace _11.Resources
+  {
+      public partial class MainWindow : Window
+      {
+          public void _2_4_StaticResourcesDynamicResources()
+          {
+              sp24.Resources.Add("background", Brushes.Aqua);
+              btn242.Background = (Brush)sp24.Resources["background"];
+              btn243.Background = (Brush)btn243.FindResource("background");
+              btn244.SetResourceReference(BackgroundProperty, "background");
+          }
+      }
+  }
+  
+  
+  // 2-3. StaticResources 및 DynamicResources
+  namespace _11.Resources
+  {
+      public partial class MainWindow : Window
+      {
+          private void Button_Click23(object sender, RoutedEventArgs e)
+          {
+              this.Resources["gradBrush"] = Brushes.Silver;
+          }
+      }
+  }
+  
+  // 4. 코드에서 Assembly Resource 에 접근
+  namespace _11.Resources
+  {
+      public partial class MainWindow : Window
+      {
+          public void _4_CodeAssemblyResource()
+          {
+              Uri uri1 = new Uri("card1.jpg", UriKind.Relative);
+              Uri uri2 = new Uri("D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\11. Resources\\card2.jpg");
+              BitmapImage bi1 = new BitmapImage(uri1);
+              Image balloons = new Image();
+              balloons.Source = bi1;
+  
+              BitmapImage bi2 = new BitmapImage(uri2);
+              Image dogInSnow = new Image();
+              dogInSnow.Source = bi2;
+  
+              sp4.Children.Add(balloons);
+              sp4.Children.Add(dogInSnow);
+          }
+      }
+  }
+  
+  // 4-1. 코드에서 Assembly Resource 에 접근
+  namespace _11.Resources
+  {
+      public partial class MainWindow : Window
+      {
+          public void _4_1_CodeAssemblyResource()
+          {
+              Uri uri = new Uri("pack://application:,,,/card1.jpg");
+              BitmapImage bi = new BitmapImage(uri);
+              Image dogInSnow = new Image();
+              dogInSnow.Source = bi;
+              sp41.Children.Add(dogInSnow); // Add to StackPanel, named "sp".
+  
+              // 4-2 다른 DLL에 Resource있을 때 찾아오는 방법 예제 - 다른 프로젝트의 jpg 파일을 사용할 때
+              Uri dogUri = new Uri("pack://application:,,,/PackURLs;component/card3.jpg");
+              //Uri dogUri = new Uri("pack://application:,,,/10. Control_And_Element;component/card3.jpg");
+              BitmapImage bmi = new BitmapImage(dogUri);
+              Image img = new Image();
+              img.Source = bmi;
+              sp41.Children.Add(img);
+          }
+      }
+  }
+
+  ```
+
 
 <br><br><br>
 
@@ -5142,6 +5663,29 @@
 
 - <img src="" width="70%">
 
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
+
+### 0. s
+
+<br>
 
 <br><br><br>
 
