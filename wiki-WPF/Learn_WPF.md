@@ -7179,6 +7179,890 @@
 - <img src="/uploads/5f6ef23d660c0b6c3de52812a8121053/image.png" width="70%">
 
 
+### 1. Data Templates
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      <ControlTemplate x:Key="ListTemplate">
+          <Border BorderBrush="SteelBlue" BorderThickness="7"
+                  CornerRadius="3" Background="Pink">
+              <Border BorderBrush="White" BorderThickness="1" Padding="5 10 10 10">
+                  <Grid>
+                      <ItemsPresenter TextBlock.Foreground="Black"/>
+                  </Grid>
+              </Border>
+          </Border>
+      </ControlTemplate>
+  </Window.Resources>
+
+  <StackPanel Orientation="Horizontal">
+      <ListBox Name="listPeople" SelectedIndex="0" Margin="5" Padding="8"
+           DisplayMemberPath="FirstName" Width="80" Template="{StaticResource ListTemplate}"/>
+      
+      <StackPanel Name="sp" Margin="10 5" DataContext="{Binding ElementName=listPeople, Path=SelectedItem}">
+          <Label Name="lblFName" FontWeight="Bold"/>
+          <Label Name="lblAge"/>
+          <Label Name="lblColor"/>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  class Person
+  {
+      public string FirstName { get; set; }
+      public int Age { get; set; }
+      public string FavoriteColor { get; set; }
+
+      public Person(string fName, int age, string color)
+      {
+          FirstName = fName;
+          Age = age;
+          FavoriteColor = color;
+      }
+  }
+
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          Person[] people = {new Person("Shirley", 34, "Green"),
+                              new Person("Roy", 36, "Blue"),
+                              new Person("Isabel", 25, "Orange"),
+                              new Person("Manuel", 27, "Red")};
+
+          listPeople.ItemsSource = people;
+
+          Binding nameBinding = new Binding("FirstName");
+          lblFName.SetBinding(ContentProperty, nameBinding);
+          Binding ageBinding = new Binding("Age");
+          lblAge.SetBinding(ContentProperty, ageBinding);
+          Binding colorBinding = new Binding("FavoriteColor");
+          lblColor.SetBinding(ContentProperty, colorBinding);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/afed8e27d5affab9b859b9bba323dc82/image.png">
+
+<br>
+
+### 1-1. Data Templates
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      
+      <DataTemplate x:Key="NiceFormat">
+          <Border Margin="1" BorderBrush="Blue"
+                  BorderThickness="2" CornerRadius="2">
+              <Grid>
+                  <Grid.RowDefinitions>
+                      <RowDefinition/>
+                      <RowDefinition/>
+                  </Grid.RowDefinitions>
+                  <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="60"/>
+                      <ColumnDefinition Width="20"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock FontWeight="Bold" Grid.Row="0" Grid.Column="0" Padding="2"
+                        Text="{Binding FirstName}"/>
+                  <Rectangle Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                        Fill="{Binding FavoriteColor}"/>
+                  <TextBlock Padding="2" Grid.Row="1" Grid.Column="0"
+                        Text="{Binding Age}"/>
+              </Grid>
+          </Border>
+      </DataTemplate>
+      
+  </Window.Resources>
+
+  <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+      <ListBox Name="listPeople11" SelectedIndex="0" VerticalAlignment="Top"
+           ItemTemplate="{StaticResource NiceFormat}"/>
+      <StackPanel Orientation="Vertical" Name="sp11" Margin="10 5" DataContext="{Binding ElementName=listPeople11, Path=SelectedItem}">
+          <Label Name="lblFName11" FontWeight="Bold"/>
+          <Label Name="lblAge11"/>
+          <Label Name="lblColor11"/>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          Person[] people = {new Person("Shirley", 34, "Green"),
+                              new Person("Roy", 36, "Blue"),
+                              new Person("Isabel", 25, "Orange"),
+                              new Person("Manuel", 27, "Red")};
+
+          listPeople11.ItemsSource = people;
+
+          Binding nameBinding = new Binding("FirstName");
+          lblFName11.SetBinding(ContentProperty, nameBinding);
+          Binding ageBinding = new Binding("Age");
+          lblAge11.SetBinding(ContentProperty, ageBinding);
+          Binding colorBinding = new Binding("FavoriteColor");
+          lblColor11.SetBinding(ContentProperty, colorBinding);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/972c4a95868d8fcdf928c5088850fe35/image.png">
+
+<br>
+
+### 3. Views - Filtering
+
+- 특정 객체를 필터링하고 필터링 되지 않은 item만 target으로 전달하려면 아래 그림과 같이 Predicate 메서드를 View의 Filter 속성에 연결해야 한다.
+  ```cs
+  private bool IsLessThan30( object obj ) {
+    return (obj as Person).Age < 30;
+  }
+  ```
+- Person 타입의 매개변수를 나이가 30보다 적으면 True를 반환하고 그렇지 않으면 False를 반환한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <DataTemplate x:Key="NiceFormat3">
+      <Border Margin="1" BorderBrush="Blue"
+              BorderThickness="2" CornerRadius="2">
+          <Grid>
+              <Grid.RowDefinitions>
+                  <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="60"/>
+                  <ColumnDefinition Width="20"/>
+                  <ColumnDefinition Width="30"/>
+                  <ColumnDefinition Width="20"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Grid.Column="0" FontWeight="Bold" Padding="2"
+                         Text="{Binding FirstName}"/>
+              <TextBlock Grid.Column="1" Padding="2"
+                         Text="{Binding Age}"/>
+              <TextBlock Grid.Column="2" FontWeight="Bold" Padding="2" 
+              		HorizontalAlignment="Center"
+                         Text="{Binding Sex}"/>
+              <Rectangle Grid.Column="3"
+                         Fill="{Binding FavoriteColor}"/>
+          </Grid>
+      </Border>
+  </DataTemplate>
+  
+  <StackPanel Orientation="Horizontal">
+      <ListBox Name="listPeople3" SelectedIndex="0"
+           VerticalAlignment="Top"
+           ItemTemplate="{StaticResource NiceFormat3}"/>
+      <StackPanel Orientation="Vertical" Name="sp3" Margin="10 5">
+          <Button Click="Button_Click3" Margin="5">Default</Button>
+          <Button Click="Button_Click3_1" Margin="5">Less Than 30</Button>
+          <Button Click="Button_Click3_2" Margin="5">Greater Than 30</Button>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  class Person3
+  {
+      public string FirstName { get; set; }
+      public int Age { get; set; }
+      public string FavoriteColor { get; set; }
+      public string Sex { get; set; }
+      public Person3(string fName, int age, string color, string sex)
+      {
+          FirstName = fName;
+          Age = age;
+          FavoriteColor = color;
+          Sex = sex;
+      }
+  }
+
+  public partial class MainWindow : Window
+  {
+      CollectionView cv;    //Store the view.
+
+      public MainWindow()
+      {
+          Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                              new Person3( "Roy", 36, "GoldenRod", "M"),
+                              new Person3( "Isabel", 25, "DarkGray", "F"),
+                              new Person3( "Manuel", 27, "Red", "M"),
+                              new Person3( "Roy", 19, "Blue", "M") };
+
+          listPeople3.ItemsSource = people;
+          cv = (CollectionView)CollectionViewSource.GetDefaultView(listPeople3.ItemsSource);
+      }
+
+      private void Button_Click3(object sender, RoutedEventArgs e)
+      {
+          cv.Filter = null;
+      }
+
+      private void Button_Click3_1(object sender, RoutedEventArgs e)
+      {
+          cv.Filter = IsLessTnan30;
+      }
+
+      private void Button_Click3_2(object sender, RoutedEventArgs e)
+      {
+          cv.Filter = IsGreaterThan30;
+      }
+
+      private void Button_Click_2(object sender, RoutedEventArgs e)
+      {
+          cv.Filter = IsGreaterThan30;
+      }
+
+      private bool IsLessTnan30(object obj)
+      {
+          return (obj as Person3).Age < 30;
+      }
+
+      private bool IsGreaterThan30(object obj)
+      {
+          return (obj as Person3).Age >= 30;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/a2ab4358efcdec5ec86901cb0d204133/image.png">
+
+<br>
+
+### 4. View에서 Sorting
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+      <ListBox Name="listPeople4" SelectedIndex="0"
+           VerticalAlignment="Top"
+           ItemTemplate="{StaticResource NiceFormat3}"/>
+      <StackPanel Orientation="Vertical" Name="sp4" Margin="10 5">
+          <Button Click="Button_Click4" Margin="5">Default</Button>
+          <Button Click="Button_Click4_1" Margin="5">Name</Button>
+          <Button Click="Button_Click4_2" Margin="5">Age</Button>
+          <Button Click="Button_Click4_3" Margin="5">Sex and Age</Button>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+
+      CollectionView cv4;
+
+      public MainWindow()
+      {
+          Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                              new Person3( "Roy", 36, "GoldenRod", "M"),
+                              new Person3( "Isabel", 25, "DarkGray", "F"),
+                              new Person3( "Manuel", 27, "Red", "M"),
+                              new Person3( "Roy", 19, "Blue", "M") };
+
+          listPeople4.ItemsSource = people;
+          cv4 = (CollectionView)CollectionViewSource.GetDefaultView(listPeople4.ItemsSource);
+      }
+
+      private void Button_Click4(object sender, RoutedEventArgs e)
+      {
+          cv4.SortDescriptions.Clear();
+      }
+
+      private void Button_Click4_1(object sender, RoutedEventArgs e)
+      {
+          cv4.SortDescriptions.Clear();
+          SortDescription sd = new SortDescription("FirstName", ListSortDirection.Ascending);
+          cv4.SortDescriptions.Add(sd);
+      }
+
+      private void Button_Click4_2(object sender, RoutedEventArgs e)
+      {
+          cv4.SortDescriptions.Clear();
+          SortDescription sd = new SortDescription("Age", ListSortDirection.Ascending);
+          cv4.SortDescriptions.Add(sd);
+      }
+
+      private void Button_Click4_3(object sender, RoutedEventArgs e)
+      {
+          cv4.SortDescriptions.Clear();
+          SortDescription sd1 = new SortDescription("Sex", ListSortDirection.Ascending);
+          SortDescription sd2 = new SortDescription("Age", ListSortDirection.Ascending);
+          cv4.SortDescriptions.Add(sd1);
+          cv4.SortDescriptions.Add(sd2);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/4339689f89b2709944b238c23d151a2b/image.png">
+
+<br>
+
+### 5. View에서 Grouping
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal">
+      <ListBox Name="listPeople5" SelectedIndex="0"
+           VerticalAlignment="Top"
+           ItemTemplate="{StaticResource NiceFormat3}">
+          <ListBox.GroupStyle>
+              <GroupStyle>
+                  <GroupStyle.HeaderTemplate>
+                      <DataTemplate>
+                          <Border BorderBrush="Blue" BorderThickness="2"
+                              Background="LightGray" Margin="2">
+                              <TextBlock Margin="2" FontSize="12" FontWeight="Bold"
+                                     Text="{Binding Path=Name}"/>
+                          </Border>
+                      </DataTemplate>
+                  </GroupStyle.HeaderTemplate>
+              </GroupStyle>
+          </ListBox.GroupStyle>
+      </ListBox>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      CollectionView cv5;
+      public void _5_ViewsGrouping()
+      {
+          Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                              new Person3( "Roy", 36, "GoldenRod", "M"),
+                              new Person3( "Isabel", 25, "DarkGray", "F"),
+                              new Person3( "Manuel", 27, "Red", "M"),
+                              new Person3( "Roy", 19, "Blue", "M") };
+                                        
+          listPeople5.ItemsSource = people;
+          cv5 = (CollectionView)CollectionViewSource.GetDefaultView(listPeople5.ItemsSource);
+
+          PropertyGroupDescription pgd = new PropertyGroupDescription("Sex");
+          cv5.GroupDescriptions.Add(pgd);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/80d633f60d39a9b3af09775db0407a6a/image.png">
+
+<br>
+
+### 5-1. View에서 Grouping
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
+      <ListBox Name="listPeople51" SelectedIndex="0"
+           VerticalAlignment="Top"
+           ItemTemplate="{StaticResource NiceFormat3}">
+          <ListBox.GroupStyle>
+              <GroupStyle>
+                  <GroupStyle.HeaderTemplate>
+                      <DataTemplate>
+                          <Border BorderBrush="Blue" BorderThickness="2"
+                              Background="LightGray" Margin="2">
+                              <TextBlock Margin="2" FontSize="12" FontWeight="Bold"
+                                     Text="{Binding Path=Name}"/>
+                          </Border>
+                      </DataTemplate>
+                  </GroupStyle.HeaderTemplate>
+              </GroupStyle>
+          </ListBox.GroupStyle>
+      </ListBox>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      CollectionView cv51;
+      public MainWindow()
+      {
+          Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                              new Person3( "Roy", 36, "GoldenRod", "M"),
+                              new Person3( "Isabel", 25, "DarkGray", "F"),
+                              new Person3( "Manuel", 27, "Red", "M"),
+                              new Person3( "Roy", 19, "Blue", "M"),
+                              new Person3( "Frank",25,"Yellow","M"),
+                              new Person3( "Amy",29,"Blue","F"),
+                              new Person3( "Isabel",30,"Red","F"),
+                              new Person3( "Sam",27,"Blue","M"),
+                              new Person3( "Tom",19,"Yellow","M")};
+
+          listPeople51.ItemsSource = people;
+          cv51 = (CollectionView)CollectionViewSource.GetDefaultView(listPeople51.ItemsSource);
+
+          PropertyGroupDescription pgd = new PropertyGroupDescription("Sex");
+          cv51.GroupDescriptions.Add(pgd);
+          pgd = new PropertyGroupDescription("FavoriteColor");
+          cv51.GroupDescriptions.Add(pgd);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/04f07b5eeed09ee087697d0ca3f181cf/image.png" width="50%">
+
+<br>
+
+<br><br><br>
+
+### 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_15.Data_Binding.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_15.Data_Binding"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="350" Width="800">
+  
+      <Window.Resources>
+          
+          <!-- 1 -->
+          <ControlTemplate x:Key="ListTemplate">
+              <Border BorderBrush="SteelBlue" BorderThickness="7"
+                      CornerRadius="3" Background="Pink">
+                  <Border BorderBrush="White" BorderThickness="1" Padding="5 10   10 10">
+                      <Grid>
+                          <ItemsPresenter TextBlock.Foreground="Black"/>
+                      </Grid>
+                  </Border>
+              </Border>
+          </ControlTemplate>
+  
+          <!-- 1-1 -->
+          <DataTemplate x:Key="NiceFormat">
+              <Border Margin="1" BorderBrush="Blue"
+                      BorderThickness="2" CornerRadius="2">
+                  <Grid>
+                      <Grid.RowDefinitions>
+                          <RowDefinition/>
+                          <RowDefinition/>
+                      </Grid.RowDefinitions>
+                      <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="60"/>
+                          <ColumnDefinition Width="20"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBlock FontWeight="Bold" Grid.Row="0" Grid.Column="0"   Padding="2"
+                            Text="{Binding FirstName}"/>
+                      <Rectangle Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                            Fill="{Binding FavoriteColor}"/>
+                      <TextBlock Padding="2" Grid.Row="1" Grid.Column="0"
+                            Text="{Binding Age}"/>
+                  </Grid>
+              </Border>
+          </DataTemplate>
+          
+          <!-- 3 -->
+          <DataTemplate x:Key="NiceFormat3">
+              <Border Margin="1" BorderBrush="Blue"
+                      BorderThickness="2" CornerRadius="2">
+                  <Grid>
+                      <Grid.RowDefinitions>
+                          <RowDefinition/>
+                      </Grid.RowDefinitions>
+                      <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="60"/>
+                          <ColumnDefinition Width="20"/>
+                          <ColumnDefinition Width="30"/>
+                          <ColumnDefinition Width="20"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBlock Grid.Column="0" FontWeight="Bold" Padding="2"
+                                 Text="{Binding FirstName}"/>
+                      <TextBlock Grid.Column="1" Padding="2"
+                                 Text="{Binding Age}"/>
+                      <TextBlock Grid.Column="2" FontWeight="Bold" Padding="2" 
+                      		HorizontalAlignment="Center"
+                                 Text="{Binding Sex}"/>
+                      <Rectangle Grid.Column="3"
+                                 Fill="{Binding FavoriteColor}"/>
+                  </Grid>
+              </Border>
+          </DataTemplate>
+  
+      </Window.Resources>
+  
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 1. Data Template -->
+          <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+              <ListBox Name="listPeople" SelectedIndex="0" Margin="5" Padding="8"
+                   DisplayMemberPath="FirstName" Width="80" Template="  {StaticResource ListTemplate}"/>
+              
+              <StackPanel Name="sp" Margin="10 5" DataContext="{Binding   ElementName=listPeople, Path=SelectedItem}">
+                  <Label Name="lblFName" FontWeight="Bold"/>
+                  <Label Name="lblAge"/>
+                  <Label Name="lblColor"/>
+              </StackPanel>
+          </StackPanel>
+  
+          <!-- 1-1. Data Template -->
+          <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+              <ListBox Name="listPeople11" SelectedIndex="0"   VerticalAlignment="Top"
+                   ItemTemplate="{StaticResource NiceFormat}"/>
+              <StackPanel Orientation="Vertical" Name="sp11" Margin="10 5"   DataContext="{Binding ElementName=listPeople11, Path=SelectedItem}">
+                  <Label Name="lblFName11" FontWeight="Bold"/>
+                  <Label Name="lblAge11"/>
+                  <Label Name="lblColor11"/>
+              </StackPanel>
+          </StackPanel>
+  
+          <!-- 3. Views - Filtering -->
+          <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2">
+              <ListBox Name="listPeople3" SelectedIndex="0"
+                   VerticalAlignment="Top"
+                   ItemTemplate="{StaticResource NiceFormat3}"/>
+              <StackPanel Orientation="Vertical" Name="sp3" Margin="10 5">
+                  <Button Click="Button_Click3" Margin="5">Default</Button>
+                  <Button Click="Button_Click3_1" Margin="5">Less Than 30</Button>
+                  <Button Click="Button_Click3_2" Margin="5">Greater Than 30</  Button>
+              </StackPanel>
+          </StackPanel>
+          
+          <!-- 4. Views Sorting -->
+          <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+              <ListBox Name="listPeople4" SelectedIndex="0"
+                   VerticalAlignment="Top"
+                   ItemTemplate="{StaticResource NiceFormat3}"/>
+              <StackPanel Orientation="Vertical" Name="sp4" Margin="10 5">
+                  <Button Click="Button_Click4" Margin="5">Default</Button>
+                  <Button Click="Button_Click4_1" Margin="5">Name</Button>
+                  <Button Click="Button_Click4_2" Margin="5">Age</Button>
+                  <Button Click="Button_Click4_3" Margin="5">Sex and Age</Button>
+              </StackPanel>
+          </StackPanel>
+  
+          <!-- 5. View Grouping -->
+          <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+              <ListBox Name="listPeople5" SelectedIndex="0"
+                   VerticalAlignment="Top"
+                   ItemTemplate="{StaticResource NiceFormat3}">
+                  <ListBox.GroupStyle>
+                      <GroupStyle>
+                          <GroupStyle.HeaderTemplate>
+                              <DataTemplate>
+                                  <Border BorderBrush="Blue" BorderThickness="2"
+                                      Background="LightGray" Margin="2">
+                                      <TextBlock Margin="2" FontSize="12"   FontWeight="Bold"
+                                             Text="{Binding Path=Name}"/>
+                                  </Border>
+                              </DataTemplate>
+                          </GroupStyle.HeaderTemplate>
+                      </GroupStyle>
+                  </ListBox.GroupStyle>
+              </ListBox>
+          </StackPanel>
+  
+          <!-- 5-1. View Grouping -->
+          <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
+              <ListBox Name="listPeople51" SelectedIndex="0"
+                   VerticalAlignment="Top"
+                   ItemTemplate="{StaticResource NiceFormat3}">
+                  <ListBox.GroupStyle>
+                      <GroupStyle>
+                          <GroupStyle.HeaderTemplate>
+                              <DataTemplate>
+                                  <Border BorderBrush="Blue" BorderThickness="2"
+                                      Background="LightGray" Margin="2">
+                                      <TextBlock Margin="2" FontSize="12"   FontWeight="Bold"
+                                             Text="{Binding Path=Name}"/>
+                                  </Border>
+                              </DataTemplate>
+                          </GroupStyle.HeaderTemplate>
+                      </GroupStyle>
+                  </ListBox.GroupStyle>
+              </ListBox>
+          </StackPanel>
+  
+      </Grid>
+  </Window>
+
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+   using System.ComponentModel;
+   using System.Windows;
+   using System.Windows.Data;
+   
+   namespace _15.Data_Binding
+   {
+       public partial class MainWindow : Window
+       {
+           public MainWindow()
+           {
+               InitializeComponent();
+   
+               _1_DataTemplate();
+               _1_1_DataTemplate();
+               _3_ViewsFiltering();
+   
+               _4_ViewsSorting();
+               _5_ViewsGrouping();
+               _5_1_ViewsGrouping();
+           }
+   
+       }
+   }
+   
+   
+   // 1. Data Templates
+   namespace _15.Data_Binding
+   {
+       class Person
+       {
+           public string FirstName { get; set; }
+           public int Age { get; set; }
+           public string FavoriteColor { get; set; }
+   
+           public Person(string fName, int age, string color)
+           {
+               FirstName = fName;
+               Age = age;
+               FavoriteColor = color;
+           }
+       }
+   
+       public partial class MainWindow : Window
+       {
+           public void _1_DataTemplate()
+           {
+               Person[] people = {new Person("Shirley", 34, "Green"),
+                                   new Person("Roy", 36, "Blue"),
+                                   new Person("Isabel", 25, "Orange"),
+                                   new Person("Manuel", 27, "Red")};
+   
+               listPeople.ItemsSource = people;
+   
+               Binding nameBinding = new Binding("FirstName");
+               lblFName.SetBinding(ContentProperty, nameBinding);
+               Binding ageBinding = new Binding("Age");
+               lblAge.SetBinding(ContentProperty, ageBinding);
+               Binding colorBinding = new Binding("FavoriteColor");
+               lblColor.SetBinding(ContentProperty, colorBinding);
+           }
+       }
+   }
+   
+   
+   // 1-1. Data Templates
+   namespace _15.Data_Binding
+   {
+       public partial class MainWindow : Window
+       {
+           public void _1_1_DataTemplate()
+           {
+               Person[] people = {new Person("Shirley", 34, "Green"),
+                                   new Person("Roy", 36, "Blue"),
+                                   new Person("Isabel", 25, "Orange"),
+                                   new Person("Manuel", 27, "Red")};
+   
+               listPeople11.ItemsSource = people;
+   
+               Binding nameBinding = new Binding("FirstName");
+               lblFName11.SetBinding(ContentProperty, nameBinding);
+               Binding ageBinding = new Binding("Age");
+               lblAge11.SetBinding(ContentProperty, ageBinding);
+               Binding colorBinding = new Binding("FavoriteColor");
+               lblColor11.SetBinding(ContentProperty, colorBinding);
+           }
+       }
+   }
+   
+   
+   // 1-2. View Filtering
+   namespace _15.Data_Binding
+   {
+       class Person3
+       {
+           public string FirstName { get; set; }
+           public int Age { get; set; }
+           public string FavoriteColor { get; set; }
+           public string Sex { get; set; }
+           public Person3(string fName, int age, string color, string sex)
+           {
+               FirstName = fName;
+               Age = age;
+               FavoriteColor = color;
+               Sex = sex;
+           }
+       }
+   
+       public partial class MainWindow : Window
+       {
+           CollectionView cv;    //Store the view.
+   
+   
+           public void _3_ViewsFiltering()
+           {
+               Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                                   new Person3( "Roy", 36, "GoldenRod", "M"),
+                                   new Person3( "Isabel", 25, "DarkGray", "F"),
+                                   new Person3( "Manuel", 27, "Red", "M"),
+                                   new Person3( "Roy", 19, "Blue", "M") };
+   
+               listPeople3.ItemsSource = people;
+               cv = (CollectionView)CollectionViewSource.GetDefaultView (listPeople3.ItemsSource);
+           }
+   
+           private void Button_Click3(object sender, RoutedEventArgs e)
+           {
+               cv.Filter = null;
+           }
+   
+           private void Button_Click3_1(object sender, RoutedEventArgs e)
+           {
+               cv.Filter = IsLessTnan30;
+           }
+   
+           private void Button_Click3_2(object sender, RoutedEventArgs e)
+           {
+               cv.Filter = IsGreaterThan30;
+           }
+   
+           private void Button_Click_2(object sender, RoutedEventArgs e)
+           {
+               cv.Filter = IsGreaterThan30;
+           }
+   
+           private bool IsLessTnan30(object obj)
+           {
+               return (obj as Person3).Age < 30;
+           }
+   
+           private bool IsGreaterThan30(object obj)
+           {
+               return (obj as Person3).Age >= 30;
+           }
+       }
+   }
+   
+   
+   
+   
+   // 4. View Sorting
+   namespace _15.Data_Binding
+   {
+       public partial class MainWindow : Window
+       {
+   
+           CollectionView cv4;
+   
+           public void _4_ViewsSorting()
+           {
+               Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                                   new Person3( "Roy", 36, "GoldenRod", "M"),
+                                   new Person3( "Isabel", 25, "DarkGray", "F"),
+                                   new Person3( "Manuel", 27, "Red", "M"),
+                                   new Person3( "Roy", 19, "Blue", "M") };
+   
+               listPeople4.ItemsSource = people;
+               cv4 = (CollectionView)CollectionViewSource.GetDefaultView (listPeople4.ItemsSource);
+           }
+   
+           private void Button_Click4(object sender, RoutedEventArgs e)
+           {
+               cv4.SortDescriptions.Clear();
+           }
+   
+           private void Button_Click4_1(object sender, RoutedEventArgs e)
+           {
+               cv4.SortDescriptions.Clear();
+               SortDescription sd = new SortDescription("FirstName",  ListSortDirection.Ascending);
+               cv4.SortDescriptions.Add(sd);
+           }
+   
+           private void Button_Click4_2(object sender, RoutedEventArgs e)
+           {
+               cv4.SortDescriptions.Clear();
+               SortDescription sd = new SortDescription("Age", ListSortDirection. Ascending);
+               cv4.SortDescriptions.Add(sd);
+           }
+   
+           private void Button_Click4_3(object sender, RoutedEventArgs e)
+           {
+               cv4.SortDescriptions.Clear();
+               SortDescription sd1 = new SortDescription("Sex", ListSortDirection. Ascending);
+               SortDescription sd2 = new SortDescription("Age", ListSortDirection. Ascending);
+               cv4.SortDescriptions.Add(sd1);
+               cv4.SortDescriptions.Add(sd2);
+           }
+       }
+   }
+   
+   
+   
+    // 5. View Grouping
+   namespace _15.Data_Binding
+   {
+       public partial class MainWindow : Window
+       {
+           CollectionView cv5;
+           public void _5_ViewsGrouping()
+           {
+               Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                                   new Person3( "Roy", 36, "GoldenRod", "M"),
+                                   new Person3( "Isabel", 25, "DarkGray", "F"),
+                                   new Person3( "Manuel", 27, "Red", "M"),
+                                   new Person3( "Roy", 19, "Blue", "M") };
+                                             
+               listPeople5.ItemsSource = people;
+               cv5 = (CollectionView)CollectionViewSource.GetDefaultView (listPeople5.ItemsSource);
+   
+               PropertyGroupDescription pgd = new PropertyGroupDescription("Sex");
+               cv5.GroupDescriptions.Add(pgd);
+           }
+       }
+   }
+   
+   
+    // 5-1. View Grouping
+   namespace _15.Data_Binding
+   {
+       public partial class MainWindow : Window
+       {
+           CollectionView cv51;
+           public void _5_1_ViewsGrouping()
+           {
+               Person3[] people = { new Person3( "Shirley", 34, "Aquamarine", "F"),
+                                   new Person3( "Roy", 36, "GoldenRod", "M"),
+                                   new Person3( "Isabel", 25, "DarkGray", "F"),
+                                   new Person3( "Manuel", 27, "Red", "M"),
+                                   new Person3( "Roy", 19, "Blue", "M"),
+                                   new Person3( "Frank",25,"Yellow","M"),
+                                   new Person3( "Amy",29,"Blue","F"),
+                                   new Person3( "Isabel",30,"Red","F"),
+                                   new Person3( "Sam",27,"Blue","M"),
+                                   new Person3( "Tom",19,"Yellow","M")};
+   
+               listPeople51.ItemsSource = people;
+               cv51 = (CollectionView)CollectionViewSource.GetDefaultView (listPeople51.ItemsSource);
+   
+               PropertyGroupDescription pgd = new PropertyGroupDescription("Sex");
+               cv51.GroupDescriptions.Add(pgd);
+               pgd = new PropertyGroupDescription("FavoriteColor");
+               cv51.GroupDescriptions.Add(pgd);
+           }
+       }
+   }
+
+  ```
+
 <br><br><br>
 
 # Ch 16. Tree, Tab, 그 외 다른 Control들
