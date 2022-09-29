@@ -9670,6 +9670,922 @@
 - <img src="/uploads/ac0c7bb696e83fdb0507f78751b524b5/image.png" width="70%">
 
 
+### 1. WPF에서 Graphics
+
+- 그래픽 영역에 대해 살펴본다. 세 가지로 나눌 수 있다.
+  - 처음 두 가지 주제인 Transforms 및 Bitmap Effects에는 element의 시각적 표시를 수정할 수 있는 몇 가지 방법이 포함된다.
+  - Brush는 element를 그리는 데 사용할 수 있다.
+  - 2차원 그래픽을 만들고 사용할 수 있는 Shapes, Geometries, Drawing
+
+<br>
+
+### 2. Transforms - Rotate Transform
+
+- Tramsform을 사용하면 특정한 방법으로 element의 모양을 수정할 수 있다. 베이스 클래스 Transform에서 파생된 6개의 클래스가 있고 이러한 클래스는 3가지 카테고리로 분류된다.
+  - RotateTransform, ScaleTransform, SkewTransform, TranslateTransform의 네 가지 Transform이 있다. element를 회전하고, 크기를 변경하고, 각도를 왜곡하고, 이동할 수 있다.
+  - MatrixTransform 이라는 일반화된 Transform 클래스를 사용하여 변환의 모든 파라미터를 개별적으로 조작할 수 있다. 앞에 정의된 네 가지 클래스는 MatrixTransform 클래스의 특수 버전이다.
+  - TransformGroup은 Transforms의 집합이다. TransformGroup은 베이스 클래스 Transform에서 파생되므로 다른 Transform 객체 중 하나가 사용되는 모든 위치에서 사용할 수 있다. TransformGroup이 element에 적용되면 집합의 각 Transforms가 element에 적용된다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Canvas>
+      <Button Canvas.Left="30" Canvas.Top="20">
+          <Button.RenderTransform>
+              <RotateTransform Angle="45"/>
+          </Button.RenderTransform>
+          Rotate Me
+      </Button>
+      <Ellipse Canvas.Left="27.5" Canvas.Top="17.5" Height="5" Width="5"
+       Fill="Red"/>
+  </Canvas>
+  ```
+- 결과  
+  <img src="/uploads/a4843dafa9a935d34f8c6e2523efe5be/image.png">
+
+
+<br>
+
+### 2-2. Transforms - Rotate Transform
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel HorizontalAlignment="Center">
+      <Button Width="65" Height="23">Rotate Me</Button>
+      <Button Width="65" Height="23">Rotate Me</Button>
+      <Button Width="65" Height="23">
+          <Button.RenderTransform>
+              <RotateTransform Angle="30" CenterX="65" CenterY="0"/>
+          </Button.RenderTransform>
+          Rotate Me
+      </Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/e2e310695ba4e938b7805c96c7302dee/image.png">
+
+<br>
+
+### 2-3. LayoutTransform vs. RenderTransform
+
+- Transform을 LayoutTransform 속성 또는 RenderTransform 속성에 적용할 수 있다.
+  - LayoutTransform 속성에 Transform을 적용하는 경우, WPF 레이아웃 엔진은 페이지를 배치하고 모든 element의 위치를 결정할 때 Transform을 적용한다. 이 경우 Transform 결과는 다른 element를 배치할 때 고려된다.
+  - RenderTransform 속성에 Transform을 적용하면 화면이 렌더링 되는 last minute와 다른 모든 element가 배치될 때까지 Transform이 적용되지 않는다. 따라서 Transform에서 변환된 모양은 고려되지 않는다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2">
+          <Button>Rotate Me</Button>
+
+          <Button>
+              <Button.LayoutTransform>
+                  <RotateTransform Angle="45"/>
+              </Button.LayoutTransform>
+              Rotate Me
+          </Button>
+
+          <Button>Rotate Me</Button>
+  </StackPanel>
+
+  <StackPanel HorizontalAlignment="Center" Grid.Row="0" Grid.Column="3">
+          <Button>Rotate Me</Button>
+
+          <Button>
+              <Button.RenderTransform>
+                  <RotateTransform Angle="45"/>
+              </Button.RenderTransform>
+              Rotate Me
+          </Button>
+
+          <Button>Rotate Me</Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/240a0f400b8c58f98b0c4347fa451984/image.png">
+
+
+<br>
+
+### 2-4. TranslateTransform
+
+- TranslateTransform은 element를 다른 위치로 이동시킨다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel HorizontalAlignment="Center">
+      <Button Width="70">Button 1</Button>
+      <Button Width="70">
+          <Button.RenderTransform>
+              <TranslateTransform X="30" Y="10"/>
+          </Button.RenderTransform>
+          Button 2
+      </Button>
+      <Button Width="70">Button 3</Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/b97824072598075fd7751b08faf47c64/image.png">
+
+
+<br>
+
+### 2.5 SkewTransform
+
+- SkewTransform은 한 각도에서 element를 왜곡한다.
+- X 좌표, Y 좌표 또는 둘 다 기울일 수 있다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel HorizontalAlignment="Center">
+      <Button Width="90" FontWeight="Bold" Margin="2">No Skew</Button>
+
+      <Button Width="90" FontWeight="Bold" Margin="2">
+          <Button.RenderTransform>
+              <SkewTransform AngleX="30"/>
+          </Button.RenderTransform>
+          AngleX="30"
+      </Button>
+
+      <Button Width="90" FontWeight="Bold" Margin="2">
+          <Button.RenderTransform>
+              <SkewTransform AngleY="30"/>
+          </Button.RenderTransform>
+          AngleY="30"
+      </Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/843aa19e163873827aefd8500a81ec3b/image.png">
+
+
+<br>
+
+### 2.6 ScaleTransform
+
+- Scale transform 은 element의 크기를 변경한다.
+- X 방향, Y 방향 또는 둘 다로 설정할 것인지 선택할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel HorizontalAlignment="Center">
+      <Button Width="70">Button 1</Button>
+      <Button Width="70">
+          <Button.LayoutTransform>
+              <ScaleTransform ScaleX="1.75" ScaleY="1.5"/>
+          </Button.LayoutTransform>
+          Button 2
+      </Button>
+      <Button Width="70">Button 3</Button>
+  </StackPanel>
+
+  ```
+- 결과  
+  <img src="/uploads/bba86487d7833f2c1b3e7adbae9920d5/image.png">
+
+<br>
+
+### 2.7 ScaleTransform
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel HorizontalAlignment="Center">
+      <Button Width="70">Button 1</Button>
+      <Button Width="70">
+          <Button.RenderTransform>
+              <ScaleTransform ScaleX="1.75" ScaleY="1.5"/>
+          </Button.RenderTransform>
+          Button 2
+      </Button>
+      <Button Width="70">Button 3</Button>
+  </StackPanel>
+
+  ```
+- 결과  
+  <img src="/uploads/d5f5c5532ce19873ae17d2a58f8d8362/image.png">
+
+<br>
+
+### 2.8 BitmapEffects
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Button Content="Button 1" Margin="5">
+          <Button.BitmapEffect>
+              <DropShadowBitmapEffect/>
+          </Button.BitmapEffect>
+      </Button>
+      <Button Content="Button 2" Margin="5">
+          <Button.BitmapEffect>
+              <BlurBitmapEffect/>
+          </Button.BitmapEffect>
+      </Button>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/8129b14c535ae045334369dae718597c/image.png">
+
+<br>
+
+### 3. Brushes
+
+- Brush는 색상 또는 그래픽으로 영역을 색칠하는 데 사용된다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Background="Yellow">
+      <GroupBox Header="Buttons" Background="AliceBlue" BorderBrush="Blue"
+            BorderThickness="3" Padding="10">
+          <StackPanel>
+              <Button Width="100" FontWeight="Bold" Background="Coral"
+                  Foreground="White">Button 1</Button>
+              <Button Width="100" FontWeight="Bold" Background="Coral"
+                  Foreground="White">Button 2</Button>
+              <Button Width="100" FontWeight="Bold" Background="Coral"
+                  Foreground="White">Button 3</Button>
+          </StackPanel>
+      </GroupBox>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/a1d8f865e1ea32c77d096e1b0d4a6d85/image.png">
+
+
+<br>
+
+### 3-1. LinearGradientBrushes
+
+- LinearGradientBrush를 사용하면 그라데이션 path를 따라서 여러 색상 포인트를 가질 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Button Height="100" Width="100" Margin="10">
+          <Button.Background>
+              <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
+                  <GradientStop Offset="0" Color="Red"/>
+                  <GradientStop Offset=".25" Color="Orange"/>
+                  <GradientStop Offset=".5" Color="Green"/>
+                  <GradientStop Offset=".75" Color="Blue"/>
+                  <GradientStop Offset="1" Color="Violet"/>
+              </LinearGradientBrush>
+          </Button.Background>
+      </Button>
+      <TextBlock HorizontalAlignment="Center" FontWeight="Bold">
+      (0, 0) (1, 1)
+      </TextBlock>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/a3ea9cb24842ec99b2c67b77eb144899/image.png">
+
+<br>
+
+### 3-2. LinearGradientBrushes
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+      <Button Height="100" Width="100" Margin="10">
+          <Button.Background>
+              <LinearGradientBrush StartPoint="0.25, 0.25"
+                           EndPoint=".75, .75"
+                           SpreadMethod="Repeat">
+                  <GradientStop Offset="0" Color="Orange"/>
+                  <GradientStop Offset="1" Color="Black"/>
+              </LinearGradientBrush>
+          </Button.Background>
+      </Button>
+      <StackPanel VerticalAlignment="Center">
+          <TextBlock HorizontalAlignment="Right" FontWeight="Bold"
+              Margin="0,10,0,0">
+      StartPoint( .25, .25)</TextBlock>
+          <TextBlock HorizontalAlignment="Right" FontWeight="Bold">
+      EndPoint( .75, .75)</TextBlock>
+          <TextBlock HorizontalAlignment="Right" FontWeight="Bold">
+      SpreadMethod = Repeat</TextBlock>
+      </StackPanel>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/409268d645d897b3893bf71d0a43830a/image.png">
+
+<br>
+
+### 4. Shapes
+
+- WPF는 UI에 사용할 수 있는 여섯 가지 Shape을 제공한다.
+  - 다섯 개의 간단한 Shape 클래스와 임의의 모양을 정의할 수 있는 Path라는 Shape 클래스가 있다.
+  - Shape 클래스는 line stroke를 설정하기 위한 속성과 Shape의 채우기를 포함하는 추상 Shape 클래스에서 파생된다.
+  - Shape는 element이므로 UI에 직접 배치할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+      <Rectangle Stroke="Black" StrokeThickness="2" Margin="10"
+             Height="30" Width="40" Fill="Orange"/>
+      <Ellipse Stroke="Black" StrokeThickness="2" Margin="10"
+           Height="30" Width="40" Fill="Orange"/>
+      <Line Stroke="Black" StrokeThickness="2" Margin="10"
+        X1="0" Y1="0" X2="40" Y2="30" Height="30"/>
+      <Polyline Stroke="Black" StrokeThickness="2" Margin="10"
+            Points="0 0 30 0 10 30 40 30" Height="30"/>
+      <Polygon Stroke="Black" StrokeThickness="2" Margin="10"
+           Points="0 0 30 0 10 30 40 30" Height="30"/>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/63d6833b7f8fd72054434c6902aa1ea8/image.png">
+
+<br>
+
+### 5. Geometry 클래스
+
+- Geometry 클래스를 사용하여 2차원 shape와 path를 정의할 수 있다. System.Windows.Media 네임스페이스에는 8개의 Geometry 클래스가 있다.
+  - Geometry 클래스는 다른 클래스의 베이스 클래스이다. 추상 클래스이기 때문에 인스턴스화할 수 없다. 대신 일곱 개의 파생 클래스를 사용한다.
+  - Geometry 클래스는 자기 자신을 렌더링하도록 설계되지 않았다. 그들의 기능은 모양을 그리는 것이 아니라 모양을 정의하는 것이다. Geomery를 렌더링 하려면 렌더링 하는 path shape에 할당한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Orientation="Horizontal">
+      <Path Stroke="Black" StrokeThickness="2">
+          <Path.Data>
+              <LineGeometry StartPoint="10 10" EndPoint="50 40"/>
+          </Path.Data>
+      </Path>
+
+      <Path Stroke="Black" Fill="LightBlue" StrokeThickness="2">
+          <Path.Data>
+              <RectangleGeometry Rect="10 10 40 30"/>
+          </Path.Data>
+      </Path>
+
+      <Path Stroke="Black" Fill="LightBlue" StrokeThickness="2">
+          <Path.Data>
+              <EllipseGeometry RadiusX="20" RadiusY="15" Center="30 25"/>
+          </Path.Data>
+      </Path>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/d7a289f2e4c7e1e0b791c5a1c58b230f/image.png">
+
+<br>
+
+### 5-1. PathGeometry 클래스
+
+- PathGeometry 클래스를 사용하면 선, 호, 베지어 곡선을 조합하여 임의적으로 복잡한 path를 지정할 수 있다. 
+
+<br>
+
+### 5-2. LineSegment 및 PolyLineSegment
+
+- 여러 Geometry를 결합할 수 있는 두 가지 방법이 있다.
+  - GeometryGroup 클래스는 Geometry 집합을 포함할 수 있다. 단일 Geometry를 사용할 수 있는 모든 위치에서 GeometryGroup 개체를 사용할 수 있다.
+  - CombinedGeometry 클래스는 두 Geometry 객체를 가져와서 두 개의 개별 객체 중 하나와 다른 경로를 갖는 단일 Geometry 객체로 결합한다. 결합하는 데 사용할 수 있는 작업에는 Union, Intersection, Exclude, Xor 이 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="3" Grid.Column="0" >
+      <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+      </Grid.ColumnDefinitions>
+      <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue"  Grid.Row="0" Grid.Column="0" >
+          <Path.Data>
+              <CombinedGeometry GeometryCombineMode="Union">
+                  <CombinedGeometry.Geometry1>
+                      <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry1>
+                  <CombinedGeometry.Geometry2>
+                      <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry2>
+              </CombinedGeometry>
+          </Path.Data>
+      </Path>
+      <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue" Grid.Row="0" Grid.Column="1">
+          <Path.Data>
+              <CombinedGeometry GeometryCombineMode="Xor">
+                  <CombinedGeometry.Geometry1>
+                      <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry1>
+                  <CombinedGeometry.Geometry2>
+                      <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry2>
+              </CombinedGeometry>
+          </Path.Data>
+      </Path>
+      <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue" Grid.Row="1" Grid.Column="0">
+          <Path.Data>
+              <CombinedGeometry GeometryCombineMode="Exclude">
+                  <CombinedGeometry.Geometry1>
+                      <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry1>
+                  <CombinedGeometry.Geometry2>
+                      <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry2>
+              </CombinedGeometry>
+          </Path.Data>
+      </Path>
+      <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue" Grid.Row="1" Grid.Column="1" >
+          <Path.Data>
+              <CombinedGeometry GeometryCombineMode="Intersect">
+                  <CombinedGeometry.Geometry1>
+                      <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry1>
+                  <CombinedGeometry.Geometry2>
+                      <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                  </CombinedGeometry.Geometry2>
+              </CombinedGeometry>
+          </Path.Data>
+      </Path>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/74cce6a8f85864ee6b5b77e7f0b2613f/image.png">
+
+
+<br>
+
+### 5-3. Path Markup 구문
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Path Stroke="Black" StrokeThickness="3">
+          <Path.Data>
+              <PathGeometry Figures="M 10,10 L 100,10 50,50 100,70 M 10,50 L 10,90 100,90"/>
+          </Path.Data>
+      </Path>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/98b6decb08fc55fc0c7c27c061881db3/image.png">
+
+| Syntax  | Parameters                                                         | Description                                                                                            |
+|---------|--------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| L       | points                                                             | Line commnad. 현재 위치에서 endpoint 까지의 선을 그린다.                                                             |
+| H       | x                                                                  | Horizontal command. 현재 위치에서 지정된 X 좌표 위치로 수평선을 그린다. Y 좌표는 시작 좌표와 동일하게 유지된다.                             |
+| V       | y                                                                  | Vertical command. 현재 위치에서 지정된 Y 좌표 위치로 수직선을 그린다. X 좌표는 시작 좌표와 동일하게 유지된다.                               |
+| A       | size, rotation angle, isLargeArcFlag, sweepDirectionFlag, endpoint | Arc command. 타원 호를 그린다.                                                                                |
+| C,Q,S,T | Various control points and end points                              | 네 개의 Bezier 곡선 명령을 나타낸다. cubic Bezier, quadratic Bezier, smooth cubic Bezier, smooth quadratic Bezier. |
+
+<br>
+
+### 5-4. Geometry 채우기
+
+- Geometry는 path나 shape를 정의한다.
+- 그러나 element가 아니므로 레이아웃에서 직접 렌더링 되지 않는다. 
+- 대신, 경로와 같은 element에서 호스트 되어야 한다. 
+- Path element를 사용하면 Geometry 개체에 Stroke 개체 및 Fill 작업을 적용할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Path Stroke="Black" StrokeThickness="2" Fill="LightGray">
+          <Path.Data>
+              <PathGeometry FillRule="EvenOdd">
+                  <PathFigure StartPoint="60 110" IsClosed="True">
+                      <ArcSegment Point="120 110" Size="50 40"
+                              IsLargeArc="True" SweepDirection="Clockwise"/>
+                  </PathFigure>
+              </PathGeometry>
+          </Path.Data>
+      </Path>
+  </Grid>
+
+  ```
+- 결과  
+  <img src="/uploads/bf094b0a1dfaccfe32d2e476a423b5e3/image.png">
+
+
+<br>
+
+### 6. Drawings
+
+- WPF를 사용하면 다양한 타입의 그래픽 개체를 사용할 수 있으며 다양한 방법으로 사용할 수 있다.
+- WPF는 다른 용도로 그래픽을 사용할 수 있는 두 가지 클래스 셋을 제공한다.
+  - 특정 용도에 맞게 그래픽을 패키징 하는 데 사용되는 세 가지 클래스가 있다. 이러한 클래스의 이름은 Drawing으로 시작한다(DrawingXXX 클래스).
+    - DrawingImage : 이미지로 사용할 그래픽을 패키지로 제공한다.
+    - DrawingBrush : Brush로 사용할 그래픽을 페키지로 제공한다.
+    - DrawingVisual : Viisuals 라고 불리는 그래픽 개체로 사용될 그래픽을 패키지로 제공한다.
+  - 3가지 DrawingXXX 클래스에서 사용할 수 있도록, 다양한 유형의 그래픽을 패키징 하는 데 사용되는 추상 Drawing 클래스에서 파생된 4 개의 클래스(XXXDrawing)가 있다.
+  - Drawing에서 파생된 DrawingGroup 클래스는 XXXDrawing 객체의 컬렉션 역할을 한다.
+
+#### DrawingImage 클래스, DrawingBrush 클래스
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Button Width="100" Height="50" FontWeight="Bold" Content="My Button">
+          <Button.Background>
+
+              
+              <DrawingBrush>
+                  <DrawingBrush.Drawing>
+
+                      <GeometryDrawing Brush="Aqua">
+                          <GeometryDrawing.Pen>
+                              <Pen Thickness="1" Brush="Black"/>
+                          </GeometryDrawing.Pen>
+                          <GeometryDrawing.Geometry>
+
+                              <CombinedGeometry GeometryCombineMode="Xor">
+                                  <CombinedGeometry.Geometry1>
+                                      <EllipseGeometry Center="60 50" RadiusX="40" RadiusY="30"/>
+                                  </CombinedGeometry.Geometry1>
+                                  <CombinedGeometry.Geometry2>
+                                      <EllipseGeometry Center="100 50" RadiusX="40" RadiusY="30"/>
+                                  </CombinedGeometry.Geometry2>
+                              </CombinedGeometry>
+
+                          </GeometryDrawing.Geometry>
+                      </GeometryDrawing>
+
+                  </DrawingBrush.Drawing>
+              </DrawingBrush>
+
+              
+          </Button.Background>
+      </Button>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/b2eb14c4626b53a797d58b7a9c41cb24/image.png">
+
+<br>
+
+### 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_18.WPF_Graphic.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_18.WPF_Graphic"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 2 -->
+          <Grid Grid.Row="0" Grid.Column="0">
+              <Canvas>
+                  <Button Canvas.Left="30" Canvas.Top="20">
+                      <Button.RenderTransform>
+                          <RotateTransform Angle="45"/>
+                      </Button.RenderTransform>
+                      Rotate Me
+                  </Button>
+                  <Ellipse Canvas.Left="27.5" Canvas.Top="17.5" Height="5" Width="5"
+                   Fill="Red"/>
+              </Canvas>
+          </Grid>
+  
+          <!-- 2-2 -->
+          <StackPanel HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1">
+              <Button Width="65" Height="23">Rotate Me</Button>
+              <Button Width="65" Height="23">Rotate Me</Button>
+              <Button Width="65" Height="23">
+                  <Button.RenderTransform>
+                      <RotateTransform Angle="30" CenterX="65" CenterY="0"/>
+                  </Button.RenderTransform>
+                  Rotate Me
+              </Button>
+          </StackPanel>
+          
+          <!-- 2-3-1 -->
+          <StackPanel HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2">
+              <Button>Rotate Me</Button>
+  
+              <Button>
+                  <Button.LayoutTransform>
+                      <RotateTransform Angle="45"/>
+                  </Button.LayoutTransform>
+                  Rotate Me
+              </Button>
+  
+              <Button>Rotate Me</Button>
+          </StackPanel>
+  
+  
+          <!-- 2-3-2 -->
+          <StackPanel HorizontalAlignment="Center" Grid.Row="0" Grid.Column="3">
+              <Button>Rotate Me</Button>
+  
+              <Button>
+                  <Button.RenderTransform>
+                      <RotateTransform Angle="45"/>
+                  </Button.RenderTransform>
+                  Rotate Me
+              </Button>
+  
+              <Button>Rotate Me</Button>
+          </StackPanel>
+          
+          <!-- 2-4 -->
+          <StackPanel HorizontalAlignment="Center" Grid.Row="0" Grid.Column="4">
+              <Button Width="70">Button 1</Button>
+              <Button Width="70">
+                  <Button.RenderTransform>
+                      <TranslateTransform X="30" Y="10"/>
+                  </Button.RenderTransform>
+                  Button 2
+              </Button>
+              <Button Width="70">Button 3</Button>
+          </StackPanel>
+          
+          <!-- 2-5 -->
+          <StackPanel HorizontalAlignment="Center" Grid.Row="1" Grid.Column="0">
+              <Button Width="90" FontWeight="Bold" Margin="2">No Skew</Button>
+  
+              <Button Width="90" FontWeight="Bold" Margin="2">
+                  <Button.RenderTransform>
+                      <SkewTransform AngleX="30"/>
+                  </Button.RenderTransform>
+                  AngleX="30"
+              </Button>
+  
+              <Button Width="90" FontWeight="Bold" Margin="2">
+                  <Button.RenderTransform>
+                      <SkewTransform AngleY="30"/>
+                  </Button.RenderTransform>
+                  AngleY="30"
+              </Button>
+          </StackPanel>     
+          
+          <!-- 2-6 -->
+          <StackPanel HorizontalAlignment="Center" Grid.Row="1" Grid.Column="1">
+              <Button Width="70">Button 1</Button>
+              <Button Width="70">
+                  <Button.LayoutTransform>
+                      <ScaleTransform ScaleX="1.75" ScaleY="1.5"/>
+                  </Button.LayoutTransform>
+                  Button 2
+              </Button>
+              <Button Width="70">Button 3</Button>
+          </StackPanel>
+  
+          
+          <!-- 2-7 -->
+          <StackPanel HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2">
+              <Button Width="70">Button 1</Button>
+              <Button Width="70">
+                  <Button.RenderTransform>
+                      <ScaleTransform ScaleX="1.75" ScaleY="1.5"/>
+                  </Button.RenderTransform>
+                  Button 2
+              </Button>
+              <Button Width="70">Button 3</Button>
+          </StackPanel>
+  
+          
+          <!-- 2-8 -->
+          <StackPanel Grid.Row="1" Grid.Column="3">
+              <Button Content="Button 1" Margin="5">
+                  <Button.BitmapEffect>
+                      <DropShadowBitmapEffect/>
+                  </Button.BitmapEffect>
+              </Button>
+              <Button Content="Button 2" Margin="5">
+                  <Button.BitmapEffect>
+                      <BlurBitmapEffect/>
+                  </Button.BitmapEffect>
+              </Button>
+          </StackPanel>
+          
+          <!-- 3 -->
+          <StackPanel Background="Yellow" Grid.Row="1" Grid.Column="4">
+              <GroupBox Header="Buttons" Background="AliceBlue" BorderBrush="Blue"
+                    BorderThickness="3" Padding="10">
+                  <StackPanel>
+                      <Button Width="100" FontWeight="Bold" Background="Coral"
+                          Foreground="White">Button 1</Button>
+                      <Button Width="100" FontWeight="Bold" Background="Coral"
+                          Foreground="White">Button 2</Button>
+                      <Button Width="100" FontWeight="Bold" Background="Coral"
+                          Foreground="White">Button 3</Button>
+                  </StackPanel>
+              </GroupBox>
+          </StackPanel>
+  
+          <!-- 3-1 -->
+          <StackPanel Grid.Row="2" Grid.Column="0">
+              <Button Height="100" Width="100" Margin="10">
+                  <Button.Background>
+                      <LinearGradientBrush StartPoint="0 0" EndPoint="1 1">
+                          <GradientStop Offset="0" Color="Red"/>
+                          <GradientStop Offset=".25" Color="Orange"/>
+                          <GradientStop Offset=".5" Color="Green"/>
+                          <GradientStop Offset=".75" Color="Blue"/>
+                          <GradientStop Offset="1" Color="Violet"/>
+                      </LinearGradientBrush>
+                  </Button.Background>
+              </Button>
+              <TextBlock HorizontalAlignment="Center" FontWeight="Bold">
+              (0, 0) (1, 1)
+              </TextBlock>
+          </StackPanel>
+  
+          <!-- 3-2 -->
+          <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+              <Button Height="100" Width="100" Margin="10">
+                  <Button.Background>
+                      <LinearGradientBrush StartPoint="0.25, 0.25"
+                                   EndPoint=".75, .75"
+                                   SpreadMethod="Repeat">
+                          <GradientStop Offset="0" Color="Orange"/>
+                          <GradientStop Offset="1" Color="Black"/>
+                      </LinearGradientBrush>
+                  </Button.Background>
+              </Button>
+              <StackPanel VerticalAlignment="Center">
+                  <TextBlock HorizontalAlignment="Right" FontWeight="Bold"
+                      Margin="0,10,0,0">
+              StartPoint( .25, .25)</TextBlock>
+                  <TextBlock HorizontalAlignment="Right" FontWeight="Bold">
+              EndPoint( .75, .75)</TextBlock>
+                  <TextBlock HorizontalAlignment="Right" FontWeight="Bold">
+              SpreadMethod = Repeat</TextBlock>
+              </StackPanel>
+          </StackPanel>
+  
+          <!-- 4 -->
+          <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+              <Rectangle Stroke="Black" StrokeThickness="2" Margin="10"
+                     Height="30" Width="40" Fill="Orange"/>
+              <Ellipse Stroke="Black" StrokeThickness="2" Margin="10"
+                   Height="30" Width="40" Fill="Orange"/>
+              <Line Stroke="Black" StrokeThickness="2" Margin="10"
+                X1="0" Y1="0" X2="40" Y2="30" Height="30"/>
+              <Polyline Stroke="Black" StrokeThickness="2" Margin="10"
+                    Points="0 0 30 0 10 30 40 30" Height="30"/>
+              <Polygon Stroke="Black" StrokeThickness="2" Margin="10"
+                   Points="0 0 30 0 10 30 40 30" Height="30"/>
+          </StackPanel>
+  
+          <!-- 5 -->
+          <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal">
+              <Path Stroke="Black" StrokeThickness="2">
+                  <Path.Data>
+                      <LineGeometry StartPoint="10 10" EndPoint="50 40"/>
+                  </Path.Data>
+              </Path>
+  
+              <Path Stroke="Black" Fill="LightBlue" StrokeThickness="2">
+                  <Path.Data>
+                      <RectangleGeometry Rect="10 10 40 30"/>
+                  </Path.Data>
+              </Path>
+  
+              <Path Stroke="Black" Fill="LightBlue" StrokeThickness="2">
+                  <Path.Data>
+                      <EllipseGeometry RadiusX="20" RadiusY="15" Center="30 25"/>
+                  </Path.Data>
+              </Path>
+          </StackPanel>
+  
+          <!-- 6 -->
+          <Grid Grid.Row="2" Grid.Column="4" >
+              <Path Stroke="Black" StrokeThickness="2" Fill="LightGray">
+                  <Path.Data>
+                      <GeometryGroup FillRule="Nonzero">
+                          <EllipseGeometry Center="60 50"
+                                       RadiusX="40" RadiusY="30"/>
+                          <EllipseGeometry Center="100 50"
+                                       RadiusX="40" RadiusY="30"/>
+                      </GeometryGroup>
+                  </Path.Data>
+              </Path>
+          </Grid>
+          
+          <!-- 7 -->
+          <Grid Grid.Row="3" Grid.Column="0" >
+              <Grid.RowDefinitions>
+                  <RowDefinition/>
+                  <RowDefinition/>
+              </Grid.RowDefinitions>
+              <Grid.ColumnDefinitions>
+                  <ColumnDefinition/>
+                  <ColumnDefinition/>
+              </Grid.ColumnDefinitions>
+              <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue"  Grid.Row="0" Grid.Column="0" >
+                  <Path.Data>
+                      <CombinedGeometry GeometryCombineMode="Union">
+                          <CombinedGeometry.Geometry1>
+                              <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry1>
+                          <CombinedGeometry.Geometry2>
+                              <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry2>
+                      </CombinedGeometry>
+                  </Path.Data>
+              </Path>
+              <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue" Grid.Row="0" Grid.Column="1">
+                  <Path.Data>
+                      <CombinedGeometry GeometryCombineMode="Xor">
+                          <CombinedGeometry.Geometry1>
+                              <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry1>
+                          <CombinedGeometry.Geometry2>
+                              <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry2>
+                      </CombinedGeometry>
+                  </Path.Data>
+              </Path>
+              <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue" Grid.Row="1" Grid.Column="0">
+                  <Path.Data>
+                      <CombinedGeometry GeometryCombineMode="Exclude">
+                          <CombinedGeometry.Geometry1>
+                              <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry1>
+                          <CombinedGeometry.Geometry2>
+                              <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry2>
+                      </CombinedGeometry>
+                  </Path.Data>
+              </Path>
+              <Path Stroke="Black" StrokeThickness="2" Fill="LightBlue" Grid.Row="1" Grid.Column="1" >
+                  <Path.Data>
+                      <CombinedGeometry GeometryCombineMode="Intersect">
+                          <CombinedGeometry.Geometry1>
+                              <EllipseGeometry Center="25 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry1>
+                          <CombinedGeometry.Geometry2>
+                              <EllipseGeometry Center="50 25" RadiusX="20" RadiusY="15"/>
+                          </CombinedGeometry.Geometry2>
+                      </CombinedGeometry>
+                  </Path.Data>
+              </Path>
+          </Grid>
+          
+          <!-- 5-3 -->
+          <Grid  Grid.Row="3" Grid.Column="1">
+              <Path Stroke="Black" StrokeThickness="3">
+                  <Path.Data>
+                      <PathGeometry Figures="M 10,10 L 100,10 50,50 100,70 M 10,50 L 10,90 100,90"/>
+                  </Path.Data>
+              </Path>
+          </Grid>
+  
+          
+          <!-- 5-4 -->
+          <Grid Grid.Row="3" Grid.Column="2">
+              <Path Stroke="Black" StrokeThickness="2" Fill="LightGray">
+                  <Path.Data>
+                      <PathGeometry FillRule="EvenOdd">
+                          <PathFigure StartPoint="60 110" IsClosed="True">
+                              <ArcSegment Point="120 110" Size="50 40"
+                                      IsLargeArc="True" SweepDirection="Clockwise"/>
+                          </PathFigure>
+                      </PathGeometry>
+                  </Path.Data>
+              </Path>
+          </Grid>
+  
+          <!-- 5-5 -->
+          <Grid Grid.Row="3" Grid.Column="3">
+              <Button Width="100" Height="50" FontWeight="Bold" Content="My Button">
+                  <Button.Background>
+                      
+                      <DrawingBrush>
+                          <DrawingBrush.Drawing>
+                              <GeometryDrawing Brush="Aqua">
+                                  <GeometryDrawing.Pen>
+                                      <Pen Thickness="1" Brush="Black"/>
+                                  </GeometryDrawing.Pen>
+                                  <GeometryDrawing.Geometry>
+                                      <CombinedGeometry GeometryCombineMode="Xor">
+                                          <CombinedGeometry.Geometry1>
+                                              <EllipseGeometry Center="60 50" RadiusX="40" RadiusY="30"/>
+                                          </CombinedGeometry.Geometry1>
+                                          <CombinedGeometry.Geometry2>
+                                              <EllipseGeometry Center="100 50" RadiusX="40" RadiusY="30"/>
+                                          </CombinedGeometry.Geometry2>
+                                      </CombinedGeometry>
+                                  </GeometryDrawing.Geometry>
+                              </GeometryDrawing>
+                          </DrawingBrush.Drawing>
+                      </DrawingBrush>
+                      
+                  </Button.Background>
+              </Button>
+          </Grid>
+  
+  
+      </Grid>
+  </Window>
+  ```
+
+<br>
+
+
 <br><br><br>
 
 # Ch 19. Animation
@@ -9689,4 +10605,3 @@
 
 
 <br><br><br>
-
