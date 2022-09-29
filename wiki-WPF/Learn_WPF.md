@@ -8069,7 +8069,972 @@
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
+- <img src="/uploads/331ec0af153224c11073f6524a6af5b5/image.png" width="70%">
+
+
+### 1. TreeView 컨트롤
+
+- TreeView 컨트롤은 데이터 컬렉션의 계층구조를 위해 설계되었다.
+- TreeView를 만드는 데 두 개의 주요한 클래스는 TreeView 클래스와 TreeViewItem 클래스이다.
+
+<br>
+
+### 2. HierarchicalDataTemplate
+
+- TreeView에서는 트리의 구조를 사전에 알고 XAML에 명시적으로 지정했다.
+- TreeView를 구축하는 또 다른 방법은 데이터 컬렉션을 ItemsSource 속성에 할당하는 것이다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <TreeView Name="oldMaps2" Grid.Column="0" FontWeight="Bold"/>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  class MapInfo
+  {
+      public string LastName { get; set; }
+      public string FirstName { get; set; }
+      public string Title { get; set; }
+      public string Year { get; set; }
+      public string Description { get; set; }
+      public Uri Picture { get; set; }
+
+      public MapInfo(string ln, string fn, string title, string year, string desc, string picUri)
+      {
+          LastName = ln;
+          FirstName = fn;
+          Title = title;
+          Year = year;
+          Description = desc;
+          string uriString = string.Format("Images/{0}", picUri);
+          Picture = new Uri(uriString, UriKind.Relative);
+      }
+  }
+
+  class WorldRegion
+  {
+      public string RegionName { get; set; }
+      public List<MapInfo> Maps { get; set; }
+      public WorldRegion(string name)
+      {
+          Maps = new List<MapInfo>();
+          RegionName = name;
+      }
+  }
+
+  public partial class MainWindow : Window
+  {
+      List<WorldRegion> mapRegions2;
+
+      public MainWindow()
+      {
+          mapRegions2 = new List<WorldRegion>();
+          CreateMapsDataStructure();
+          oldMaps2.ItemsSource = mapRegions2;
+      }
+
+      private void CreateMapsDataStructure()
+      {
+          WorldRegion region = new WorldRegion("Double Hemisphere");
+          region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+          region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+          mapRegions2.Add(region);
+
+          region = new WorldRegion("Western Hemisphere");
+          region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+          mapRegions2.Add(region);
+
+          region = new WorldRegion("Eastern Hemisphere");
+          region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+          region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+          mapRegions2.Add(region);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/76c7f0c54047ad3bf2069f7206312d8f/image.png">
+
+<br>
+
+### 2-1. HierarchicalDataTemplate
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window.Resources>
+      
+      <DataTemplate DataType="{x:Type local:WorldRegion}">
+          <TextBlock Text="{Binding Path=RegionName}" Foreground="Gray"/>
+      </DataTemplate>
+      
+  </Window.Resources>
+
+  <Grid Grid.Row="0" Grid.Column="1">
+      <TreeView Name="oldMaps21" Grid.Column="0" FontWeight="Bold"/>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      List<WorldRegion> mapRegions21;
+
+      public void _2_1_HierarchicalDataTemplate()
+      {
+          mapRegions21 = new List<WorldRegion>();
+          CreateMapsDataStructure21();
+          oldMaps21.ItemsSource = mapRegions21;
+      }
+
+      private void CreateMapsDataStructure21()
+      {
+          WorldRegion region = new WorldRegion("Double Hemisphere");
+          region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+          region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+          mapRegions21.Add(region);
+
+          region = new WorldRegion("Western Hemisphere");
+          region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+          mapRegions21.Add(region);
+
+          region = new WorldRegion("Eastern Hemisphere");
+          region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+          region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+          mapRegions21.Add(region);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/e153b1ddc3b0ce63e3098ddeb14df3d3/image.png">
+
+<br>
+
+### 2-2. HierarchicalDataTemplate
+
+- 2-1의 xaml 코드를 다음과 같이 수정한다.
+  ```xml
+  <Window.Resources>
+      <HierarchicalDataTemplate DataType="{x:Type local:WorldRegion}"
+                                ItemsSource="{Binding Path=Maps}">
+          <TextBlock Text="{Binding Path=RegionName}" Foreground="Gray"/>
+      </HierarchicalDataTemplate>
+  </Window.Resources>
+  ```
+- 결과  
+  <img src="/uploads/ffa63276c966fca1c631b9e3b40d5057/image.png">
+
+<br>
+
+### 2-3. HierarchicalDataTemplate
+
+- 2-2의 xaml 코드를 다음과 같이 수정한다.
+  ```xml
+  <Window.Resources>
+      <HierarchicalDataTemplate DataType="{x:Type local:WorldRegion}"
+                                ItemsSource="{Binding Path=Maps}">
+          <TextBlock Text="{Binding Path=RegionName}" Foreground="Gray"/>
+      </HierarchicalDataTemplate>
+      <HierarchicalDataTemplate DataType="{x:Type local:MapInfo}">
+          <TextBlock Text="{Binding Path=LastName}"/>
+      </HierarchicalDataTemplate>
+  </Window.Resources>
+  ```
+- 결과  
+  <img src="/uploads/cc13c0cafbe93e5c6079fdd10b878152/image.png">
+
+<br>
+
+### 3. TreeView 에서 이벤트 핸들러 사용
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="3*"/>
+          <ColumnDefinition Width="2*"/>
+      </Grid.ColumnDefinitions>
+      <TreeView Name="oldMaps3" Grid.Column="0" FontWeight="Bold"
+            SelectedItemChanged="oldMaps_SelectedItemChanged"/>
+      <StackPanel Grid.Column="1" TextBlock.FontWeight="Bold">
+          <TextBlock Name="name" Margin="10 5 0 0"/>
+          <TextBlock Name="title" Margin="10 0 0 0"/>
+          <TextBlock Name="date" Margin="20 0 0 0"/>
+          <TextBlock Name="desc" Margin="10 10 0 0"/>
+      </StackPanel>
+  </Grid>
+
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      List<WorldRegion> mapRegions3;
+
+      public MainWindow()
+      {
+          mapRegions3 = new List<WorldRegion>();
+          CreateMapsDataStructure3();
+          oldMaps3.ItemsSource = mapRegions3;
+      }
+
+      private void CreateMapsDataStructure3()
+      {
+          WorldRegion region = new WorldRegion("Double Hemisphere");
+          region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+          region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+          mapRegions3.Add(region);
+
+          region = new WorldRegion("Western Hemisphere");
+          region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+          mapRegions3.Add(region);
+
+          region = new WorldRegion("Eastern Hemisphere");
+          region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+          region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+          mapRegions3.Add(region);
+      }
+
+      private void oldMaps_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+      {
+          MapInfo map = oldMaps3.SelectedItem as MapInfo;
+          if (map == null)
+              return;
+
+          name.Text = map.LastName + "," + map.FirstName;
+          title.Text = map.Title;
+          date.Text = map.Year;
+          desc.Text = map.Description;
+      }
+  }
+
+  ```
+- 결과  
+  <img src="/uploads/6a357a809cac5cc2d6a8f59896de7cf0/image.png">
+
+<br>
+
+### 4. TreeView에 다른 컨트롤 바인딩
+
+- 데이터 바인딩은 더 사용하기 쉬운 구현이다.
+- TreeView에 바인딩 하려면 ElementName과 Path 라는 두 개의 파라미터가 필요하다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="2*"/>
+          <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="3*"/>
+      </Grid.ColumnDefinitions>
+      <TreeView Name="oldMaps4" Grid.Column="0" FontWeight="Bold"/>
+      <GridSplitter Grid.Column="1" Width="2" Background="DarkGray"
+                VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+      <DockPanel Grid.Column="2">
+          <StackPanel DockPanel.Dock="Top">
+              <Border BorderBrush="DarkGray" BorderThickness="1"
+                  Margin="3" Padding="3">
+                  <StackPanel Orientation="Horizontal" TextBlock.FontWeight="Bold">
+                      <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.FirstName}"/>
+                      <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.LastName}"
+                             Margin="5 0 0 0"/>
+                  </StackPanel>
+              </Border>
+              <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.Title}"
+                     Margin="10 0 0 0"/>
+              <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.Year}"
+                     Margin="20 0 0 0"/>
+          </StackPanel>
+          <Viewbox Stretch="Uniform" Margin="2">
+              <Image Source="{Binding ElementName=oldMaps4, Path=SelectedItem.Picture}"/>
+          </Viewbox>
+      </DockPanel>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      List<WorldRegion> mapRegions4;
+
+      public void _4_TreeView_Binding()
+      {
+          mapRegions4 = new List<WorldRegion>();
+          CreateMapsDataStructure4();
+          oldMaps4.ItemsSource = mapRegions4;
+      }
+
+      private void CreateMapsDataStructure4()
+      {
+          WorldRegion region = new WorldRegion("Double Hemisphere");
+          region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+          region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+          mapRegions4.Add(region);
+
+          region = new WorldRegion("Western Hemisphere");
+          region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+          mapRegions4.Add(region);
+
+          region = new WorldRegion("Eastern Hemisphere");
+          region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+          region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+          region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+          mapRegions4.Add(region);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/26ab17fb0c2f1e36cccded12b11bf7e8/image.png">
+
+<br>
+
+### 5. TabControl
+
+- TabControl은 label이 지정된 파일 폴더의 집합처럼 보이는 panel이다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="1" Grid.Column="0">
+      <TabControl>
+          <TabItem Header="Tab 1">
+              <StackPanel>
+                  <TextBlock>This is text on Tab 1.</TextBlock>
+              </StackPanel>
+          </TabItem>
+          <TabItem Header="Tab 2">
+              <StackPanel>
+                  <TextBlock>This is text on Tab 2.</TextBlock>
+              </StackPanel>
+          </TabItem>
+          <TabItem Header="Tab 3">
+              <StackPanel>
+                  <TextBlock>This is text on Tab 3.</TextBlock>
+              </StackPanel>
+          </TabItem>
+      </TabControl>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/5e6c31facb90f686459c81f2ea318dc3/image.png">
+
+<br>
+
+### 5-1. TabControl
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <TabControl Name="simpleTabs51"/>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public MainWindow()
+      {
+          TabItem ti1 = new TabItem();
+          ti1.Header = "Tab 1";
+          ti1.Content = "This is text on Tab 1.";
+          simpleTabs51.Items.Add(ti1);
+
+          TabItem ti2 = new TabItem();
+          ti2.Header = "Tab 2";
+          ti2.Content = "This is text on Tab 2.";
+          simpleTabs51.Items.Add(ti2);
+
+          TabItem ti3 = new TabItem();
+          ti3.Header = "Tab 3";
+          ti3.Content = "This is text on Tab 3.";
+          simpleTabs51.Items.Add(ti3);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/87d8db1287b2e1762061c81d6f6a6b69/image.png">
+
+<br>
+
+### 6. Calendar 컨트롤
+
+- Calendar Control에는 사용자가 날짜를 선택할 수 있는 그래픽 달력이 표시된다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Calendar Name="cal6" SelectionMode="MultipleRange">
+          <Calendar.BlackoutDates>
+              <CalendarDateRange Start="10/8/2018" End="10/10/2018"/>
+              <CalendarDateRange Start="10/18/2018" End="10/22/2018"/>
+          </Calendar.BlackoutDates>
+      </Calendar>
+      <TextBlock Text="Selected Date" FontWeight="Bold" Margin="5 5 5 2"/>
+      <TextBlock Margin="20 0" Text="{Binding ElementName=cal6, Path=SelectedDate}"/>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/4a96e927172b6d0ab0ef73f8bc786fa6/image.png">
+
+<br>
+
+### 6-1. Calendar 컨트롤
+
+- Calendar Control에는 사용자가 날짜를 선택할 수 있는 그래픽 달력이 표시된다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <Calendar Name="cal61" SelectionMode="MultipleRange"
+            DisplayDateStart="10/10/2018"
+            DisplayDateEnd="10/26/2018"/>
+      <TextBlock Text="Selected Date" FontWeight="Bold"
+             Margin="5,5,5,2"/>
+      <TextBlock Margin="20,0"
+             Text="{Binding ElementName=cal61, Path=SelectedDate}"  />
+  </StackPanel>
+
+  ```
+- 결과  
+  <img src="/uploads/838f9873fbeac6ca25d3e6f17165a4f8/image.png">
+- Calendar Control에서 쓰이는 중요한 속성들은 다음과 같다.
+  - DisplayDateStart
+  - DisplayDateEnd
+  - DisplayMode
+  - SelectionMode
+  - BlackoutDates
+  - SelectedDate
+  - SelectedDates
+  - IsTodayHighlighted
+
+<br>
+
+### 7. DatePicker 컨트롤
+
+- DatePicker 컨트롤을 사용하면 TextBox에 텍스트를 입력하거나 DatePicker의 기본 제공 캘린더 컨트롤을 사용하여 날짜를 입력할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <DatePicker Name="datePicker62" HorizontalAlignment="Left"
+              Width="110" Margin="5"
+              DisplayDateStart="10/10/2018"
+              DisplayDateEnd="10/30/2018"/>
+      <TextBlock Text="Selected Date" FontWeight="Bold"
+             Margin="5 5 5 2"/>
+      <TextBlock Margin="20 0" Text="{Binding ElementName=datePicker62, Path=SelectedDate}"/>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/06c09e2dd384d90f7573b0cf9f0ee6e3/image.png">
+
+<br>
+
+### 8. DataGrid 컨트롤
+
+- WPF 4.0에 도입된 DataGrid 컨트롤은 2차원 데이터의 그리드를 표시한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <DataGrid Name="dg" AutoGenerateColumns="False" Margin="10">
+          <DataGrid.Columns>
+              <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name"/>
+              <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name"/>
+              <DataGridCheckBoxColumn Binding="{Binding HasRoadster}" Header="Has Roadster" Width="SizeToHeader"/>
+              <DataGridTextColumn Binding="{Binding Age}" Header="Age" Width="*"/>
+          </DataGrid.Columns>
+      </DataGrid>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  class Person
+  {
+      public string FirstName { get; set; }
+      public string LastName { get; set; }
+      public int Age { get; set; }
+      public bool HasRoadster { get; set; }
+
+      public Person(string fName, string lName, int age, bool hasRoadster)
+      {
+          FirstName = fName;
+          LastName = lName;
+          Age = age;
+          HasRoadster = hasRoadster;
+      }
+  }
+
+  public partial class MainWindow : Window
+  {
+      List<Person> _people = new List<Person>();
+
+      public MainWindow()
+      {
+          _people.Add(new Person("Sherlock", "Holmes", 54, false));
+          _people.Add(new Person("Jane", "Marple", 60, false));
+          _people.Add(new Person("Nancy", "Drew", 16, true));
+          _people.Add(new Person("Charlie", "Chan", 50, false));
+
+          dg.ItemsSource = _people;
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/0ce78c200da53739738e81caf4a23835/image.png">
+
+<br>
+
+
+### 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_16.Tree_Tab_anotherControls.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_16.Tree_Tab_anotherControls"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+  
+      <Window.Resources>
+  
+          <HierarchicalDataTemplate DataType="{x:Type local:WorldRegion}"
+                                  ItemsSource="{Binding Path=Maps}">
+              <TextBlock Text="{Binding Path=RegionName}" Foreground="Gray"/>
+          </HierarchicalDataTemplate>
+          <HierarchicalDataTemplate DataType="{x:Type local:MapInfo}">
+              <TextBlock Text="{Binding Path=LastName}"/>
+          </HierarchicalDataTemplate>
+  
+      </Window.Resources>
+      
+      <Grid ShowGridLines="False">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 2. HierarchicalDataTemplate -->
+          <Grid Grid.Row="0" Grid.Column="0">
+              <TreeView Name="oldMaps2" Grid.Column="0" FontWeight="Bold"/>
+          </Grid>
+  
+  
+          <!-- 2-1. HierarchicalDataTemplate -->
+          <Grid Grid.Row="0" Grid.Column="1">
+              <TreeView Name="oldMaps21" Grid.Column="0" FontWeight="Bold"/>
+          </Grid>
+  
+          <!-- 3. TreeView EventHandler -->
+          <Grid Grid.Row="0" Grid.Column="2">
+              <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="3*"/>
+                  <ColumnDefinition Width="2*"/>
+              </Grid.ColumnDefinitions>
+              <TreeView Name="oldMaps3" Grid.Column="0" FontWeight="Bold"
+                    SelectedItemChanged="oldMaps_SelectedItemChanged"/>
+              <StackPanel Grid.Column="1" TextBlock.FontWeight="Bold">
+                  <TextBlock Name="name" Margin="10 5 0 0"/>
+                  <TextBlock Name="title" Margin="10 0 0 0"/>
+                  <TextBlock Name="date" Margin="20 0 0 0"/>
+                  <TextBlock Name="desc" Margin="10 10 0 0"/>
+              </StackPanel>
+          </Grid>
+  
+          <!-- 4. TreeView Binding -->
+          <Grid Grid.Row="0" Grid.Column="3">
+              <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="2*"/>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="3*"/>
+              </Grid.ColumnDefinitions>
+              <TreeView Name="oldMaps4" Grid.Column="0" FontWeight="Bold"/>
+              <GridSplitter Grid.Column="1" Width="2" Background="DarkGray"
+                        VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+              <DockPanel Grid.Column="2">
+                  <StackPanel DockPanel.Dock="Top">
+                      <Border BorderBrush="DarkGray" BorderThickness="1"
+                          Margin="3" Padding="3">
+                          <StackPanel Orientation="Horizontal" TextBlock.FontWeight="Bold">
+                              <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.FirstName}"/>
+                              <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.LastName}"
+                                     Margin="5 0 0 0"/>
+                          </StackPanel>
+                      </Border>
+                      <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.Title}"
+                             Margin="10 0 0 0"/>
+                      <TextBlock Text="{Binding ElementName=oldMaps4, Path=SelectedItem.Year}"
+                             Margin="20 0 0 0"/>
+                  </StackPanel>
+                  <Viewbox Stretch="Uniform" Margin="2">
+                      <Image Source="{Binding ElementName=oldMaps4, Path=SelectedItem.Picture}"/>
+                  </Viewbox>
+              </DockPanel>
+          </Grid>
+  
+  
+          <!-- 5. TabControl -->
+  
+          <Grid Grid.Row="1" Grid.Column="0">
+              <TabControl>
+                  <TabItem Header="Tab 1">
+                      <StackPanel>
+                          <TextBlock>This is text on Tab 1.</TextBlock>
+                      </StackPanel>
+                  </TabItem>
+                  <TabItem Header="Tab 2">
+                      <StackPanel>
+                          <TextBlock>This is text on Tab 2.</TextBlock>
+                      </StackPanel>
+                  </TabItem>
+                  <TabItem Header="Tab 3">
+                      <StackPanel>
+                          <TextBlock>This is text on Tab 3.</TextBlock>
+                      </StackPanel>
+                  </TabItem>
+              </TabControl>
+          </Grid>
+  
+          <!-- 5-1. TabControl -->
+          <Grid Grid.Row="1" Grid.Column="1">
+              <TabControl Name="simpleTabs51"/>
+          </Grid>
+  
+          <!-- 6. Calendar Control -->
+          <StackPanel Grid.Row="1" Grid.Column="2">
+              <Calendar Name="cal6" SelectionMode="MultipleRange">
+                  <Calendar.BlackoutDates>
+                      <CalendarDateRange Start="10/8/2018" End="10/10/2018"/>
+                      <CalendarDateRange Start="10/18/2018" End="10/22/2018"/>
+                  </Calendar.BlackoutDates>
+              </Calendar>
+              <TextBlock Text="Selected Date" FontWeight="Bold" Margin="5 5 5 2"/>
+              <TextBlock Margin="20 0" Text="{Binding ElementName=cal6, Path=SelectedDate}"/>
+          </StackPanel>
+          
+          <!-- 6-1. Calendar Control -->
+          <StackPanel Grid.Row="1" Grid.Column="3">
+              <Calendar Name="cal61" SelectionMode="MultipleRange"
+                    DisplayDateStart="10/10/2018"
+                    DisplayDateEnd="10/26/2018"/>
+              <TextBlock Text="Selected Date" FontWeight="Bold"
+                     Margin="5,5,5,2"/>
+              <TextBlock Margin="20,0"
+                     Text="{Binding ElementName=cal61, Path=SelectedDate}"  />
+          </StackPanel>
+  
+          <!-- 7. DatePicker Control -->
+          <StackPanel Grid.Row="2" Grid.Column="0">
+              <DatePicker Name="datePicker62" HorizontalAlignment="Left"
+                      Width="110" Margin="5"
+                      DisplayDateStart="10/10/2018"
+                      DisplayDateEnd="10/30/2018"/>
+              <TextBlock Text="Selected Date" FontWeight="Bold"
+                     Margin="5 5 5 2"/>
+              <TextBlock Margin="20 0" Text="{Binding ElementName=datePicker62, Path=SelectedDate}"/>
+          </StackPanel>
+  
+          <!-- 8. DataGrid Control -->
+          <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
+              <DataGrid Name="dg" AutoGenerateColumns="False" Margin="10">
+                  <DataGrid.Columns>
+                      <DataGridTextColumn Binding="{Binding FirstName}" Header="First Name"/>
+                      <DataGridTextColumn Binding="{Binding LastName}" Header="Last Name"/>
+                      <DataGridCheckBoxColumn Binding="{Binding HasRoadster}" Header="Has Roadster" Width="SizeToHeader"/>
+                      <DataGridTextColumn Binding="{Binding Age}" Header="Age" Width="*"/>
+                  </DataGrid.Columns>
+              </DataGrid>
+          </StackPanel>
+  
+      </Grid>
+  </Window>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Collections.Generic;
+  using System.Windows;
+  using System.Windows.Controls;
+  
+  namespace _16.Tree_Tab_anotherControls
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+              _2_HierarchicalDataTemplate();
+              _2_1_HierarchicalDataTemplate();
+  
+              _3_TreeView_EventHandler();
+  
+              _4_TreeView_Binding();
+  
+              _5_1_TabControl();
+  
+              _8_DataGrid_Control();
+          }
+  
+      }
+  }
+  
+  // 2. HierarchicalDataTemplate
+  namespace _16.Tree_Tab_anotherControls
+  {
+      class MapInfo
+      {
+          public string LastName { get; set; }
+          public string FirstName { get; set; }
+          public string Title { get; set; }
+          public string Year { get; set; }
+          public string Description { get; set; }
+          public Uri Picture { get; set; }
+  
+          public MapInfo(string ln, string fn, string title, string year, string desc, string picUri)
+          {
+              LastName = ln;
+              FirstName = fn;
+              Title = title;
+              Year = year;
+              Description = desc;
+              string uriString = string.Format("Images/{0}", picUri);
+              Picture = new Uri(uriString, UriKind.Relative);
+          }
+      }
+  
+      class WorldRegion
+      {
+          public string RegionName { get; set; }
+          public List<MapInfo> Maps { get; set; }
+          public WorldRegion(string name)
+          {
+              Maps = new List<MapInfo>();
+              RegionName = name;
+          }
+      }
+  
+      public partial class MainWindow : Window
+      {
+          List<WorldRegion> mapRegions2;
+  
+          public void _2_HierarchicalDataTemplate()
+          {
+              mapRegions2 = new List<WorldRegion>();
+              CreateMapsDataStructure();
+              oldMaps2.ItemsSource = mapRegions2;
+          }
+  
+          private void CreateMapsDataStructure()
+          {
+              WorldRegion region = new WorldRegion("Double Hemisphere");
+              region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+              region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+              mapRegions2.Add(region);
+  
+              region = new WorldRegion("Western Hemisphere");
+              region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+              mapRegions2.Add(region);
+  
+              region = new WorldRegion("Eastern Hemisphere");
+              region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+              region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+              mapRegions2.Add(region);
+          }
+      }
+  }
+  
+  // 2-1. HierarchicalDataTemplate
+  namespace _16.Tree_Tab_anotherControls
+  {
+  
+      public partial class MainWindow : Window
+      {
+          List<WorldRegion> mapRegions21;
+  
+          public void _2_1_HierarchicalDataTemplate()
+          {
+              mapRegions21 = new List<WorldRegion>();
+              CreateMapsDataStructure21();
+              oldMaps21.ItemsSource = mapRegions21;
+          }
+  
+          private void CreateMapsDataStructure21()
+          {
+              WorldRegion region = new WorldRegion("Double Hemisphere");
+              region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+              region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+              mapRegions21.Add(region);
+  
+              region = new WorldRegion("Western Hemisphere");
+              region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+              mapRegions21.Add(region);
+  
+              region = new WorldRegion("Eastern Hemisphere");
+              region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+              region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+              mapRegions21.Add(region);
+          }
+      }
+  }
+  
+  // 3. TreeView EventHandler
+  namespace _16.Tree_Tab_anotherControls
+  {
+      public partial class MainWindow : Window
+      {
+          List<WorldRegion> mapRegions3;
+  
+          public void _3_TreeView_EventHandler()
+          {
+              mapRegions3 = new List<WorldRegion>();
+              CreateMapsDataStructure3();
+              oldMaps3.ItemsSource = mapRegions3;
+          }
+  
+          private void CreateMapsDataStructure3()
+          {
+              WorldRegion region = new WorldRegion("Double Hemisphere");
+              region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+              region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+              mapRegions3.Add(region);
+  
+              region = new WorldRegion("Western Hemisphere");
+              region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+              mapRegions3.Add(region);
+  
+              region = new WorldRegion("Eastern Hemisphere");
+              region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+              region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+              mapRegions3.Add(region);
+          }
+  
+          private void oldMaps_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+          {
+              MapInfo map = oldMaps3.SelectedItem as MapInfo;
+              if (map == null)
+                  return;
+  
+              name.Text = map.LastName + "," + map.FirstName;
+              title.Text = map.Title;
+              date.Text = map.Year;
+              desc.Text = map.Description;
+          }
+      }
+  }
+  
+  // 4. TreeView Binding
+  namespace _16.Tree_Tab_anotherControls
+  {
+      public partial class MainWindow : Window
+      {
+          List<WorldRegion> mapRegions4;
+  
+          public void _4_TreeView_Binding()
+          {
+              mapRegions4 = new List<WorldRegion>();
+              CreateMapsDataStructure4();
+              oldMaps4.ItemsSource = mapRegions4;
+          }
+  
+          private void CreateMapsDataStructure4()
+          {
+              WorldRegion region = new WorldRegion("Double Hemisphere");
+              region.Maps.Add(new MapInfo("Seutter", "Mattheus", "Diversi Globi Terr-Aquei", "c.1730", "Double hemisphere", "Seutter.jpg"));
+              region.Maps.Add(new MapInfo("Stoopendahl", "Daniel", "Orbis Terrarum", "c. 1680", "Double hemisphere", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Valck", "Gerard", "Mappe Monde", "c. 1700", "Double Hemisphere", "Valck.jpg"));
+              mapRegions4.Add(region);
+  
+              region = new WorldRegion("Western Hemisphere");
+              region.Maps.Add(new MapInfo("Sanson", "Nicholas", "California as an Island", "c. 1657", "Calif. as an island", "Sanson.jpg"));
+              mapRegions4.Add(region);
+  
+              region = new WorldRegion("Eastern Hemisphere");
+              region.Maps.Add(new MapInfo("Bowen", "Emanuel", "Spain and Portugal", "c. 1752", "Spain and Portugal", "Stoopendahl.jpg"));
+              region.Maps.Add(new MapInfo("Janvier", "Jean", "Les Isles Britanniques", "c. 1762", "The British Isles", "Janvier.jpg"));
+              region.Maps.Add(new MapInfo("Mortier", "Pierre", "Les Isles Britanniques", "c. 1738", "The British Isles", "Stoopendahl.jpg"));
+              mapRegions4.Add(region);
+          }
+      }
+  }
+  
+  // 5-1. TabControl
+  namespace _16.Tree_Tab_anotherControls
+  {
+      public partial class MainWindow : Window
+      {
+  
+          public void _5_1_TabControl()
+          {
+              TabItem ti1 = new TabItem();
+              ti1.Header = "Tab 1";
+              ti1.Content = "This is text on Tab 1.";
+              simpleTabs51.Items.Add(ti1);
+  
+              TabItem ti2 = new TabItem();
+              ti2.Header = "Tab 2";
+              ti2.Content = "This is text on Tab 2.";
+              simpleTabs51.Items.Add(ti2);
+  
+              TabItem ti3 = new TabItem();
+              ti3.Header = "Tab 3";
+              ti3.Content = "This is text on Tab 3.";
+              simpleTabs51.Items.Add(ti3);
+          }
+      }
+  }
+  
+  // 8. DataGrid Control
+  namespace _16.Tree_Tab_anotherControls
+  {
+      class Person
+      {
+          public string FirstName { get; set; }
+          public string LastName { get; set; }
+          public int Age { get; set; }
+          public bool HasRoadster { get; set; }
+  
+          public Person(string fName, string lName, int age, bool hasRoadster)
+          {
+              FirstName = fName;
+              LastName = lName;
+              Age = age;
+              HasRoadster = hasRoadster;
+          }
+      }
+  
+      public partial class MainWindow : Window
+      {
+          List<Person> _people = new List<Person>();
+  
+          public void _8_DataGrid_Control()
+          {
+              _people.Add(new Person("Sherlock", "Holmes", 54, false));
+              _people.Add(new Person("Jane", "Marple", 60, false));
+              _people.Add(new Person("Nancy", "Drew", 16, true));
+              _people.Add(new Person("Charlie", "Chan", 50, false));
+  
+              dg.ItemsSource = _people;
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="">
 
 
 <br><br><br>
@@ -8078,8 +9043,350 @@
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
+- <img src="/uploads/7f9097cf49b80057997079cf09bac6e0/image.png" width="70%">
 
+### 1. WPF에서 Text 표시 방법
+
+- WPF가 텍스트를 표시하는 방법을 배우게 된다.
+- WPF는 다음과 같은 유형의 텍스트를 표시하는 방법을 제공한다.
+  - Fixed documents
+    - 이 문서는 고정된 형식으로 작성된 문서이다.
+    - 사용자는 문서를 페이지별로 볼 수 있지만 창 크기에 상관없이 문서의 페이지와 형식은 변경되지 않는다.
+    - 이 파일은 Adobe PDF 파일과 유사하다.
+  - Flow documents
+    - 이 문서는 HTML 페이지와 유사한 방식으로 작동한다.
+    - 사용자가 창의 크기를 변경하면 호스팅 프로그램(HTML의 경우 브라우저)은 새로운 크기와 창에 맞게 텍스트의 레이아웃을 재조정한다.
+  - TextBlock element
+    - 텍스트 형식을 지정할 수 있는 TextBox element의 고급 버전이다.
+
+<br>
+
+### 2. Flow Document 개요
+
+- Flow document에 대한 주요사항이다.
+  - 텍스트는 창의 크기에 맞게 자동으로 작성된다.
+  - 쉽게 볼 수 있도록 텍스트가 자동으로 column에 배치된다. 창이 너무 좁아서 산만해지면 WPF는 하나의 column에 텍스트를 배치한다.
+  - 텍스트는 문서를 탐색하고 볼 수 있는 기본 툴을 제공하는 컨테이너에서 호스트 된다.
+
+
+<br>
+
+### 3. Flow Document의 구성요소 - The Hosting Controls
+
+- Flow document 프로그램의 구조는 세 개의 주요한 파트로 구성되어있다.
+  - Hosting control은 응용 프로그램에서 사용할 수 있는 Viewing 모드 또는 모드를 결정한다. 창 아래쪽에 있는 내장 툴도 결정한다.
+  - FlowDocument element는 문서의 content를 담고 있는 컨테이너이다.
+  - FlowDocument의 content는 문서의 실제 내용을 보관하고 관리하는 여러 컨테이너로 구성된다.
+- 호스팅 컨트롤을 FlowDocumentReader를 사용한 예시를 만들어본다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <FlowDocumentReader x:Class="Chapter17_01_Hosting_Controls.MainWindow"
+          ...>
+      <FlowDocument>
+          <Paragraph FontSize="20" FontWeight="Bold">
+              <Run>Simple Flow Document</Run>
+          </Paragraph>
+      </FlowDocument>
+  </FlowDocumentReader>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : FlowDocumentReader
+  { ...
+  ```
+- 결과  
+  <img src="/uploads/1aefe6def56044032911ac92b13d576c/image.png">
+
+<br>
+
+### 4. Flow Document의 Content
+
+- 호스팅 컨트롤 세 개 모두 content로 하나의 FlowDocument element 가 필요하다.
+- FlowDocument는 내용의 컨테이너이다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <FlowDocument>
+      <Paragraph>
+          <Run>"Lorem ipsum" text is Latin text that printers
+          and designers use to display layout designs or
+          typefaces. It can also be used to stand in
+          for actual text that will be supplied later.</Run>
+          <Run>Using</Run>
+          <Italic>lorem text</Italic>
+          <Run>allows the viewer to concentrate on the layout or typeface rather than the content.</Run>
+      </Paragraph>
+      <Paragraph>
+          <Run>
+              The text is based on a passage from Cicero, but
+              is not a direct quotation. It was used by early
+              printers starting in the 1500's or early 1600's.
+          </Run>
+      </Paragraph>
+  </FlowDocument>
+  ```
+- 결과  
+  <img src="/uploads/1245ece9a7315869abfcf27c50fa47da/image.png" width="15%">
+
+<br>
+
+### 4-1. Flow document를 작성하는 다양한 element 타입
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <FlowDocument>
+      <Paragraph FontSize="22" FontWeight="Bold">
+          Simple Flow Document
+      </Paragraph>
+      <Section>
+          <Paragraph FontSize="18">
+              <Bold>First Section</Bold>
+          </Paragraph>
+          <Paragraph>
+              Lorem ipsum dolor sit amet, ... consequat massa eros sed purus.
+          </Paragraph>
+          <Paragraph>
+              Ut elementum erat et mattis. Quisque ... malesuada libero.
+              <Bold>
+                  <Underline>Vivamus ante odio</Underline></Bold>
+              volupat non mollis quis, vulputate vel justo.
+          </Paragraph>
+      </Section>
+      <Section>
+          <Paragraph FontSize="18">
+              <Bold>Second Section</Bold>
+          </Paragraph>
+          <Paragraph>
+              Pellentesque cursus consectetur augue in aliquet. In sapien dui, lacinia nec condimentum ac, aliquam a erat.
+          </Paragraph>
+      </Section>
+  </FlowDocument>
+  ```
+- 결과  
+  <img src="/uploads/eabc7f40eb763bc0350489e8bdd53302/image.png">
+
+
+<br>
+
+### 4-2. Tables and Lists
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <FlowDocument>
+      <Paragraph>This is a simple list.</Paragraph>
+      <List>
+          <ListItem>
+              <Paragraph>Lorem ipsum dolor sit amet ...</Paragraph>
+          </ListItem>
+          <ListItem>
+              <Paragraph>Nemo enim ipsam voluptatem quia voluptas ...</Paragraph>
+          </ListItem>
+          <ListItem>
+              <Paragraph>Neque porro quisquam est, qui ...</Paragraph>
+          </ListItem>
+      </List>
+  </FlowDocument>
+  ```
+- 결과  
+  <img src="/uploads/bc9b7d1d71562c646295bdbf4bab8058/image.png">
+
+<br>
+
+### 4-3. Tables and Lists
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <FlowDocument>
+      <Paragraph>
+          The following is a table of information about several antique maps.
+      </Paragraph>
+      <Table>
+          <Table.Columns>
+              <TableColumn Width="150"/>
+              <TableColumn Width="60"/>
+              <TableColumn Width="200"/>
+          </Table.Columns>
+          <TableRowGroup>
+              <TableRow FontSize="18" FontWeight="Bold">
+                  <TableCell>
+                      <Paragraph>Cartographer</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>Year</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>Name</Paragraph>
+                  </TableCell>
+              </TableRow>
+              <TableRow>
+                  <TableCell>
+                      <Paragraph>Seutter</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>1730</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>
+                          <Italic>Diversi Globi Terr-Aquei</Italic>
+                      </Paragraph>
+                  </TableCell>
+              </TableRow>
+              <TableRow>
+                  <TableCell>
+                      <Paragraph>Stoopendahl</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>1680</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>
+                          <Italic>Orbis Terrarum</Italic>
+                      </Paragraph>
+                  </TableCell>
+              </TableRow>
+              <TableRow>
+                  <TableCell>
+                      <Paragraph>Valck</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>1700</Paragraph>
+                  </TableCell>
+                  <TableCell>
+                      <Paragraph>
+                          <Italic>Mappe Monde</Italic>
+                      </Paragraph>
+                  </TableCell>
+              </TableRow>
+          </TableRowGroup>
+      </Table>
+  </FlowDocument>
+  ```
+- 결과  
+  <img src="/uploads/e1ad68f11e0ba588405013cc0c51829c/image.png">
+
+<br>
+
+### 5. 내장된 Flow Document
+
+- 두 개의 column이 있는 그리드가 포함된 window가 표시된다.
+- 왼쪽 column에는 버튼 3개인 StackPanel이 있고 오른쪽 column에는 flow document를 포함하는 Border가 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window ...
+          Title="MainWindow" Height="205" Width="520">
+      <Grid>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="auto"/>
+              <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Grid.Column="0">
+              <Button VerticalAlignment="Top" Margin="3">Button 1</Button>
+              <Button VerticalAlignment="Top" Margin="3">Button 2</Button>
+              <Button VerticalAlignment="Top" Margin="3">Button 3</Button>
+          </StackPanel>
+          <Border Grid.Column="1" BorderBrush="Black"
+                  BorderThickness="1" Margin="3">
+              <FlowDocumentReader>
+                  <FlowDocument>
+                      <Paragraph>
+                          <Run>
+                              "Lorem ipsum" text is Latin text that printers
+                              and designers use to display layout designs or
+                              typefaces. The text is based on a passage from
+                              Cicero, but is not a direct quotation. It was
+                              used by early printers starting in the 1500's
+                              or early 1600's.
+                          </Run>
+                      </Paragraph>
+                  </FlowDocument>
+              </FlowDocumentReader>
+          </Border>
+      </Grid>
+  </Window>
+  ```
+- 결과  
+  <img src="/uploads/aad131797d464603ad94b52042ca4a00/image.png">
+
+<br>
+
+### 6. TextBlock
+
+- TextBlock은 적은 양의 텍스트를 표시하는 간단한 방법이다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <TextBlock TextWrapping="Wrap">
+      I know you believe you understand what you think I said.
+      But what you fail to realize is that what you heard is not what I meant.
+      </TextBlock>
+  </Grid>
+
+  ```
+- 결과  
+  <img src="/uploads/816bc61a4ed942f0708874fe41d8f0b0/image.png">
+
+<br>
+
+### 6-1. TextBlock
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <TextBlock Margin="10" TextWrapping="Wrap">
+      <Italic>
+          I know you believe you understand what you think I said.
+      </Italic>
+      But you <Bold>fail to realize</Bold>
+      is that what you heard is 
+      <Italic><Bold>not what I meant</Bold></Italic>.
+      </TextBlock>
+      <TextBlock HorizontalAlignment="Left" FontSize="15" Margin="10 0">
+      Push 'em to the left.
+      </TextBlock>
+      <TextBlock HorizontalAlignment="Right" FontSize="15" Margin="10 0">
+      Push 'em to the right.
+      </TextBlock>
+      <TextBlock HorizontalAlignment="Center" FontSize="15">
+      Stand up. sit down.<LineBreak/><Italic>fight, fight, fight!</Italic>
+      </TextBlock>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/b68120797ded896d4649bbd9b85a33e7/image.png">
+
+
+<br>
+
+###  6-2. TextBlock
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">
+          <TextBlock.BitmapEffect>
+              <DropShadowBitmapEffect Color="Black" ShadowDepth="4" Direction="330"
+                                  Opacity="0.5" Softness="0.25"/>
+          </TextBlock.BitmapEffect>
+      Drop Shadow Text
+      </TextBlock>
+      <TextBlock TextWrapping="Wrap" Margin="10">
+      Below is a <Span FontFamily="Courier New">TextBlock</Span>
+      containing a <Span FontFamily="Courier New">CheckBox</Span>
+      and a <Span FontFamily="Courier New">ToolBar</Span>
+      with two <Span FontFamily="Courier New">Button</Span>s.
+      </TextBlock>
+      <TextBlock>
+      <CheckBox></CheckBox>
+      <ToolBar>
+          <Button>Button 1</Button>
+          <Button>Button 2</Button>
+      </ToolBar>
+      </TextBlock>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/576a77299beebce4f18c0bd27d9ae722/image.png">
+
+<br>
 
 <br><br><br>
 
