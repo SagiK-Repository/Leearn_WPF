@@ -10592,7 +10592,7 @@
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
+- <img src="/uploads/0c6188f018b21800dbde8b3d7bd973fa/image.png" width="70%">
 
 
 <br><br><br>
