@@ -10594,6 +10594,632 @@
 
 - <img src="/uploads/0c6188f018b21800dbde8b3d7bd973fa/image.png" width="70%">
 
+### 1. Animation이란?
+
+- Graphic Animation은 프레임의 연속이다. 프레임이 연속적으로 빠르게 표시되면 프레임의 개체가 이동하는 것처럼 보인다. 
+- WPF가 일정 기간 동안 매우 작은 증가로 한 값에서 다른 값으로 순차적으로 변경되는 과정을 말한다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid Grid.Row="0" Grid.Column="0">
+      <Button Name="myButton1" FontWeight="Bold" Height="40" Width="150">
+          Click Me
+      </Button>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void MainWindow()
+      {
+          // FontSize는 double 형이므로 DoubleAnimation
+          DoubleAnimation animationFontSize = new DoubleAnimation();
+
+          animationFontSize.From = 12.0; // 시작 값
+          animationFontSize.To = 22.0; // 종료 값
+          animationFontSize.Duration = TimeSpan.Parse("0:0:2"); // 실행할 기간
+
+          myButton1.BeginAnimation( FontSizeProperty, animationFontSize );
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/5e3f0594ce0445010daa03b7215de94b/image.png">
+
+<br>
+
+
+### 2. Animation Object 기초
+
+- 속성에 애니메이션을 적용하려면 해당 속성의 타입에 해당하는 애니메이션 클래스를 사용해야 한다.
+
+
+| Category   | Types                                                                                  |
+|------------|----------------------------------------------------------------------------------------|
+| .NET types | Byte, Decimal, Double, Int16, Int32, Int64, Single                                     |
+| WPF types  | Color, Point, Point3D, Quaternion, Rect, Rotation3D, Size, Thickness, Vector, Vector3D |
+
+
+
+<br>
+
+### 3. AnimationClock 클래스
+
+- AnimationClock 객체 : 이 객체는 애니메이션 시작 이후의 시간을 추적한다.
+- DoubleAnimation 객체 : 이 객체는 타임라인을 설명하고 AnimationClock 에 의해 쿼리 될 때 double 타입의 값을 생성한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Button Name="myButton3" FontWeight="Bold" Height="60" Width="60" >Click Me</Button>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void MainWindow()
+      {
+          DoubleAnimation animateSize = new DoubleAnimation();
+          animateSize.From = 60.0;
+          animateSize.To = 100.0;
+          animateSize.Duration = TimeSpan.Parse("0:0:2"); // 실행할 기간
+
+          myButton3.BeginAnimation(HeightProperty, animateSize);
+          myButton3.BeginAnimation(WidthProperty, animateSize);
+      }
+  }
+
+  ```
+- 결과  
+  <img src="/uploads/f2fe0668805ab6ae871ff290a75ba8c8/image.png">
+
+
+<br>
+
+### 4. Storyboards
+
+- 세트로 수행되는 애니메이션 그룹을 설정하는 경우에는 Storyboard 클래스를 사용한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Button Name="myButton4" FontWeight="Bold" Height="40" Width="150">
+          Click Me
+      </Button>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void _4_StoryBoards()
+      {
+          DoubleAnimation animateFontSize = new DoubleAnimation();
+          animateFontSize.From = 12.0;
+          animateFontSize.To = 22.0;
+          animateFontSize.Duration = TimeSpan.Parse("0:0:2");
+
+          DoubleAnimation animateHeight = new DoubleAnimation();
+          animateHeight.From = 40.0;
+          animateHeight.To = 80.0;
+          animateHeight.Duration = TimeSpan.Parse("0:0:2");
+
+          Storyboard sb = new Storyboard();
+          sb.Duration = TimeSpan.Parse("0:0:2");
+
+          sb.Children.Add(animateFontSize);
+          sb.Children.Add(animateHeight);
+
+          //FontSize 애니메이션에 버튼의 FontSize 속성을 연결.
+          Storyboard.SetTargetName(animateFontSize, "myButton4");
+          Storyboard.SetTargetProperty(animateFontSize, new PropertyPath(Button.FontSizeProperty));
+
+          //Height 애니메이션에 버튼의 Height 속성을 연결.
+          Storyboard.SetTargetName(animateHeight, "myButton4");
+          Storyboard.SetTargetProperty(animateHeight, new PropertyPath(Button.HeightProperty));
+
+          sb.Begin(myButton4);
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/fa3d24770a0f1853ed67442a5d4f93bb/image.png">
+
+
+<br>
+
+### 4_1. 마크업(XAML)에서 Storyboard
+
+- Storyboard animation은 마크업(xaml)으로 제작할 수 있다. 
+
+<br>
+
+### 5. Animation의 변형
+
+- 애니메이션에는 값(시작 값과 끝 점 사이의 값)을 변경할 수 있는 두 가지 변형이 있다. 
+  - animation with keyframes 
+    - 진행 중인 다양한 지점에서 속성의 특정 값을 설정할 수 있다.
+  - animation along a path
+    - 경로를 따라 객체의 위치를 이동할 수 있다.
+
+<br>
+
+### 6. Keyframe Animations
+
+- Keyframe은 타임라인의 포인트를 나타내는 개체이다.
+  - KeyTime 속성
+    - 타임라인의 시간을 지정한다.
+    - 애니메이션 시작 시간으로부터의 offset으로 표시된다.
+  - Value 속성
+    - 해당 시점에 dependency 속성에 포함되어야 하는 값을 지정한다.
+- Linear Keyframe Animation
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Canvas Grid.Row="0" Grid.Column="3">
+      
+      <Button Canvas.Top="20" Canvas.Left="0" Content="Hi" Padding="7 3">
+          
+          <Button.Triggers>
+              <EventTrigger RoutedEvent="Button.MouseEnter">
+                  <EventTrigger.Actions>
+                      
+                      
+                      <BeginStoryboard>
+                          <Storyboard>
+                              <DoubleAnimationUsingKeyFrames
+                          	Storyboard.TargetProperty="(Canvas.Left)"
+                              	Duration="0:0:5">
+                                  <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                  <LinearDoubleKeyFrame KeyTime="0:0:0.4" Value="160"/>
+                                  <LinearDoubleKeyFrame KeyTime="0:0:0.8" Value="40"/>
+                                  <LinearDoubleKeyFrame KeyTime="0:0:1.2" Value="120"/>
+                                  <LinearDoubleKeyFrame KeyTime="0:0:1.6" Value="80"/>
+                                  <LinearDoubleKeyFrame KeyTime="0:0:2" Value="100"/>
+                              </DoubleAnimationUsingKeyFrames>
+
+                              <DoubleAnimation From="20" To="120"
+                                           Storyboard.TargetProperty="(Canvas.Top)"
+                                           Duration="0:0:2"/>
+                          </Storyboard>
+                      </BeginStoryboard>
+                      
+                      
+                  </EventTrigger.Actions>
+              </EventTrigger>
+          </Button.Triggers>
+          
+      </Button>
+  </Canvas>
+  ```
+- 결과  
+  <img src="/uploads/f6b2fb21531ae7cce526b21f2edce8dd/image.png">
+
+<br>
+
+### 6_1. Spline Interpolation Animations
+
+- 키프레임 애니메이션은 두 개의 연속 키프레임간에 각각 linear interpolation 을 수행한다.
+- Spline keyframe 애니메이션은 Bezier 곡선을 사용하여 이전 타임라인 세그먼트로부터의 전환을 보다 부드럽게 만든다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Canvas Grid.Row="1" Grid.Column="0">
+      
+      <Button Canvas.Top="20" Canvas.Left="0" Content="Hi" Padding="7 3">
+          
+          <Button.Triggers>
+              <EventTrigger RoutedEvent="Button.MouseEnter">
+                  <EventTrigger.Actions>
+                      
+                      
+                      <BeginStoryboard>
+                          <Storyboard>
+                              <DoubleAnimationUsingKeyFrames
+                          	Storyboard.TargetProperty="(Canvas.Left)"
+                              	Duration="0:0:5">
+                                  <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                  <SplineDoubleKeyFrame KeyTime="0:0:2" Value="180"
+                                                        KeySpline=".06, .94, .90, 0"/>
+                              </DoubleAnimationUsingKeyFrames>
+
+                              <DoubleAnimation From="20" To="120"
+                                           Storyboard.TargetProperty="(Canvas.Top)"
+                                           Duration="0:0:2"/>
+                          </Storyboard>
+                      </BeginStoryboard>
+                      
+                      
+                  </EventTrigger.Actions>
+              </EventTrigger>
+          </Button.Triggers>
+          
+      </Button>
+  </Canvas>
+  ```
+- 결과  
+  <img src="/uploads/2c36b1623fee333c271429f08b15b60c/image.png">
+
+
+<br>
+
+### 6_2. Discrete Keyframe Animation
+
+- 이 방법에서는 키프레임 사이에 interpolation이 없다. 
+- 대신 다음 키프레임에 의해 지정된 시간에 즉시 지정된 값으로 변경된다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Canvas Grid.Row="1" Grid.Column="1">
+
+      <Button Canvas.Top="20" Canvas.Left="0" Content="Hi" Padding="7 3">
+
+          <Button.Triggers>
+              <EventTrigger RoutedEvent="Button.MouseEnter">
+                  <EventTrigger.Actions>
+
+
+                      <BeginStoryboard>
+                          <Storyboard>
+                              <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Canvas.Left)"
+                             Duration="0:0:5">
+                                  <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                  <DiscreteDoubleKeyFrame KeyTime="0:0:1" Value="160"/>
+                                  <DiscreteDoubleKeyFrame KeyTime="0:0:2" Value="40"/>
+                                  <DiscreteDoubleKeyFrame KeyTime="0:0:3" Value="120"/>
+                                  <DiscreteDoubleKeyFrame KeyTime="0:0:4" Value="80"/>
+                                  <DiscreteDoubleKeyFrame KeyTime="0:0:5" Value="100"/>
+                              </DoubleAnimationUsingKeyFrames>
+                              <DoubleAnimation From="20" To="120" Storyboard.TargetProperty="(Canvas.Top)"
+               Duration="0:0:5"/>
+                          </Storyboard>
+                      </BeginStoryboard>
+
+
+                  </EventTrigger.Actions>
+              </EventTrigger>
+          </Button.Triggers>
+
+      </Button>
+  </Canvas>
+  ```
+- 결과  
+  <img src="/uploads/6aac794cb354529d1c307f17c1d4545e/image.png">
+
+
+<br>
+
+### 7. Path Animations
+
+- Path 애니메이션을 사용하면 화면의 경로를 따라 이동할 수 있다. 
+- 경로는 PathGeometry 개체로 사용한다.
+- Path를 지원하는 타입이 세 가지(Double, Matrix, Point) 이다. 
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Canvas>
+      <Button Canvas.Left="10" Canvas.Top="70" Content="Hi" Padding="7 3">
+          
+          <Button.Triggers>
+              <EventTrigger RoutedEvent="Button.MouseEnter">
+                  <EventTrigger.Actions>
+                      
+                      
+                      <BeginStoryboard>
+                          <Storyboard>
+                              <DoubleAnimationUsingPath
+                              Storyboard.TargetProperty="(Canvas.Left)"
+                              Source="X"
+                              Duration="0:0:5">
+                                  <DoubleAnimationUsingPath.PathGeometry>
+                                      <PathGeometry Figures="M 10,70 L 85,100 L 160,40 L 235,70"/>
+                                  </DoubleAnimationUsingPath.PathGeometry>
+                              </DoubleAnimationUsingPath>
+
+                              <DoubleAnimationUsingPath
+                              Storyboard.TargetProperty="(Canvas.Top)"
+                              Source="Y"
+                              Duration="0:0:5">
+                                  <DoubleAnimationUsingPath.PathGeometry>
+                                      <PathGeometry Figures="M 10,70 L 85,100 L 160,40 L 235,70"/>
+                                  </DoubleAnimationUsingPath.PathGeometry>
+                              </DoubleAnimationUsingPath>
+                          </Storyboard>
+                      </BeginStoryboard>
+                      
+                      
+                  </EventTrigger.Actions>
+              </EventTrigger>
+          </Button.Triggers>
+          
+      </Button>
+  </Canvas>
+  ```
+- 결과  
+  <img src="/uploads/fe427e0e6477cb8ed739b9dcbc0f79aa/image.png">
+
+<br>
+
+### 연습문제
+
+- TextBlock을 만들고 텍스트 위에 마우스를 올리면 FontSize가 18에서 30으로 증가하고, 마우스를 다시 텍스트 밖으로 이동하면 FontSize가 30에서 18로 작아지는 프로그램을 만든다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Canvas Grid.Row="1" Grid.Column="3">
+
+      <TextBlock Name="textblock" Text="Hello, WPF!" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+          <TextBlock.Style>
+              <Style TargetType="TextBlock">
+
+
+                  <Style.Triggers>
+                      <EventTrigger RoutedEvent="MouseEnter">
+
+                          <EventTrigger.Actions>
+                              <BeginStoryboard>
+                                  <Storyboard>
+                                      <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" To="100"/>
+                                  </Storyboard>
+                              </BeginStoryboard>
+                          </EventTrigger.Actions>
+                          
+                      </EventTrigger>
+                      
+                      <EventTrigger RoutedEvent="MouseLeave">
+
+                          <EventTrigger.Actions>
+                              <BeginStoryboard>
+                                  <Storyboard>
+                                      <DoubleAnimation Duration="0:0:0.5" Storyboard.TargetProperty="FontSize" To="18"/>
+                                  </Storyboard>
+                              </BeginStoryboard>
+                          </EventTrigger.Actions>
+                          
+                      </EventTrigger>
+                  </Style.Triggers>
+                  
+                  
+              </Style>
+          </TextBlock.Style>
+
+      </TextBlock>
+  </Canvas>
+  ```
+- 결과  
+  <img src="/uploads/e3cc4a67866804da37b2d3facf242961/image.png">
+
+<br>
+
+### 종합
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_19.Animation.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_19.Animation"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 1 -->
+          <Grid Grid.Row="0" Grid.Column="0">
+              <Button Name="myButton1" FontWeight="Bold" Height="40" Width="150">
+                  Click Me
+              </Button>
+          </Grid>
+  
+          <!-- 3. AnimationClock -->
+          <Grid Grid.Row="0" Grid.Column="1">
+              <Button Name="myButton3" FontWeight="Bold" Height="60" Width="60" >Click Me</Button>
+          </Grid>
+  
+          <!-- 4. StoryBoards -->
+          <Grid Grid.Row="0" Grid.Column="2">
+              <Button Name="myButton4" FontWeight="Bold" Height="40" Width="150">
+                  Click Me
+              </Button>
+          </Grid>
+          
+          <!-- 6. Keyframe Animation -->
+          <Canvas Grid.Row="0" Grid.Column="3">
+              
+              <Button Canvas.Top="20" Canvas.Left="0" Content="Hi" Padding="7 3">
+                  
+                  <Button.Triggers>
+                      <EventTrigger RoutedEvent="Button.MouseEnter">
+                          <EventTrigger.Actions>
+                              
+                              
+                              <BeginStoryboard>
+                                  <Storyboard>
+                                      <DoubleAnimationUsingKeyFrames
+                                  	Storyboard.TargetProperty="(Canvas.Left)"
+                                      	Duration="0:0:5">
+                                          <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                          <LinearDoubleKeyFrame KeyTime="0:0:0.4" Value="160"/>
+                                          <LinearDoubleKeyFrame KeyTime="0:0:0.8" Value="40"/>
+                                          <LinearDoubleKeyFrame KeyTime="0:0:1.2" Value="120"/>
+                                          <LinearDoubleKeyFrame KeyTime="0:0:1.6" Value="80"/>
+                                          <LinearDoubleKeyFrame KeyTime="0:0:2" Value="100"/>
+                                      </DoubleAnimationUsingKeyFrames>
+  
+                                      <DoubleAnimation From="20" To="120"
+                                                   Storyboard.TargetProperty="(Canvas.Top)"
+                                                   Duration="0:0:2"/>
+                                  </Storyboard>
+                              </BeginStoryboard>
+                              
+                              
+                          </EventTrigger.Actions>
+                      </EventTrigger>
+                  </Button.Triggers>
+                  
+              </Button>
+          </Canvas>
+  
+          <!-- 6_1. Spline Interpolation Animations -->
+          <Canvas Grid.Row="1" Grid.Column="0">
+              
+              <Button Canvas.Top="20" Canvas.Left="0" Content="Hi" Padding="7 3">
+                  
+                  <Button.Triggers>
+                      <EventTrigger RoutedEvent="Button.MouseEnter">
+                          <EventTrigger.Actions>
+                              
+                              
+                              <BeginStoryboard>
+                                  <Storyboard>
+                                      <DoubleAnimationUsingKeyFrames
+                                  	Storyboard.TargetProperty="(Canvas.Left)"
+                                      	Duration="0:0:5">
+                                          <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                          <SplineDoubleKeyFrame KeyTime="0:0:2" Value="180"
+                                                                KeySpline=".06, .94, .90, 0"/>
+                                      </DoubleAnimationUsingKeyFrames>
+  
+                                      <DoubleAnimation From="20" To="120"
+                                                   Storyboard.TargetProperty="(Canvas.Top)"
+                                                   Duration="0:0:2"/>
+                                  </Storyboard>
+                              </BeginStoryboard>
+                              
+                              
+                          </EventTrigger.Actions>
+                      </EventTrigger>
+                  </Button.Triggers>
+                  
+              </Button>
+          </Canvas>
+  
+          <!-- 6_2. Discrete Keyframe Animation -->
+          <Canvas Grid.Row="1" Grid.Column="1">
+  
+              <Button Canvas.Top="20" Canvas.Left="0" Content="Hi" Padding="7 3">
+  
+                  <Button.Triggers>
+                      <EventTrigger RoutedEvent="Button.MouseEnter">
+                          <EventTrigger.Actions>
+  
+  
+                              <BeginStoryboard>
+                                  <Storyboard>
+                                      <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Canvas.Left)"
+                                     Duration="0:0:5">
+                                          <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                          <DiscreteDoubleKeyFrame KeyTime="0:0:1" Value="160"/>
+                                          <DiscreteDoubleKeyFrame KeyTime="0:0:2" Value="40"/>
+                                          <DiscreteDoubleKeyFrame KeyTime="0:0:3" Value="120"/>
+                                          <DiscreteDoubleKeyFrame KeyTime="0:0:4" Value="80"/>
+                                          <DiscreteDoubleKeyFrame KeyTime="0:0:5" Value="100"/>
+                                      </DoubleAnimationUsingKeyFrames>
+                                      <DoubleAnimation From="20" To="120" Storyboard.TargetProperty="(Canvas.Top)"
+                       Duration="0:0:5"/>
+                                  </Storyboard>
+                              </BeginStoryboard>
+  
+  
+                          </EventTrigger.Actions>
+                      </EventTrigger>
+                  </Button.Triggers>
+  
+              </Button>
+          </Canvas>
+  
+          <!-- 7. Path Animations -->
+          <Canvas Grid.Row="1" Grid.Column="2">
+              <Button Canvas.Left="10" Canvas.Top="70" Content="Hi" Padding="7 3">
+                  
+                  <Button.Triggers>
+                      <EventTrigger RoutedEvent="Button.MouseEnter">
+                          <EventTrigger.Actions>
+                              
+                              
+                              <BeginStoryboard>
+                                  <Storyboard>
+                                      <DoubleAnimationUsingPath
+                                      Storyboard.TargetProperty="(Canvas.Left)"
+                                      Source="X"
+                                      Duration="0:0:5">
+                                          <DoubleAnimationUsingPath.PathGeometry>
+                                              <PathGeometry Figures="M 10,70 L 85,100 L 160,40 L 235,70"/>
+                                          </DoubleAnimationUsingPath.PathGeometry>
+                                      </DoubleAnimationUsingPath>
+  
+                                      <DoubleAnimationUsingPath
+                                      Storyboard.TargetProperty="(Canvas.Top)"
+                                      Source="Y"
+                                      Duration="0:0:5">
+                                          <DoubleAnimationUsingPath.PathGeometry>
+                                              <PathGeometry Figures="M 10,70 L 85,100 L 160,40 L 235,70"/>
+                                          </DoubleAnimationUsingPath.PathGeometry>
+                                      </DoubleAnimationUsingPath>
+                                  </Storyboard>
+                              </BeginStoryboard>
+                              
+                              
+                          </EventTrigger.Actions>
+                      </EventTrigger>
+                  </Button.Triggers>
+                  
+              </Button>
+          </Canvas>
+          
+          <!-- 연습문제 -->
+  
+          <Canvas Grid.Row="1" Grid.Column="3">
+  
+              <TextBlock Name="textblock" Text="Hello, WPF!" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+  
+                  <TextBlock.Style>
+                      <Style TargetType="TextBlock">
+  
+  
+                          <Style.Triggers>
+                              <EventTrigger RoutedEvent="MouseEnter">
+  
+                                  <EventTrigger.Actions>
+                                      <BeginStoryboard>
+                                          <Storyboard>
+                                              <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" To="100"/>
+                                          </Storyboard>
+                                      </BeginStoryboard>
+                                  </EventTrigger.Actions>
+                                  
+                              </EventTrigger>
+                              
+                              <EventTrigger RoutedEvent="MouseLeave">
+  
+                                  <EventTrigger.Actions>
+                                      <BeginStoryboard>
+                                          <Storyboard>
+                                              <DoubleAnimation Duration="0:0:0.5" Storyboard.TargetProperty="FontSize" To="18"/>
+                                          </Storyboard>
+                                      </BeginStoryboard>
+                                  </EventTrigger.Actions>
+                                  
+                              </EventTrigger>
+                          </Style.Triggers>
+                          
+                          
+                      </Style>
+                  </TextBlock.Style>
+  
+              </TextBlock>
+          </Canvas>
+  
+  
+      </Grid>
+  </Window>
+  ```
+
 
 <br><br><br>
 
