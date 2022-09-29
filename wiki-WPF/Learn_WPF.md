@@ -9388,13 +9388,286 @@
 
 <br>
 
+### 종합
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window   x:Class="_17.Text_And_Document.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_17.Text_And_Document"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 3 -->
+          <Grid Grid.Row="0" Grid.Column="0">
+              <FlowDocumentReader>
+                  <FlowDocument>
+                      <Paragraph FontSize="20" FontWeight="Bold">
+                          <Run>Simple Flow Document</Run>
+                      </Paragraph>
+                  </FlowDocument>
+              </FlowDocumentReader>
+          </Grid>
+  
+          <!-- 4 -->
+          <Grid Grid.Row="0" Grid.Column="1">
+              <FlowDocumentReader>
+                  <FlowDocument>
+                      <Paragraph>
+                          <Run>"Lorem ipsum" text is Latin text that printers
+            and designers use to display layout designs or
+            typefaces. It can also be used to stand in
+            for actual text that will be supplied later.</Run>
+                          <Run>Using</Run>
+                          <Italic>lorem text</Italic>
+                          <Run>allows the viewer to concentrate on the layout or typeface rather than the content.</Run>
+                      </Paragraph>
+                      <Paragraph>
+                          <Run>
+                              The text is based on a passage from Cicero, but
+                is not a direct quotation. It was used by early
+                printers starting in the 1500's or early 1600's.
+                          </Run>
+                      </Paragraph>
+                  </FlowDocument>
+              </FlowDocumentReader>
+          </Grid>
+  
+          <!-- 4-1 -->
+          <Grid Grid.Row="0" Grid.Column="2">
+              <FlowDocumentReader>
+                  <FlowDocument>
+                      <Paragraph FontSize="22" FontWeight="Bold">
+                          Simple Flow Document
+                      </Paragraph>
+                      <Section>
+                          <Paragraph FontSize="18">
+                              <Bold>First Section</Bold>
+                          </Paragraph>
+                          <Paragraph>
+                              Lorem ipsum dolor sit amet, ... consequat massa eros sed purus.
+                          </Paragraph>
+                          <Paragraph>
+                              Ut elementum erat et mattis. Quisque ... malesuada libero.
+                              <Bold>
+                                  <Underline>Vivamus ante odio</Underline>
+                              </Bold>
+                              volupat non mollis quis, vulputate vel justo.
+                          </Paragraph>
+                      </Section>
+                      <Section>
+                          <Paragraph FontSize="18">
+                              <Bold>Second Section</Bold>
+                          </Paragraph>
+                          <Paragraph>
+                              Pellentesque cursus consectetur augue in aliquet. In sapien dui, lacinia nec condimentum ac, aliquam a erat.
+                          </Paragraph>
+                      </Section>
+                  </FlowDocument>
+              </FlowDocumentReader>
+          </Grid>
+  
+  
+          <!-- 4-2 -->
+          <Grid Grid.Row="1" Grid.Column="0">
+              <FlowDocumentReader>
+                  <FlowDocument>
+                      <Paragraph>This is a simple list.</Paragraph>
+                      <List>
+                          <ListItem>
+                              <Paragraph>Lorem ipsum dolor sit amet ...</Paragraph>
+                          </ListItem>
+                          <ListItem>
+                              <Paragraph>Nemo enim ipsam voluptatem quia voluptas ...</Paragraph>
+                          </ListItem>
+                          <ListItem>
+                              <Paragraph>Neque porro quisquam est, qui ...</Paragraph>
+                          </ListItem>
+                      </List>
+                  </FlowDocument>
+              </FlowDocumentReader>
+          </Grid>
+  
+  
+          <!-- 4-3 -->
+          <Grid Grid.Row="1" Grid.Column="1">
+              <FlowDocumentReader>
+                  <FlowDocument>
+                      <Paragraph>
+                          The following is a table of information about several antique maps.
+                      </Paragraph>
+                      <Table>
+                          <Table.Columns>
+                              <TableColumn Width="150"/>
+                              <TableColumn Width="60"/>
+                              <TableColumn Width="200"/>
+                          </Table.Columns>
+                          <TableRowGroup>
+                              <TableRow FontSize="18" FontWeight="Bold">
+                                  <TableCell>
+                                      <Paragraph>Cartographer</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>Year</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>Name</Paragraph>
+                                  </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                  <TableCell>
+                                      <Paragraph>Seutter</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>1730</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>
+                                          <Italic>Diversi Globi Terr-Aquei</Italic>
+                                      </Paragraph>
+                                  </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                  <TableCell>
+                                      <Paragraph>Stoopendahl</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>1680</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>
+                                          <Italic>Orbis Terrarum</Italic>
+                                      </Paragraph>
+                                  </TableCell>
+                              </TableRow>
+                              <TableRow>
+                                  <TableCell>
+                                      <Paragraph>Valck</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>1700</Paragraph>
+                                  </TableCell>
+                                  <TableCell>
+                                      <Paragraph>
+                                          <Italic>Mappe Monde</Italic>
+                                      </Paragraph>
+                                  </TableCell>
+                              </TableRow>
+                          </TableRowGroup>
+                      </Table>
+                  </FlowDocument>
+              </FlowDocumentReader>
+          </Grid>
+  
+          <!-- 5 -->
+          <Grid Grid.Row="1" Grid.Column="2">
+              <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="auto"/>
+                  <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <StackPanel Grid.Column="0">
+                  <Button VerticalAlignment="Top" Margin="3">Button 1</Button>
+                  <Button VerticalAlignment="Top" Margin="3">Button 2</Button>
+                  <Button VerticalAlignment="Top" Margin="3">Button 3</Button>
+              </StackPanel>
+              <Border Grid.Column="1" BorderBrush="Black"
+                  BorderThickness="1" Margin="3">
+                  <FlowDocumentReader>
+                      <FlowDocument>
+                          <Paragraph>
+                              <Run>
+                                  "Lorem ipsum" text is Latin text that printers
+                              and designers use to display layout designs or
+                              typefaces. The text is based on a passage from
+                              Cicero, but is not a direct quotation. It was
+                              used by early printers starting in the 1500's
+                              or early 1600's.
+                              </Run>
+                          </Paragraph>
+                      </FlowDocument>
+                  </FlowDocumentReader>
+              </Border>
+          </Grid>
+  
+          <!-- 6 -->
+          <Grid Grid.Row="2" Grid.Column="0">
+              <TextBlock TextWrapping="Wrap">
+              I know you believe you understand what you think I said.
+              But what you fail to realize is that what you heard is not what I meant.
+              </TextBlock>
+          </Grid>
+  
+          <!-- 3 -->
+          <StackPanel Grid.Row="2" Grid.Column="1">
+              <TextBlock Margin="10" TextWrapping="Wrap">
+              <Italic>
+                  I know you believe you understand what you think I said.
+              </Italic>
+              But you <Bold>fail to realize</Bold>
+              is that what you heard is 
+              <Italic><Bold>not what I meant</Bold></Italic>.
+              </TextBlock>
+              <TextBlock HorizontalAlignment="Left" FontSize="15" Margin="10 0">
+              Push 'em to the left.
+              </TextBlock>
+              <TextBlock HorizontalAlignment="Right" FontSize="15" Margin="10 0">
+              Push 'em to the right.
+              </TextBlock>
+              <TextBlock HorizontalAlignment="Center" FontSize="15">
+              Stand up. sit down.<LineBreak/><Italic>fight, fight, fight!</Italic>
+              </TextBlock>
+          </StackPanel>
+  
+  
+          <!-- 3 -->
+          <StackPanel Grid.Row="2" Grid.Column="2">
+              <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">
+                  <TextBlock.BitmapEffect>
+                      <DropShadowBitmapEffect Color="Black" ShadowDepth="4" Direction="330"
+                                          Opacity="0.5" Softness="0.25"/>
+                  </TextBlock.BitmapEffect>
+              Drop Shadow Text
+              </TextBlock>
+              <TextBlock TextWrapping="Wrap" Margin="10">
+              Below is a <Span FontFamily="Courier New">TextBlock</Span>
+              containing a <Span FontFamily="Courier New">CheckBox</Span>
+              and a <Span FontFamily="Courier New">ToolBar</Span>
+              with two <Span FontFamily="Courier New">Button</Span>s.
+              </TextBlock>
+              <TextBlock>
+              <CheckBox></CheckBox>
+              <ToolBar>
+                  <Button>Button 1</Button>
+                  <Button>Button 2</Button>
+              </ToolBar>
+              </TextBlock>
+          </StackPanel>
+  
+      </Grid>
+  </Window>
+  ```
+
 <br><br><br>
 
 # Ch 18. WPF의 Graphic
 
 ### 0. Summary(요약)
 
-- <img src="" width="70%">
+- <img src="/uploads/ac0c7bb696e83fdb0507f78751b524b5/image.png" width="70%">
 
 
 <br><br><br>
