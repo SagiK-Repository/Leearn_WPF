@@ -11229,32 +11229,615 @@
 
 - <img src="/uploads/1f6958ad86aff846d44bef583a103bc7/image.png" width="70%">
 
-### 1. 1
+### 1. Audio 개요
+
+- WPF는 4가지 클래스를 제공한다. 
+  - SystemSounds 클래스는 일반적으로 사용되는 운영체제 사운드를 여러 개 생성할 수 있다.
+  - SoundPlayer 클래스는 사운드 파일을 시작할 수 있는 간단한 .wav 형식 파일에 사용된다.
+  - MediaPlayer 클래스를 사용하여 다양한 사운드 파일 형식을 사용할 수 있으며 재생을 제어할 수 있다. 그러나 이 클래스는 code-behind에서만 사용할 수 있으며 XAML에서는 사용할 수 없다.
+  - MediaElement 클래스는 MediaPlayer 클래스와 동일한 컨트롤을 제공하지만 XAML에서도 사용할 수 있다.
+
+#### SystemSounds
+
+- Asterisk, Beep, Exclamation, Hand, Question의 5가지 운영체제 사운드를 생성할 수 있다.
+- SystemSounds 클래스는 이러한 소리의 재생을 수정하거나 제어하는 방법을 제공하지 않는다.
+- 이 클래스는 xaml로는 사용할 수 없다.
+- SystemSounds 클래스는 5가지 특정 소리만 낼 수 있다는 점에서 제한적이다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Button Content="play astarisk" FontWeight="Bold" Height="40" Width="150" Click="Button_Click1"/>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  private void Button_Click1(object sender, RoutedEventArgs e)
+  {
+      SystemSounds.Asterisk.Play();
+  }
+  ```
+- 결과  
+  <img src="/uploads/5dca98186c21913bf98b6264af351250/image.png">
+
 
 <br>
 
-### 1. 1
+### 2. SoundPlayer
+
+- 펄스 코드 변조(PCM) .wav 형식의 사운드 파일만 재생할 수 있다.
+- SoundPlayer에서 허용하는 세 가지 작업은 재생을 시작하고, 중지하고, 사운드 파일의 소스를 변경하는 것이다.
+- 사운드 소스는 로컬 파일, URL, 임베디드 리소스, Stream일 수 있다.
+- Play 메서드는 사운드 파일을 비동기식으로 로드한 다음 다른 스레드에서 재생한다. 즉, 소리가 재생되는 동안 주 스레드가 자유롭게 계속 동작할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Button Content="play music" FontWeight="Bold" Height="40" Width="150" Click="Button_Click2"/>
+  </Grid>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  private void Button_Click2(object sender, RoutedEventArgs e)
+  {
+      SoundPlayer sp = new SoundPlayer();
+      sp.SoundLocation = "D:\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\Shuffle.wav";
+      //sp.SoundLocation = "Shuffle.wav";
+      sp.Play();
+  }
+  ```
+- 결과  
+  <img src="/uploads/79e0f9d027a4a1c14dadc1b2616a01a6/image.png">
+
 
 <br>
 
-### 1. 1
+### 2-1. SoundPlayerAction
+
+- SoundPlayer 클래스는 WPF element가 아니므로 XAML에 배치할 수 없다.
+- 이를 위해 WPF는 SoundPlayerAction 클래스를 만들었다.
+- .wav 파일을 미리 로드할 수 없으며 소리를 동시에 재생할 수 없다.
+  - SoundPlayerAction element는 Source 속성을 가져와서 .wav 파일의 경로 또는 URL을 사용한다.
+  - Visual Studio 프로젝트에 .wav 파일을 포함할 경우 이를 어셈블리 리소스로 지정할 수 있다.
+    - 파일의 빌드 작업 옵션을 Resource로 설정한다.
+    - 빌드 작업 속성을 없음으로 설정하고 출력 디렉토리에 복사 옵션을 항상 복사로 설정한다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Grid>
+      <Button>
+          
+          <Button.Triggers>
+              <EventTrigger RoutedEvent="Button.Click">
+                  <EventTrigger.Actions>
+                      <SoundPlayerAction
+                          Source="D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\Shuffle.wav"/>
+                  </EventTrigger.Actions>
+              </EventTrigger>
+          </Button.Triggers>
+          
+          Click Me
+      </Button>
+  </Grid>
+  ```
+- 결과  
+  <img src="/uploads/f02afdf00af8707345d88101871d6b6c/image.png">
 
 <br>
 
-### 1. 1
+### 3. MediaPlayer
+
+- MediaPlayer 클래스에는 훨씬 더 많은 제어기능을 제공한다.
+- MediaPlayer는 Windows Media Player의 구성요소를 사용한다.
+- MediaPlayer는 WPF의 구성요소를 사용하기 때문에 WPF가 사용할 수 있는 사운드 파일 형식을 사용할 수 있다.
+  - 설치된 WMP 버전은 10.0 이상이어야 하고 MediaPlyer는 WMP의 구성요소를 사용하기 때문에 WMP가 사용할 수 있는 사운드 파일 형식을 사용할 수 있다.
+- MediaPlayer를 사용하면 소리 재생을 훨씬 더 효과적으로 제어할 수 있다.
+  - 이 기능을 사용하면 재생 속도를 시작, 중지, 설정할 수 있다. 
+  - 파일의 위치를 설정하고 왼쪽 채널과 오른쪽 채널의 밸런스를 조정할 수도 있다.
+- MediaPlayer 클래스의 속성은 dependency 속성이 아니며 해당 이벤트는 RoutedEvent가 아니다.
+- MediaPlayer는 XAML에서는 사용할 수 없다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel>
+      <GroupBox Header="Balance" Margin="5">
+          <StackPanel Orientation="Horizontal">
+              <RadioButton Margin="10 5" GroupName="balanceButtons"
+                   Checked="RadioButton_Checked3" Name="radioLeft3"/>
+              <RadioButton Margin="10 5" GroupName="balanceButtons"
+                   Checked="RadioButton_Checked3" Name="radioCenter3"/>
+              <RadioButton Margin="10 5" GroupName="balanceButtons"
+                   Checked="RadioButton_Checked3" Name="radioRight3"/>
+          </StackPanel>
+      </GroupBox>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+              VerticalAlignment="Top">
+          <Button Click="Play_Click3" Margin="3" Padding="6 3">Play</Button>
+          <Button Click="Pause_Click3" Margin="3" Padding="6 3">Pause</Button>
+          <Button Click="Stop_Click3" Margin="3" Padding="6 3">Stop</Button>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      MediaPlayer player3;
+      public void MainWindow()
+      {
+          player3 = new MediaPlayer();
+          player3.Open(new Uri("D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\music.wma"
+              , UriKind.Relative));
+
+          radioCenter3.IsChecked = true;
+      }
+
+      private void RadioButton_Checked3(object sender, RoutedEventArgs e)
+      {
+          if (radioLeft3.IsChecked.Value)
+              player3.Balance = -1.0;
+          else if (radioRight3.IsChecked.Value)
+              player3.Balance = 1.0;
+          else
+              player3.Balance = 0;
+      }
+
+      private void Play_Click3(object sender, RoutedEventArgs e)
+      {
+          player3.Play();
+      }
+
+      private void Pause_Click3(object sender, RoutedEventArgs e)
+      {
+          player3.Pause();
+      }
+
+      private void Stop_Click3(object sender, RoutedEventArgs e)
+      {
+          player3.Stop();
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/5e575a68ae983d42ae540b0a740191da/image.png">
+
 
 <br>
 
-### 1. 1
+### 4. MediaElement
+
+- MediaPlayer 클래스와 마찬가지로 MediaElement는 Window Media Player의 구성요소를 사용한다.
+- MediaPlayer 클래스와 달리, MediaElement의 속성은 dependency 속성이며 이벤트는 RoutedEvent 이다.
+- MediaElement는 UIElement에서 파생되므로 xaml에 배치할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="0">
+      <MediaElement Name="player3" LoadedBehavior="Manual"/>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+          <Button Click="Play_Click3" Margin="3" Padding="6 3">Play</Button>
+          <Button Click="Pause_Click3" Margin="3" Padding="6 3">Pause</Button>
+          <Button Click="Stop_Click3" Margin="3" Padding="6 3">Stop</Button>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void MainWindow()
+      {
+          player4.Source = new Uri("music.wma", UriKind.Relative);
+      }
+
+      private void Play_Click4(object sender, RoutedEventArgs e)
+      {
+          player4.Play();
+      }
+
+      private void Pause_Click4(object sender, RoutedEventArgs e)
+      {
+          player4.Pause();
+      }
+
+      private void Stop_Click4(object sender, RoutedEventArgs e)
+      {
+          player4.Stop();
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/8dea3374dfae83e5de568b366e0d5599/image.png">
 
 <br>
 
-### 1. 1
+### 4_1 MediaElement
+
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="1">
+      <MediaElement Name="player41"/>
+
+      <StackPanel Orientation="Horizontal">
+          <Button Name="playButton41" Margin="5" Padding="3">Play</Button>
+          <Button Name="stopButton41" Margin="5" Padding="3">Stop</Button>
+          <Button Name="pauseButton41" Margin="5" Padding="3">Pause</Button>
+          <Button Name="resumeButton41" Margin="5" Padding="3">Resume</Button>
+      </StackPanel>
+
+      <StackPanel.Triggers>
+          <EventTrigger RoutedEvent="Button.Click" SourceName="playButton41">
+              <EventTrigger.Actions>
+                  <BeginStoryboard Name="musicStoryboard41">
+                      <Storyboard SlipBehavior="Slip">
+                          <MediaTimeline Source="D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\Shuffle.wav"
+                                         Storyboard.TargetName="player41"/>
+                      </Storyboard>
+                  </BeginStoryboard>
+              </EventTrigger.Actions>
+          </EventTrigger>
+
+          <EventTrigger RoutedEvent="Button.Click" SourceName="stopButton41">
+              <EventTrigger.Actions>
+                  <StopStoryboard BeginStoryboardName="musicStoryboard41"/>
+              </EventTrigger.Actions>
+          </EventTrigger>
+
+          <EventTrigger RoutedEvent="Button.Click" SourceName="pauseButton41">
+              <EventTrigger.Actions>
+                  <PauseStoryboard BeginStoryboardName="musicStoryboard41"/>
+              </EventTrigger.Actions>
+          </EventTrigger>
+
+          <EventTrigger RoutedEvent="Button.Click" SourceName="resumeButton41">
+              <EventTrigger.Actions>
+                  <ResumeStoryboard BeginStoryboardName="musicStoryboard41"/>
+              </EventTrigger.Actions>
+          </EventTrigger>
+      </StackPanel.Triggers>
+  </StackPanel>
+  ```
+- 결과  
+  <img src="/uploads/a25745e3f9d3f69f4556ac24cef13a34/image.png">
 
 <br>
 
-### 1. 1
+### 5. Video
+
+- WPF에서 비디오를 재생하려면 MediaElement 클래스를 사용한다.
+- Code-behind에서 비디어를 제어하거나 EventTrigger를 사용하여 스토리보드를 조작할 수 있다.
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <StackPanel Grid.Row="1" Grid.Column="2">
+      <MediaElement Name="videoElement5" LoadedBehavior="Manual"
+                ScrubbingEnabled="True" Source="D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\20. AudioVideo\cat.wmv"/>
+      <StackPanel Orientation="Horizontal">
+          <Button Margin="3" Padding="3" Click="Play_Click5">Play</Button>
+          <Button Margin="3" Padding="3" Click="Stop_Click5">Stop</Button>
+          <Button Margin="3" Padding="3" Click="Pause_Click5">Pause</Button>
+      </StackPanel>
+  </StackPanel>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  public partial class MainWindow : Window
+  {
+      public void _5_Video()
+      {
+          //한번 재생 후 Position을 시작부분으로 설정
+          videoElement5.Play();
+          videoElement5.Pause();
+          videoElement5.Position = TimeSpan.Zero;
+      }
+
+      private void Play_Click5(object sender, RoutedEventArgs e)
+      {
+          videoElement5.Play();
+      }
+
+      private void Pause_Click5(object sender, RoutedEventArgs e)
+      {
+          videoElement5.Pause();
+      }
+
+      private void Stop_Click5(object sender, RoutedEventArgs e)
+      {
+          videoElement5.Stop();
+      }
+  }
+  ```
+- 결과  
+  <img src="/uploads/7167913cdd229c0bf1db448fae0ccc93/image.png">
 
 <br>
+
+### 종합
+- xaml 코드를 다음과 같이 구성한다.
+  ```xml
+  <Window x:Class="_20.AudioVideo.MainWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:local="clr-namespace:_20.AudioVideo"
+          mc:Ignorable="d"
+          Title="MainWindow" Height="450" Width="800">
+      <Grid ShowGridLines="True">
+          <Grid.RowDefinitions>
+              <RowDefinition/>
+              <RowDefinition/>
+          </Grid.RowDefinitions>
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+              <ColumnDefinition/>
+          </Grid.ColumnDefinitions>
+  
+          <!-- 1. SystemSounds -->
+          <Grid Grid.Row="0" Grid.Column="0">
+              <Button Content="play astarisk" FontWeight="Bold" Height="40" Width="150" Click="Button_Click1"/>
+          </Grid>
+  
+          <!-- 2. SoundPlayer -->
+          <Grid Grid.Row="0" Grid.Column="1">
+              <Button Content="play music" FontWeight="Bold" Height="40" Width="150" Click="Button_Click2"/>
+          </Grid>
+  
+          <!-- 2-1. SoundPlayerAction-->
+          <Grid Grid.Row="0" Grid.Column="2">
+              <Button>
+                  
+                  <Button.Triggers>
+                      <EventTrigger RoutedEvent="Button.Click">
+                          <EventTrigger.Actions>
+                              <SoundPlayerAction
+                                  Source="D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\Shuffle.wav"/>
+                          </EventTrigger.Actions>
+                      </EventTrigger>
+                  </Button.Triggers>
+                  
+                  Click Me
+              </Button>
+          </Grid>
+          
+          <!-- 3. MediaPlayer -->
+          <StackPanel Grid.Row="0" Grid.Column="3">
+              <GroupBox Header="Balance" Margin="5">
+                  <StackPanel Orientation="Horizontal">
+                      <RadioButton Margin="10 5" GroupName="balanceButtons"
+                           Checked="RadioButton_Checked3" Name="radioLeft3"/>
+                      <RadioButton Margin="10 5" GroupName="balanceButtons"
+                           Checked="RadioButton_Checked3" Name="radioCenter3"/>
+                      <RadioButton Margin="10 5" GroupName="balanceButtons"
+                           Checked="RadioButton_Checked3" Name="radioRight3"/>
+                  </StackPanel>
+              </GroupBox>
+              <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                      VerticalAlignment="Top">
+                  <Button Click="Play_Click3" Margin="3" Padding="6 3">Play</Button>
+                  <Button Click="Pause_Click3" Margin="3" Padding="6 3">Pause</Button>
+                  <Button Click="Stop_Click3" Margin="3" Padding="6 3">Stop</Button>
+              </StackPanel>
+          </StackPanel>
+  
+          <!-- 4. MediaElement -->
+          <StackPanel Grid.Row="1" Grid.Column="0">
+              <MediaElement Name="player4" LoadedBehavior="Manual"/>
+              <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                  <Button Click="Play_Click4" Margin="3" Padding="6 3">Play</Button>
+                  <Button Click="Pause_Click4" Margin="3" Padding="6 3">Pause</Button>
+                  <Button Click="Stop_Click4" Margin="3" Padding="6 3">Stop</Button>
+              </StackPanel>
+          </StackPanel>
+          
+          <!-- 4_1. MediaElement -->
+          <StackPanel Grid.Row="1" Grid.Column="1">
+              <MediaElement Name="player41"/>
+  
+              <StackPanel Orientation="Horizontal">
+                  <Button Name="playButton41" Margin="5" Padding="3">Play</Button>
+                  <Button Name="stopButton41" Margin="5" Padding="3">Stop</Button>
+                  <Button Name="pauseButton41" Margin="5" Padding="3">Pause</Button>
+                  <Button Name="resumeButton41" Margin="5" Padding="3">Resume</Button>
+              </StackPanel>
+  
+              <StackPanel.Triggers>
+                  <EventTrigger RoutedEvent="Button.Click" SourceName="playButton41">
+                      <EventTrigger.Actions>
+                          <BeginStoryboard Name="musicStoryboard41">
+                              <Storyboard SlipBehavior="Slip">
+                                  <MediaTimeline Source="D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\Shuffle.wav"
+                                                 Storyboard.TargetName="player41"/>
+                              </Storyboard>
+                          </BeginStoryboard>
+                      </EventTrigger.Actions>
+                  </EventTrigger>
+  
+                  <EventTrigger RoutedEvent="Button.Click" SourceName="stopButton41">
+                      <EventTrigger.Actions>
+                          <StopStoryboard BeginStoryboardName="musicStoryboard41"/>
+                      </EventTrigger.Actions>
+                  </EventTrigger>
+  
+                  <EventTrigger RoutedEvent="Button.Click" SourceName="pauseButton41">
+                      <EventTrigger.Actions>
+                          <PauseStoryboard BeginStoryboardName="musicStoryboard41"/>
+                      </EventTrigger.Actions>
+                  </EventTrigger>
+  
+                  <EventTrigger RoutedEvent="Button.Click" SourceName="resumeButton41">
+                      <EventTrigger.Actions>
+                          <ResumeStoryboard BeginStoryboardName="musicStoryboard41"/>
+                      </EventTrigger.Actions>
+                  </EventTrigger>
+              </StackPanel.Triggers>
+          </StackPanel>
+  
+          <!-- 5. Video -->
+          <StackPanel Grid.Row="1" Grid.Column="2">
+              <MediaElement Name="videoElement5" LoadedBehavior="Manual"
+                        ScrubbingEnabled="True" Source="D:\Git_Hub_Repository\WPF_Project\wiki-WPF\WPF_Learn\20. AudioVideo\cat.wmv"/>
+              <StackPanel Orientation="Horizontal">
+                  <Button Margin="3" Padding="3" Click="Play_Click5">Play</Button>
+                  <Button Margin="3" Padding="3" Click="Stop_Click5">Stop</Button>
+                  <Button Margin="3" Padding="3" Click="Pause_Click5">Pause</Button>
+              </StackPanel>
+          </StackPanel>
+  
+  
+      </Grid>
+  </Window>
+  ```
+- xaml.cs 코드를 다음과 같이 구성한다.
+  ```cs
+  using System;
+  using System.Media;
+  using System.Windows;
+  using System.Windows.Media;
+  
+  namespace _20.AudioVideo
+  {
+      public partial class MainWindow : Window
+      {
+          public MainWindow()
+          {
+              InitializeComponent();
+  
+              _3_MediaPlayer();
+              _4_MediaElement();
+              _5_Video();
+          }
+  
+      }
+  }
+  
+  // 1. SystemSounds
+  namespace _20.AudioVideo
+  {
+      public partial class MainWindow : Window
+      {
+          private void Button_Click1(object sender, RoutedEventArgs e)
+          {
+              SystemSounds.Asterisk.Play();
+          }
+      }
+  }
+  
+  // 2. SoundPlayer
+  namespace _20.AudioVideo
+  {
+      public partial class MainWindow : Window
+      {
+          private void Button_Click2(object sender, RoutedEventArgs e)
+          {
+              SoundPlayer sp = new SoundPlayer();
+              sp.SoundLocation = "D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\Shuffle.wav";
+              //sp.SoundLocation = "Shuffle.wav";
+              sp.Play();
+          }
+      }
+  }
+  
+  
+  // 3. MediaPlayer
+  namespace _20.AudioVideo
+  {
+      public partial class MainWindow : Window
+      {
+          MediaPlayer player3;
+          public void _3_MediaPlayer()
+          {
+              player3 = new MediaPlayer();
+              player3.Open(new Uri("D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\music.wma"
+                  , UriKind.Relative));
+  
+              radioCenter3.IsChecked = true;
+          }
+  
+          private void RadioButton_Checked3(object sender, RoutedEventArgs e)
+          {
+              if (radioLeft3.IsChecked.Value)
+                  player3.Balance = -1.0;
+              else if (radioRight3.IsChecked.Value)
+                  player3.Balance = 1.0;
+              else
+                  player3.Balance = 0;
+          }
+  
+          private void Play_Click3(object sender, RoutedEventArgs e)
+          {
+              player3.Play();
+          }
+  
+          private void Pause_Click3(object sender, RoutedEventArgs e)
+          {
+              player3.Pause();
+          }
+  
+          private void Stop_Click3(object sender, RoutedEventArgs e)
+          {
+              player3.Stop();
+          }
+      }
+  }
+  
+  
+  // 4. MediaElement
+  namespace _20.AudioVideo
+  {
+      public partial class MainWindow : Window
+      {
+          public void _4_MediaElement()
+          {
+              player4.Source = new Uri("D:\\Git_Hub_Repository\\WPF_Project\\wiki-WPF\\WPF_Learn\\20. AudioVideo\\music.wma"
+                  , UriKind.Relative);
+          }
+  
+          private void Play_Click4(object sender, RoutedEventArgs e)
+          {
+              player4.Play();
+          }
+  
+          private void Pause_Click4(object sender, RoutedEventArgs e)
+          {
+              player4.Pause();
+          }
+  
+          private void Stop_Click4(object sender, RoutedEventArgs e)
+          {
+              player4.Stop();
+          }
+      }
+  }
+  
+  // 5. Video
+  namespace _20.AudioVideo
+  {
+      public partial class MainWindow : Window
+      {
+          public void _5_Video()
+          {
+              videoElement5.Play();
+              videoElement5.Pause();
+              videoElement5.Position = TimeSpan.Zero;  //Position을 파일의 시작부분으로 설정.
+          }
+  
+          private void Play_Click5(object sender, RoutedEventArgs e)
+          {
+              videoElement5.Play();
+          }
+  
+          private void Pause_Click5(object sender, RoutedEventArgs e)
+          {
+              videoElement5.Pause();
+          }
+  
+          private void Stop_Click5(object sender, RoutedEventArgs e)
+          {
+              videoElement5.Stop();
+          }
+      }
+  }
+  ```
+- 결과  
+  <img src="">
+
 
 <br><br><br>
+6시 30분 (아침 1시간 확보)
