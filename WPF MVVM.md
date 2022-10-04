@@ -1725,3 +1725,37 @@ namespace _1.MVVM
 - View < ViewModel : Send Notification
 - ViewModel > Model : ViewModel Updates the Model
 - Model > ViewModel : Send Notifications
+
+
+<br><br><br><br>
+
+
+
+# :bookmark_tabs: 교육 관련 총평(비평)
+
+>>>
+
+WPF에 대해 기초를 아주 잘 설명해주는 내용이었습니다.  
+WPF를 처음 접할 때 가장 도움이 되는 내용이었습니다. 이전에 교육 받았던 [WPF 프로그래밍 강의 학습하고 내용 정리합니다](http://wish.mirero.co.kr/mirero/education/newface-group/newface/juhyung.park/-/issues/13)보다 [-먼저 교육받으면 좋다-]고 생각했습니다.  
+
+C#을 처음 배운지 별로 안되었고, C#을 활용하면서 WPF에 대해서 배웠기에 C#을 활용해보는 훈련도 되었고, WPF에 대해 알아가면서 교육 진행하였습니다.  
+덕분에, [+C#에 대해서도 감을 잡을 수 있었고+], [+WPF에 대해서도 정리하면서 감을 잡을 수 있었습니다.+]  
+
+WPF에 대해서 잘 제어하고 원하는대로 목표한 것을 만들어낼 수 있도록, 개인적으로 WPF 관련 프로그램을 만들어보면서 WPF를 더욱 알아가는 제가 되겠습니다. 그렇게 해서 업무중에 WPF 관련해서 지체가 되지 않도록 하겠습니다! 빨리 WPF을 활용하여 다양한 표현을 할 수 있게 되었으면 좋겠습니다.  
+
+  <br>
+
+이번에 공부할 때 시간 소요를 관리하면서 공부를 하였습니다. 다음과 같이 시간소요가 되었습니다.  
+### WPF MVVM  ---- 목표 : 1일(8h), 한개 프로젝트 2h 이내
+Ch 01.  Bingding ------------------------ 5h
+Ch 02.  MVVM -------------------------- 3h
+Ch 03.  DevExpress .ReactiveUI--------- 4h
+Ch 04.  DevExpress---------------------- 30m
+
+- 한 챕터당 평균 1h 30m (89.6m) 소요
+- 소요시간 : 1792m, 29.86h, 하루 8h 소요하면 학습시간은 3.73d 소요했습니다.
+- 기술 세미나나 다른 특별 시간을 제외해서 고려하였기에, [+4~5d까지 소요할 수 있을 것+]으로 보입니다.
+
+>>>
+
+@ByungEun.Kim @JungOk.Kim @SeungHa.Lee @ChangBum.Kwon
