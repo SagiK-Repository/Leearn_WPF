@@ -1570,3 +1570,144 @@ namespace _1.MVVM
 </details> 
 
 <br><br>
+
+
+# 03. DevExpress
+
+
+- 기존의 1)MVVM 프로젝트에 이어서 활용한다.
+- 솔루션 탐색기 > 프로젝트 > 오른쪽 마우스 > NuGet 패키지 관리 > "Reactiveui"를 Install한다.
+- 다음 내용은 이전과 같다.
+  - MouseEventConverter.cs
+  - IDialogView.cs
+  - IWindowView.cs
+  - AddView.xaml.cs
+  - App.xaml
+  - App.xaml.cs
+  - MainView.xaml.cs
+
+<br>
+
+<details>
+<summary>Person.cs</summary>
+
+```cs
+using DevExpress.Mvvm;
+
+namespace _1.MVVM
+{
+    public class Person : BindableBase
+    {
+        public string Name
+        {
+            get { return GetProperty(()=> Name); }
+            set { SetProperty(() => Name, value); }
+        }
+        public bool Gender
+        {
+            get { return GetProperty(() => Gender); }
+            set { SetProperty(() => Gender, value); }
+        }
+        public string PhoneNumber
+        {
+            get { return GetProperty(()=> PhoneNumber); }
+            set { SetProperty(() => PhoneNumber, value); }
+        }
+        public string Address
+        {
+            get { return GetProperty(() => Address); }
+            set { SetProperty(() => Address, value); }
+        }
+
+        public Person()
+        {
+        }
+
+        public Person(Person input)
+        {
+            Address = input.Address;
+            Gender = input.Gender;
+            Name = input.Name;
+            PhoneNumber = input.PhoneNumber;
+        }
+    }
+}
+
+```
+</details> 
+
+<details>
+<summary>AddViewModel.cs</summary>
+
+```cs
+using DevExpress.Mvvm;
+using ReactiveUI;
+using System.Reactive;
+using System.Windows.Input;
+
+namespace _1.MVVM
+{
+    public class AddViewModel : ViewModelBase
+    {
+        public enum ViewType
+        {
+            Add,
+            Modify
+        }
+        public string Caption
+        {
+            get { return GetProperty(() => Caption); }
+            set { SetProperty(() => Caption, value); }
+        }
+
+        public Person PersonData 
+        {
+            get { return GetProperty(() => PersonData); }
+            set { SetProperty(() => PersonData, value); }
+        }
+        public ICommand OkCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+
+        public AddViewModel(Person Data = null, ViewType type = ViewType.Add)
+        {
+            if (type == ViewType.Add)
+            {
+                Caption = "추가";
+                PersonData = Data;
+            }
+            else if (type == ViewType.Modify)
+            {
+                Caption = "변경";
+                PersonData = Data;
+            }
+            else
+            {
+                Caption = "추가";
+                PersonData = new Person();
+            }
+
+            OkCommand = new DelegateCommand<IDialogView>(view => _okCommandAction(view));
+            CancelCommand = new DelegateCommand<IDialogView>(view => _cancleCommandAction(view));
+        }
+
+        private void _cancleCommandAction(IDialogView view)
+        {
+            view.DialogResult = false;
+            view.Close();
+        }
+
+        private void _okCommandAction(IDialogView view)
+        {
+            view.DialogResult = true;
+            view.Close();
+        }
+    }
+}
+```
+</details> 
+
+
+
+
+
+
