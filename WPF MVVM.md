@@ -1007,4 +1007,566 @@ namespace _1.MVVM
 <br><br>
 
 
-# 02. 
+# 02. DevExpress.ReactiveUI
+
+- DevExpress
+  - WinForms, MVC, WPF 등 디자인을 편리하게 작성 할 수 있는 .NET 기반의 컴포넌트 라이브러리
+  - DevExpress를 사용함으로써 보다 심미적인 UI 설계 가능
+- ReactiveUI
+  - .NET 플랫폼을 위한 반응형 Model-View-ViewModel 프레임워크
+  - RX(Reactive Extension)를 이용해 objec간 복잡한 interactions을 선언적으로 등록해서 사용함으로, 기존 event 방식 프로그램의 단점을 극복할 수 있도록함
+  - ※ Reactive Extension : Observer 패턴, Iterator 패턴과 함수형 프로그래밍의 조합
+- [DevExpress 설치](https://www.devexpress.com/)
+- 기존의 1)MVVM 프로젝트에 이어서 활용한다.
+- 다음 내용을 참조 추가한다. (참조 추가 > 어셈블리 > 확장)
+  - DevExpress.Data.Desktop.v22.1
+  - DevExpress.Data.v22.1
+  - DevExpress.Mvvm.v22.1
+  - DevExpress.Printing.v22.1.Core
+  - DevExpress.Xpf.Core.v22.1
+  - DevExpress.Xpf.Grid.v22.1
+  - DevExpress.Xpf.Grid.v22.1.Core
+  - DevExpress.Xpf.LayoutControl.v22.1
+
+<details>
+<summary>AddView.xaml , Addview.xaml.cs</summary>
+
+```xml
+<dx:DXWindow x:Class="_1.MVVM.AddView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:local="clr-namespace:_1.MVVM"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance local:AddView}"
+        Title="{Binding Path=Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Height="300" Width="300"
+        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
+        Name="AddViewParam">
+    <dxlc:LayoutControl Orientation="Vertical" Padding="4">
+
+        <dxlc:LayoutGroup Orientation="Vertical">
+            <dxlc:LayoutItem Label="이름" VerticalAlignment="Top">
+                <TextBox Text="{Binding Path=PersonData.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="성별" VerticalAlignment="Top">
+                <TextBox Text="{Binding Path=PersonData.Gender, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="전화번호" VerticalAlignment="Top">
+                <TextBox Text="{Binding Path=PersonData.PhoneNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </dxlc:LayoutItem>
+            <dxlc:LayoutItem Label="주소" VerticalAlignment="Stretch">
+                <TextBox Text="{Binding Path=PersonData.Address, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            </dxlc:LayoutItem>
+        </dxlc:LayoutGroup>
+
+        <dxlc:LayoutGroup VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="20">
+            <Button Content="확인" Command="{Binding Path=OkCommand}" CommandParameter="{Binding ElementName=AddViewParam}" Width="75"/>
+            <Button Content="취소" Command="{Binding Path=CancelCommand}" CommandParameter="{Binding ElementName=AddViewParam}" Width="75"/>
+        </dxlc:LayoutGroup>
+        
+    </dxlc:LayoutControl>
+</dx:DXWindow>
+
+```
+
+```cs
+using DevExpress.Xpf.Core;
+using System.Windows;
+
+namespace _1.MVVM
+{
+    public partial class AddView : DXWindow, IDialogView
+    {
+        public AddView(AddViewModel viewModel)
+        {
+            InitializeComponent();
+            DataContext = viewModel;
+        }
+    }
+}
+
+```
+</details> 
+
+<details>
+<summary>AddViewModel.cs</summary>
+
+```cs
+using ReactiveUI;
+using System.Reactive;
+using System.Windows.Input;
+
+namespace _1.MVVM
+{
+    public class AddViewModel : ReactiveObject
+    {
+        public enum ViewType
+        {
+            Add,
+            Modify
+        }
+        private string _caption;
+
+        public string Caption
+        {
+            get { return _caption; }
+            set { this.RaiseAndSetIfChanged(ref _caption, value); }
+        }
+
+        public Person PersonData { get; set; }
+        public ICommand OkCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+
+        public AddViewModel(Person Data = null, ViewType type = ViewType.Add)
+        {
+            if (type == ViewType.Add)
+            {
+                Caption = "추가";
+                PersonData = Data;
+            }
+            else if (type == ViewType.Modify)
+            {
+                Caption = "변경";
+                PersonData = Data;
+            }
+            else
+            {
+                Caption = "추가";
+                PersonData = new Person();
+            }
+
+            OkCommand = ReactiveCommand.Create<IDialogView, Unit>(view => _okCommandAction(view));
+            CancelCommand = ReactiveCommand.Create<IDialogView, Unit>(view => _cancleCommandAction(view));
+        }
+
+        private Unit _cancleCommandAction(IDialogView view)
+        {
+            view.DialogResult = false;
+            view.Close();
+            return Unit.Default;
+        }
+
+        private Unit _okCommandAction(IDialogView view)
+        {
+            view.DialogResult = true;
+            view.Close();
+            return Unit.Default;
+        }
+    }
+}
+
+```
+</details> 
+
+<details>
+<summary>App.xaml, App.xaml.cs</summary>
+
+```xml
+<Application x:Class="_1.MVVM.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:_1.MVVM"
+             > <!--StartupUri="MainView.xaml"-->
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>
+```
+
+```cs
+using System.Windows;
+using DevExpress.Mvvm;
+using DevExpress.Xpf.Core;
+
+namespace _1.MVVM
+{
+    public partial class App : Application
+    {
+        // MainView에 MainViewModel을 알려준다.
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            ApplicationThemeHelper.ApplicationThemeName = Theme.VS2017BlueName; //테마를 설정한다.
+            IMessageBoxService messageBoxService = new DXMessageBoxService();
+            MainViewModel mainViewModel = new MainViewModel(messageBoxService, _createAddView);
+            MainView mainView = new MainView(mainViewModel);
+            mainView.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+        }
+
+        private IDialogView _createAddView(Person modifyData, AddViewModel.ViewType type = AddViewModel.ViewType.Add)
+        {
+            IMessageBoxService messageBoxService = new DXMessageBoxService();
+            var viewModel = new AddViewModel(modifyData, type); // MainViewModel에서 AddView를 생성할 수 있도록 _createAddView Method를 추가한다. 
+            return new AddView(viewModel);
+        }
+    }
+}
+
+```
+</details> 
+
+<details>
+<summary>IDialogView.cs</summary>
+
+```cs
+namespace _1.MVVM
+{
+    // Dialg의 속성을 상속받기 위한 Interface
+    public interface IDialogView
+    {
+        bool? ShowDialog();
+
+        bool? DialogResult { get; set; }
+
+        void Show();
+
+        void Close();
+    }
+}
+```
+</details> 
+
+<details>
+<summary>IWindowView.cs</summary>
+
+```cs
+using System.Windows;
+
+namespace _1.MVVM
+{
+    // 윈도우 속성을 상속받기 위한 Interface
+    public interface IWindowView
+    {
+        void Show();
+
+        void Close();
+
+        Visibility Visibility { get; set; }
+    }
+}
+```
+</details> 
+
+<details>
+<summary>MainView.xaml, MainView.xaml.cs</summary>
+
+```xml
+<dx:DXWindow x:Class="_1.MVVM.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:local="clr-namespace:_1.MVVM"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance local:MainViewModel}"
+        Title="주소록 관리 v1.0" Height="350" Width="600"
+        WindowStartupLocation="CenterScreen" Name="MainViewParam">
+    <!--d:DataContext="{d:DesignInstance local:MainViewModel}"-->
+    <dxlc:LayoutControl Orientation="Vertical" Padding="4">
+        <dxg:GridControl EnableSmartColumnsGeneration="True" Name="PersonsParam" ItemsSource="{Binding Path=Persons, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}">
+
+            <dxmvvm:Interaction.Behaviors>
+                <dxmvvm:EventToCommand EventName="MouseDoubleClick" Command="{Binding Path=ModifyCommand}"
+                                       CommandParameter="{Binding ElementName=PersonsParam, Path=SelectedItem}"/>
+
+                <dxmvvm:EventToCommand EventName="MouseMove" Command="{Binding Path=MouseMoveCommand}"
+                                       PassEventArgsToCommand="True">
+                    <dxmvvm:EventToCommand.EventArgsConverter>
+                        <local:MouseEventConverter/>
+                    </dxmvvm:EventToCommand.EventArgsConverter>
+                </dxmvvm:EventToCommand>
+
+            </dxmvvm:Interaction.Behaviors>
+            
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn Header="이름" FieldName="Name" ReadOnly="True" HorizontalHeaderContentAlignment="Center"/>
+                <dxg:GridColumn Header="성별" FieldName="Gender" ReadOnly="True" HorizontalHeaderContentAlignment="Center"/>
+                <dxg:GridColumn Header="전화번호" FieldName="Phonenumber" ReadOnly="True" HorizontalHeaderContentAlignment="Center"/>
+                <dxg:GridColumn Header="주소" FieldName="Adress" ReadOnly="True" HorizontalHeaderContentAlignment="Center"/>
+            </dxg:GridControl.Columns>
+
+            <dxg:GridControl.View>
+                <dxg:TableView AllowPerPixelScrolling="False" AllowHorizontalScrollingVirtualization="False"
+                               AllowCascadeUpdate="False" AllowEditing="False"
+                               ShowAutoFilterRow="False" ShowTotalSummary="False" ShowGroupPanel="False"
+                               UseAnimationWhenExpanding="False"
+                               NewItemRowPosition="None"
+                               ScrollingMode="Smart"
+                               AutoWidth="True"
+                               NavigationStyle="Row"
+                               FadeSelectionOnLostFocus="False"/>
+            </dxg:GridControl.View>
+            
+        </dxg:GridControl>
+
+
+        <dxlc:LayoutGroup VerticalAlignment="Bottom" Height="24">
+            <dxlc:LayoutGroup HorizontalAlignment="Left" VerticalAlignment="Center">
+
+                <dxlc:LayoutItem Label="Mouse X">
+                    <TextBox Text="{Binding Path=MouseX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50"/>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Mouse Y">
+                    <TextBox Text="{Binding Path=MouseY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="50"/>
+                </dxlc:LayoutItem>
+
+            </dxlc:LayoutGroup>
+
+            <dxlc:LayoutGroup HorizontalAlignment="Right">
+                <Button Command="{Binding Path=AddCommand}" Content="추가" Width="75"/>
+                <Button Command="{Binding Path=ModifyCommand}" Content="변경" CommandParameter="{Binding ElementName=PersonsParam, Path=SelectedItem}" Width="75"/>
+                <Button Command="{Binding Path=DeleteCommand}" Content="삭제" CommandParameter="{Binding ElementName=PersonsParam, Path=SelectedItem}" Width="75"/>
+                <Button Command="{Binding ExitCommand}" Content="종료" CommandParameter="{Binding ElementName=MainViewParam}" Width="75"/>
+            </dxlc:LayoutGroup>
+
+        </dxlc:LayoutGroup>
+
+    </dxlc:LayoutControl>
+</dx:DXWindow>
+
+```
+
+```cs
+using System.Windows;
+// Tools > NuGet Package에 접속하여  System.Windows.Interactivity를 활용한다
+// System.Windows.Interactivity 사용하기 위해 Expression.Blend.Sdk선택한다. : 
+using DevExpress.Xpf.Core;
+
+
+namespace _1.MVVM
+{
+    public partial class MainView : DXWindow, IWindowView
+    {
+        public MainView(MainViewModel viewModel)
+        {
+            InitializeComponent();
+            DataContext = viewModel; // MainView와 MainViewModel의 연결
+        }
+    }
+}
+
+```
+</details> 
+
+<details>
+<summary>MainViewModel.cs</summary>
+
+```cs
+using DevExpress.Mvvm;
+using ReactiveUI; // MVVM패턴을 지원하는 프레임워크 (Tools > NuGet Package에 접속하여 ReactiveUI.WPF를 활용한다)
+using System;
+using System.Collections.ObjectModel;
+using System.Reactive;
+using System.Windows;
+using System.Windows.Input;
+
+namespace _1.MVVM
+{
+    public class MainViewModel : ReactiveObject
+    {
+        public ObservableCollection<Person> Persons { get; set; }
+
+
+        public ICommand AddCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
+        public ICommand ModifyCommand { get; set; }
+        public ICommand ExitCommand { get; set; }
+        public ICommand MouseMoveCommand { get; private set; }
+
+        private string _mouseX;
+        public string MouseX
+        {
+            get { return _mouseX; }
+            set { this.RaiseAndSetIfChanged(ref _mouseX, value); }
+        }
+        private string _mouseY;
+        public string MouseY
+        {
+            get { return _mouseY; }
+            set { this.RaiseAndSetIfChanged(ref _mouseY, value); }
+        }
+
+        private readonly IMessageBoxService _messageBoxService;
+        private readonly Func<Person, AddViewModel.ViewType, IDialogView> _createAddView;
+
+        public MainViewModel(IMessageBoxService messageBoxService, Func<Person, AddViewModel.ViewType, IDialogView> createAddView)
+        {
+            _messageBoxService = messageBoxService;
+            _createAddView = createAddView;
+            Persons = new ObservableCollection<Person>();
+
+            _initCommand();
+            _initTestData();
+        }
+
+        private void _initCommand()
+        {
+            Persons.Add(new Person() { Address = "test1", Name = "홍길동1", Gender = true, PhoneNumber = "1" });
+            Persons.Add(new Person() { Address = "test2", Name = "홍길동2", Gender = true, PhoneNumber = "2" });
+            Persons.Add(new Person() { Address = "test3", Name = "홍길동3", Gender = true, PhoneNumber = "3" });
+            Persons.Add(new Person() { Address = "test4", Name = "홍길동4", Gender = true, PhoneNumber = "4" });
+        }
+
+        private void _initTestData()
+        {
+            AddCommand = ReactiveCommand.Create(_addCommandAction);
+            DeleteCommand = ReactiveCommand.Create<Person, Unit>(index => _deleteCommandAction(index));
+            ModifyCommand = ReactiveCommand.Create<Person, Unit>(index => _modifyCommandAction(index));
+            ExitCommand = ReactiveCommand.Create<IWindowView, Unit>(view => _exitCommandAction(view));
+            MouseMoveCommand = ReactiveCommand.Create<Point, Unit>(args => _mouseMoveCommand(args));
+        }
+
+        private Unit _mouseMoveCommand(Point currentPoint)
+        {
+            MouseX = String.Format("{0}", currentPoint.X);
+            MouseY = String.Format("{0}", currentPoint.Y);
+            return Unit.Default;
+        }
+
+        private Unit _exitCommandAction(IWindowView view)
+        {
+            view.Close();
+            return Unit.Default;
+        }
+
+        private Unit _modifyCommandAction(Person selectedItem)
+        {
+            if (selectedItem == null)
+            {
+                _messageBoxService.Show("선택된 데이터가 없습니다", "주소록 v1.0", MessageBoxButton.OK, MessageBoxImage.Information);
+                return Unit.Default;
+            }
+
+            var modifyData = new Person(selectedItem);
+
+            IDialogView view = _createAddView(modifyData, AddViewModel.ViewType.Modify);
+            if (true == view.ShowDialog())
+            {
+                var selectIndex = Persons.IndexOf(selectedItem);
+                Persons[selectIndex] = modifyData;
+            }
+
+            return Unit.Default;
+
+        }
+
+        private void _addCommandAction()
+        {
+            var addData = new Person();
+
+            IDialogView view = _createAddView(addData, AddViewModel.ViewType.Add);
+            if (true == view.ShowDialog())
+                Persons.Add(addData);
+        }
+
+        private Unit _deleteCommandAction(Person selectedItem)
+        {
+            if (selectedItem == null)
+            {
+                _messageBoxService.Show("선택된 데이터가 없습니다", "주소록 v1.0", MessageBoxButton.OK, MessageBoxImage.Information);
+                return Unit.Default;
+            }
+
+            var Result = _messageBoxService.Show("선택된 데이터를 삭제하시겠습니까?", "주소록 v1.0", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            if (Result == MessageBoxResult.Cancel)
+                return Unit.Default;
+
+            Persons.Remove(selectedItem);
+            return Unit.Default;
+        }
+    }
+}
+
+```
+</details> 
+
+<details>
+<summary>MouseEventConverter.cs</summary>
+
+```cs
+using DevExpress.Mvvm.UI;
+using DevExpress.Xpf.Grid;
+using System;
+using System.Linq;
+using System.Windows.Input;
+
+namespace _1.MVVM
+{
+    internal class MouseEventConverter : EventArgsConverterBase<MouseEventArgs>
+    {
+        protected override object Convert(object sender, MouseEventArgs args)
+        {
+            var grid = sender as GridControl;
+
+            return args.GetPosition(grid);
+        }
+    }
+}
+```
+</details> 
+
+<details>
+<summary>Person.cs</summary>
+
+```cs
+using ReactiveUI;
+
+namespace _1.MVVM
+{
+    public class Person : ReactiveObject
+    {
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { this.RaiseAndSetIfChanged(ref _name, value); }
+        }
+        private bool _gender;
+        public bool Gender
+        {
+            get { return _gender; }
+            set { this.RaiseAndSetIfChanged(ref _gender, value); }
+        }
+        private string _phoneNumer;
+        public string PhoneNumber
+        {
+            get { return _phoneNumer; }
+            set { this.RaiseAndSetIfChanged(ref _phoneNumer, value); }
+        }
+        private string _address;
+        public string Address
+        {
+            get { return _address; }
+            set { this.RaiseAndSetIfChanged(ref _address, value); }
+        }
+
+        public Person()
+        {
+        }
+
+        public Person(Person input)
+        {
+            _address = input.Address;
+            _gender = input.Gender;
+            _name = input.Name;
+            _phoneNumer = input.PhoneNumber;
+        }
+    }
+}
+```
+</details> 
+
+<br><br>
