@@ -1576,7 +1576,7 @@ namespace _1.MVVM
 
 
 - 기존의 1)MVVM 프로젝트에 이어서 활용한다.
-- 솔루션 탐색기 > 프로젝트 > 오른쪽 마우스 > NuGet 패키지 관리 > "Reactiveui"를 Install한다.
+- 솔루션 탐색기 > 프로젝트 > 오른쪽 마우스 > NuGet 패키지 관리 > "ReactiveUI"를 Install한다.
 - 다음 내용은 이전과 같다.
   - MouseEventConverter.cs
   - IDialogView.cs
@@ -1708,6 +1708,20 @@ namespace _1.MVVM
 
 
 
+# 정리
 
+- View
+  - MainView
+  - Addview
+- ViewModel
+  - MainViewModel
+  - AddViewModel
+- Model
+  - Person
 
+### 전송
 
+- View > ViewModel : DataBinding and Commands
+- View < ViewModel : Send Notification
+- ViewModel > Model : ViewModel Updates the Model
+- Model > ViewModel : Send Notifications
